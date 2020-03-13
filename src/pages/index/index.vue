@@ -36,7 +36,7 @@ import setting from '../../setting'
 import Alert from '@/components/common/alert.vue'
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
-require('@/mock')
+// require('@/mock')
 
 Vue.use(VueCookies)
 
