@@ -1,0 +1,54 @@
+<template>
+    <div class="content">
+        <content-header v-bind:title="title" v-bind:subTitle1="subTitle1" v-bind:subTitle2="subTitle2"></content-header>
+        <component :is="currentView"></component>
+    </div>
+</template>
+<script>
+import Header from '../content/header.vue'
+import CardContainer from '../content/cardContainer.vue'
+import Setting from '@/setting'
+import UserManager from '@/views/userManager.vue'
+import RoleManager from '@/views/roleManager.vue'
+import PermissionManager from '@/views/permissionManager.vue'
+import CpsCount from '@/views/cpsCount.vue'
+import AppCount from '@/views/appCount.vue'
+import CpsCollect from '@/views/cpsCollect.vue'
+import CpsTaobao from '@/views/cpsTaobao.vue'
+import CpsJingdong from '@/views/cpsJingdong.vue'
+import cpsPddVue from '../../views/cpsPdd.vue'
+import cpsRobotVue from '../../views/cpsRobot.vue'
+import cpsRobotOrderVue from '../../views/cpsRobotOrder.vue'
+import cpsAccountsOrderVue from '../../views/cpsAccountsOrder.vue'
+import cpsCompanyOrderVue from '../../views/cpsCompanyOrder.vue'
+import cpsCapitalVue from '../../views/cpsCapital.vue'
+import cpsStatisticsCount from '../../views/cpsStatisticsCount.vue'
+
+export default {
+    props: ['currentView', 'title', 'subTitle1'],
+    data: () => {
+        return {
+            subTitle2: ''
+        }
+    },
+    components: {
+        'content-header': Header,
+        'card-container': CardContainer,
+        'user-manager': UserManager,
+        'role-manager': RoleManager,
+        'permission-manager': PermissionManager,
+        'cps-count': CpsCount,
+        'app-count': AppCount,
+        'cps-collect': CpsCollect,
+        'cps-taobao': CpsTaobao,
+        'cps-jingdong': CpsJingdong,
+        'cps-pdd': cpsPddVue,
+        'cps-robot': cpsRobotVue,
+        'cps-robot-order': cpsRobotOrderVue,
+        'cps-accounts-order': cpsAccountsOrderVue,
+        'cps-company-order':cpsCompanyOrderVue,
+        'cps-capital': cpsCapitalVue,
+        'cps-statistics-count': cpsStatisticsCount
+    }
+}
+</script>
