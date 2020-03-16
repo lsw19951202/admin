@@ -13,7 +13,9 @@
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
                 <div class="search-group text-right">
                     <label>*只能导入今日数据</label>
-                    <button class="action-btn">导入</button>
+                    <button class="action-btn" @click="selectFile">导入</button>
+                    <input type="file" ref="file" hidden accept=".xls, .xlsx" @change="fileChange">
+                    <a hidden ref="downloadFile" download="手工数据.xlsx"></a>
                     <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="nextDay + '.xlsx'">模板下载</a>
                 </div>
             </header>
@@ -69,7 +71,7 @@ export default {
             showDetail: false,
             nextDay: nextDay,
             detailStartTime: null,
-            downloadUrl: setting.baseUrl + 'getexcel?day=' + nextDay + '&skey=' + VueCookie.get('skey')
+            downloadUrl: setting.baseUrl + '/getexcel?day=' + nextDay + '&skey=' + VueCookie.get('skey')
         }
     },
     components: {
@@ -82,6 +84,49 @@ export default {
         this.loadTBData(1)
     },
     methods: {
+        getFile: function(){
+            const file = this.$refs.file
+            if(file.files.length == 0){
+                return null
+            }
+            return file.files[0]
+        },
+        fileChange: function(){
+            const file = this.getFile()
+            if(!file){
+                return
+            }
+            this.uploadFile(file)
+        },
+        uploadFile: function(file){
+            this.showLoading()
+            const fd = new FormData()
+            fd.append('file', file)
+            request({
+                url: '/importexcel',
+                method: 'post',
+                data: fd
+            }).then((resp) => {
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        console.log('上传成功')
+                        this.$refs.downloadFile.href = setting.baseUrl + '/' + resp.data.data.url + '&skey=' + VueCookie.get('skey')
+                        this.$refs.downloadFile.click()
+                    }else{
+                        this.alert(resp.data.message || '上传手工数据失败')
+                    }
+                }else{
+                    this.alert('上传手工数据失败')
+                }
+            }).catch((error) => {
+                this.alert('上传手工数据失败')
+            }).then(() => {
+                this.hideLoading()
+            })
+        },
+        selectFile: function(){
+            this.$refs.file.click()
+        },
         loadHandDetail: function(handData){
             this.detailStartTime = handData[0]
             this.showDetail = true
