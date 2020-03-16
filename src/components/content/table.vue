@@ -41,7 +41,7 @@
                 <td>{{tbRow.tp}}</td>
                 <td>{{tbRow.name}}</td>
                 <td>
-                    <button v-if="tbRow.delete_action == 'T'" @click="delBtnClicked(index)" class="action-btn del-btn">删除</button>
+                    <button v-if="tbRow['delete_action'] == 'T'" @click="delBtnClicked(tbRow.url)" class="action-btn del-btn">删除</button>
                 </td>
             </tr>
         </tbody>

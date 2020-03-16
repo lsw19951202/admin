@@ -17,6 +17,7 @@ import DetailTable from '@/components/content/table.vue'
 import confirm from '@/components/common/confirm.vue'
 import PermissionEditor from '@/components/content/permissionEditor.vue'
 import request from '@/axios'
+import qs from 'qs'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
@@ -27,7 +28,10 @@ export default {
             tbType: 'permission',
             tableBodyClick: false,
             tableHeaderFixed: false,
-            confirmParams: {},
+            confirmParams: {
+                type: 'del',
+                header: '操作提示'
+            },
             showConfirm: false,
             editorType: 'menu',
             authTree: null,
@@ -95,11 +99,33 @@ export default {
                 console.log(error)
             })
         },
-        deletePermission: function(idx){
-            console.log('delete permission')
+        deletePermission: function(url){
+            this.showConfirm = true
+            this.confirmParams = Object.assign({}, this.confirmParams, {url:url})
         },
-        confirmClicked: function(){
-            console.log('confirmClicked')
+        confirmClicked: function(dt){
+            this.showConfirm = false
+            if(dt){
+                request({
+                    url: '/auth_auth/delete',
+                    method: 'post',
+                    data: qs.stringify({
+                        'auth_action': dt.url
+                    })
+                }).then((resp) => {
+                    if(resp.status == 200){
+                        if(resp.data.code == 200){
+                            this.reload()
+                        }else{
+                            this.alert(resp.data.message || '删除权限失败')
+                        }
+                    }else{
+                        this.alert('删除权限失败')
+                    }
+                }).catch((error) => {
+                    this.alert('删除权限失败')
+                })
+            }
         },
         showEditView: function(tp){
             this.editorType = tp
@@ -157,7 +183,7 @@ export default {
                             name: item1.show_name,
                             tp: '权限菜单',
                             url: item1.name,
-                            'delete_action': item.delete_action
+                            'delete_action': item1.delete_action
                         })
                         if(item1.auth_detail){
                             for(const key2 in item1.auth_detail){
@@ -166,7 +192,7 @@ export default {
                                     name: item2.show_name,
                                     tp: '操作菜单',
                                     url: item2.name,
-                                    'delete_action': item.delete_action
+                                    'delete_action': item2.delete_action
                                 })
                             }
                         }
