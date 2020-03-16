@@ -2,8 +2,11 @@
  * 所有配置信息
  */
 export default {
-    // baseUrl: 'http://tongji.chenlong.com',
-    baseUrl: 'http://dash.yunzhanxinxi.com',
+    baseUrl: 'http://tongji.chenlong.com',
+    // baseUrl: 'http://dash.yunzhanxinxi.com',
+    urls: {
+
+    },
     // 图片地址
     images:{
         menu: {

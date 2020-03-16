@@ -40,9 +40,9 @@
                 <td>{{tbRow.url}}</td>
                 <td>{{tbRow.tp}}</td>
                 <td>{{tbRow.name}}</td>
-                <!-- <td>
-                    <button @click="delBtnClicked(index)" class="action-btn del-btn">删除</button>
-                </td> -->
+                <td>
+                    <button v-if="tbRow.delete_action == 'T'" @click="delBtnClicked(index)" class="action-btn del-btn">删除</button>
+                </td>
             </tr>
         </tbody>
         <tbody v-if="tbType == 'capital'" ref="tbody">

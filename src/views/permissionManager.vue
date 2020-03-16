@@ -147,7 +147,8 @@ export default {
                 dt.push({
                     name: item.name,
                     tp: '主菜单',
-                    url: item.name
+                    url: item.name,
+                    'delete_action': item.delete_action
                 })
                 if(item.auth_detail){
                     for(const key1 in item.auth_detail){
@@ -155,7 +156,8 @@ export default {
                         dt.push({
                             name: item1.show_name,
                             tp: '权限菜单',
-                            url: item1.name
+                            url: item1.name,
+                            'delete_action': item.delete_action
                         })
                         if(item1.auth_detail){
                             for(const key2 in item1.auth_detail){
@@ -163,7 +165,8 @@ export default {
                                 dt.push({
                                     name: item2.show_name,
                                     tp: '操作菜单',
-                                    url: item2.name
+                                    url: item2.name,
+                                    'delete_action': item.delete_action
                                 })
                             }
                         }
