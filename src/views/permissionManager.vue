@@ -10,7 +10,6 @@
         </div>
         <permission-editor v-if="showEditor" v-bind:authTree="authTree" v-bind:editorType="editorType" @reloadPermissionList="loadPermissionList"></permission-editor>
         <confirm @confirmClicked="confirmClicked" v-bind:isShow="showConfirm" v-bind:confirmParams="confirmParams"></confirm>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
     </div>
 </template>
 <script>
@@ -18,10 +17,9 @@ import DetailTable from '@/components/content/table.vue'
 import confirm from '@/components/common/confirm.vue'
 import PermissionEditor from '@/components/content/permissionEditor.vue'
 import request from '@/axios'
-import Alert from '@/components/common/alert.vue'
 
 export default {
-    // props: ['contentData'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     data: function(){
         return {
             tableHeader: [],
@@ -33,16 +31,13 @@ export default {
             showConfirm: false,
             editorType: 'menu',
             authTree: null,
-            showAlert: false,
-            alertParams: {header: '', content: ''},
             contentData: {actions: [], data: {}}
         }
     },
     components: {
         'detail-table': DetailTable,
         'confirm': confirm,
-        'permission-editor': PermissionEditor,
-        'alert': Alert
+        'permission-editor': PermissionEditor
     },
     watch: {
         editorType: function(newValue, oldValue){
@@ -58,15 +53,6 @@ export default {
         this.loadPermissionList()
     },
     methods: {
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            console.log(str)
-            this.alertParams.header = '操作提示'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
         loadAuthTree: function(){
             if(this.editorType == 'effect'){
                 return this.loadEffectAuthTree()
@@ -131,8 +117,7 @@ export default {
             }
         },
         loadPermissionList: function(){
-            // this.$emit('reloadList', 1)
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             request({
                 url: '/auth_auth/index',
                 method: 'get'
@@ -150,7 +135,7 @@ export default {
             }).catch((error) => {
                 this.alert('加载权限列表失败')
             }).then(() => {
-                this.$parent.$parent.isShowLoading = false
+                this.hideLoading()
             })
         }
     },

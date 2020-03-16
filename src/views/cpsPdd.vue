@@ -57,7 +57,6 @@
             </div>
             <page v-bind:pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
         <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams"></pop-ups>
     </div>
 </template>
@@ -65,8 +64,8 @@
 import CardContainer from '@/components/content/cardContainer.vue'
 import flatPicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import request from '@/axios'
-import Alert from '@/components/common/alert.vue'
 import PopUps from '@/components/common/popUps.vue'
 import Page from '@/components/content/page.vue'
 import DetailTable from '@/components/content/table.vue'
@@ -75,10 +74,10 @@ import setting from '@/setting'
 // require('@/mock')
 
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
         'card-container': CardContainer,
         'flat-picker': flatPicker,
-        'alert': Alert,
         'page': Page,
         'pop-ups': PopUps,
         'detail-table': DetailTable
@@ -98,7 +97,8 @@ export default {
             'end_time': nStr,
             dateConfig: {
                 'time_24hr': true,
-                maxDate: nStr
+                maxDate: nStr,
+                locale: Mandarin
             },
             pageData: {
                 'total_page': 0,
@@ -119,10 +119,7 @@ export default {
                 'profit_proportion': '0%'
             },
             tbType: 'common',
-            requestNum: 0,
-            showAlert: false,
             tableHeader: setting.tableHeader.cpsPdd,
-            alertParams: { header: '', content: '' },
             showPop: false,
             popParams: { style: '', htmlContent: '' },
             'order_type': 3
@@ -190,14 +187,6 @@ export default {
             this.tbData = Object.assign({}, tbData)
             // 明细数据
             this.mxData = dt.statistics
-        },
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
         },
         showPool: function(){
             console.log('显示资金池')
@@ -301,18 +290,6 @@ export default {
                 imgSrc: require('@/assets/today_maolilv.png')
             })
             this.cardData = Object.assign({}, [cardData])
-        },
-        showLoading: function(){
-            if(this.requestNum == 0){
-                this.$parent.$parent.isShowLoading = true
-            }
-            this.requestNum++
-        },
-        hideLoading: function(){
-            if(this.requestNum == 1){
-                this.$parent.$parent.isShowLoading = false
-            }
-            this.requestNum--
         }
     }
 }

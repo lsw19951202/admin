@@ -19,7 +19,6 @@
                 <detail-table v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType"></detail-table>
             </div>
             <page v-bind:pageData="pageData" @loadList="loadList"></page>
-            <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
         </div>
     </div>
 </template>
@@ -28,19 +27,19 @@ import CardContainer from '@/components/content/cardContainer.vue'
 import Select from '@/components/common/select.vue'
 import flatPicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import request from '@/axios'
-import Alert from '@/components/common/alert.vue'
 import Page from '@/components/content/page.vue'
 import DetailTable from '@/components/content/table.vue'
 
 // require('@/mock')
 
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
         'card-container': CardContainer,
         'selector': Select,
         'flat-picker': flatPicker,
-        'alert': Alert,
         'page': Page,
         'detail-table': DetailTable
     },
@@ -56,7 +55,8 @@ export default {
             'end_time': '',
             dateConfig: {
                 'time_24hr': true,
-                maxDate: nStr
+                maxDate: nStr,
+                locale: Mandarin
             },
             platSelectParams: {
                 label: '平台类型',
@@ -87,10 +87,7 @@ export default {
             },
             tbData: [],
             tbType: 'common',
-            requestNum: 0,
-            showAlert: false,
             tableHeader: [],
-            alertParams: { header: '', content: '' },
             'order_type': null,
             'robot_name': '',
             'is_page': 'F',
@@ -288,26 +285,6 @@ export default {
             cardData[2].push({text: '累计冻结返利金额(元)', num: 0, imgSrc: require('@/assets/icon_money.png')})
 
             this.cardData = Object.assign([], cardData)
-        },
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
-        showLoading: function(){
-            if(this.requestNum == 0){
-                this.$parent.$parent.isShowLoading = true
-            }
-            this.requestNum++
-        },
-        hideLoading: function(){
-            if(this.requestNum == 1){
-                this.$parent.$parent.isShowLoading = false
-            }
-            this.requestNum--
         }
     }
 }

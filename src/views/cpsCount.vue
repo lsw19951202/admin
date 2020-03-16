@@ -1,42 +1,29 @@
 <template>
     <div class="detail-container">
         <card-container v-bind:cardData="cardData"></card-container>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
     </div>
 </template>
 <script>
 import CardContainer from '@/components/content/cardContainer.vue'
-import Alert from '@/components/common/alert.vue'
 
 import request from '@/axios'
-// import qs from 'qs'
 
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
-        'card-container': CardContainer,
-        'alert': Alert
+        'card-container': CardContainer
     },
     data: () => {
         return {
-            cardData: [],
-            showAlert: false,
-            alertParams: { header: '', content: '' }
+            cardData: []
         }
     },
     created: function(){
         this.loadData()
     },
     methods: {
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
         loadData: function(){
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             const todayRequest = this.createRequest('/api/statistics/today', 'get', {})
             const yesterdayRequest = this.createRequest('/api/statistics/yesterday', 'get', {})
             const monthRequest = this.createRequest('/api/statistics/thismonth', 'get', {})
@@ -47,7 +34,7 @@ export default {
                 }).catch((error) => {
                     this.alert('加载CPS首页数据失败')
                 }).then(() => {
-                    this.$parent.$parent.isShowLoading = false
+                    this.hideLoading()
                 })
         },
         createCardData: function(dt){

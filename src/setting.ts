@@ -3,7 +3,7 @@
  */
 export default {
     // baseUrl: 'http://tongji.chenlong.com',
-    baseUrl: 'http://dash.yunzhanxinxi.com/',
+    baseUrl: 'http://dash.yunzhanxinxi.com',
     // 图片地址
     images:{
         menu: {
@@ -59,6 +59,12 @@ export default {
         ],
         cpsCapitalDetail: [
             [{name: '数据库', colspan: 1}, {name: '首单奖励', colspan: 1}, {name: '人为修改', colspan: 1}, {name: '签到奖励', colspan: 1}, {name: '提成奖励', colspan: 1}, {name: '申请提现', colspan: 1}, {name: '消费补贴', colspan: 1}, {name: '维权扣除', colspan: 1}, {name: '退回积分', colspan: 1}, {name: '申请提现未打款', colspan: 1}, {name: '提现成功', colspan: 1}, {name: '提现拒绝退回', colspan: 1}, {name: '提现拒绝没收', colspan: 1}, {name: '用户余额', colspan: 1}]
+        ],
+        cpsHandData: [
+            [{name: '时间', colspan: 1}, {name: '平台', colspan: 1}, {name: '预估收入', colspan: 1}, {name: '结算收入', colspan: 1}, {name: '数据库预估收入', colspan: 1}, {name: '数据库结算收入', colspan: 1}, {name: '操作', colspan: 1}]
+        ],
+        cpsHandDetail: [
+            [{name: '时间', colspan: 1}, {name: '平台', colspan: 1}, {name: '联盟账号', colspan: 1}, {name: '联盟ID', colspan: 1}, {name: '预估收入', colspan: 1}, {name: '结算收入', colspan: 1}, {name: '数据库预估收入', colspan: 1}, {name: '数据库结算收入', colspan: 1}, {name: '预估差异', colspan: 1}, {name: '结算差异', colspan: 1}]
         ]
     },
     views: {
@@ -131,6 +137,11 @@ export default {
             name: 'cps-capital',
             title: 'CPS管理',
             subTitle1: '资金管理'
+        },
+        '/cps/handdata': {
+            name: 'cps-handdata',
+            title: 'CPS管理',
+            subTitle1: '淘宝手工数据'
         },
         '/cps/statistics/count': {
             name: 'cps-statistics-count',

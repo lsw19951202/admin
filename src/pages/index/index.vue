@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="right-body">
-                    <right-content v-bind:currentView="currentView" v-bind:title="title" v-bind:subTitle1="subTitle1"></right-content>
+                    <right-content v-bind:isContentAlive="isContentAlive" v-bind:currentView="currentView" v-bind:title="title" v-bind:subTitle1="subTitle1"></right-content>
                 </div>
             </div>
         </div>
@@ -47,13 +47,14 @@ export default {
             isShowLoading: false,
             currentView: '',
             menuData: [],
-            // contentData: {},
             itemIdx: 0,
             subItemIdx: 0,
             showAlert: false,
             alertParams: {header: '', content: ''},
             title: '',
-            subTitle1: ''
+            subTitle1: '',
+            isContentAlive: true,
+            requestNum: 0
         }
     },
     created: function(){
@@ -66,12 +67,39 @@ export default {
         'right-content': Content,
         alert: Alert
     },
+    provide: function(){
+        return {
+            reload: this.reload,
+            alert: this.alert,
+            showLoading: this.showLoading,
+            hideLoading: this.hideLoading
+        }
+    },
     methods: {
+        reload: function(){
+            console.log('reload')
+            this.isContentAlive = false
+            this.$nextTick(function(){
+                this.isContentAlive = true
+            })
+        },
+        showLoading: function(){
+            if(this.requestNum == 0){
+                this.isShowLoading = true
+            }
+            this.requestNum++
+        },
+        hideLoading: function(){
+            if(this.requestNum == 1){
+                this.isShowLoading = false
+            }
+            this.requestNum--
+        },
         alertOkClicked: function(){
             this.showAlert = false
         },
         alert: function(str){
-            this.alertParams.header = "操作提示"
+            this.alertParams.header = "提示信息"
             this.alertParams.content = str
             this.showAlert = true
         },
@@ -131,7 +159,7 @@ export default {
             let url = this.menuData[data.itemIdx]['auth_detail'][data.subItemIdx].url;
             url = url.indexOf('/') == 0 ? url : ('/' + url)
             if(this.currentView == setting.views[url].name){
-                // this.$children[4].reload()
+                this.$children[4].reload()
             }else{
                 this.currentView = setting.views[url].name
                 this.title = setting.views[url].title

@@ -58,6 +58,14 @@
                 <td v-for="(tbCol, idx) in tbRow" v-bind:key="idx">{{tbCol}}</td>
             </tr>
         </tbody>
+        <tbody v-if="tbType == 'handdata'" ref="tbody">
+            <tr v-for="(tbRow, index) in tbData" v-bind:key="index">
+                <td v-for="(tbCol, idx) in tbRow" v-bind:key="idx">{{tbCol}}</td>
+                <td>
+                    <a style="color: #4880EA; font-size: 0.375rem; cursor: pointer;" @click="showHandDetail(tbRow)">查看详情</a>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 <script>
@@ -70,6 +78,9 @@ export default {
         }
     },
     methods: {
+        showHandDetail: function(handData){
+            this.$emit('loadHandDetail', handData)
+        },
         loadCapitalDetail: function(capital){
             this.$emit('loadCapitalDetail', capital)
         },

@@ -27,7 +27,6 @@
                 <detail-table @sortTBData="sortTBData" @tableBodyClicked="tableBodyClicked" v-bind:tableHeaderFixed="tableHeaderFixed" v-bind:tableBodyClick="tableBodyClick" v-bind:tbData="tbData" v-bind:reduceData="reduceData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType"></detail-table>
             </div>
         </div>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
         <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams"></pop-ups>
         <pop-chart v-bind:isShow="showPopChart" v-bind:popParams="popParams"></pop-chart>
     </div>
@@ -35,8 +34,8 @@
 <script>
 import flatPicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import request from '@/axios'
-import Alert from '@/components/common/alert.vue'
 import PopUps from '@/components/common/popUps.vue'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
@@ -45,9 +44,9 @@ import PopChart from '@/components/common/popChart.vue'
 // require('@/mock')
 
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
         'flat-picker': flatPicker,
-        'alert': Alert,
         'pop-ups': PopUps,
         'detail-table': DetailTable,
         'pop-chart': PopChart
@@ -66,16 +65,15 @@ export default {
             'end_time': nStr,
             dateConfig: {
                 'time_24hr': true,
-                maxDate: nStr
+                maxDate: nStr,
+                locale: Mandarin
             },
             tbData: [],
             reduceData: [],
             tbType: 'common',
-            showAlert: false,
             tableHeader: setting.tableHeader.cpsRobot,
             tableHeaderFixed: true,
             tableBodyClick: true,
-            alertParams: { header: '', content: '' },
             showPop: false,
             showPopChart: false,
             popParams: { style: 'width: 23.44rem; height: 17.81rem;', htmlContent: '', popType: 'echart', echartOption: {} },
@@ -100,7 +98,7 @@ export default {
             }
             if(target.tagName.toLowerCase() == 'tr'){
                 const robotName = target.children[2].innerHTML
-                this.$parent.$parent.isShowLoading = true
+                this.showLoading()
                 // console.log(robotName)
                 request({
                     url: '/api/statistics/robot-detail',
@@ -122,7 +120,7 @@ export default {
                 }).catch((error) => {
                     this.alert('加载机器人统计数据失败')
                 }).then(() => {
-                    this.$parent.$parent.isShowLoading = false
+                    this.hideLoading()
                 })
             }
         },
@@ -343,7 +341,7 @@ export default {
         },
         loadTBData: function(){
             console.log('load table data')
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             request({
                 url: '/api/statistics/robot',
                 method: 'get',
@@ -366,7 +364,7 @@ export default {
             }).catch((error) => {
                 this.alert('加载机器人管理数据失败')
             }).then(() => {
-                this.$parent.$parent.isShowLoading = false
+                this.hideLoading()
             })
         },
         createTBData: function(dt){
@@ -413,17 +411,9 @@ export default {
             this.reduceData = Object.assign([], reduceData)
             this.currSortType = ''
         },
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
         showPool: function(){
             console.log('显示资金池')
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             request({
                 url: '/api/statistics/pool',
                 method: 'get',
@@ -455,9 +445,9 @@ export default {
             }).catch((error) => {
                 this.alert('加载资金池数据失败')
             }).then(() => {
-                this.$parent.$parent.isShowLoading = false
+                this.hideLoading()
             })
-        },
+        }
     }
 }
 </script>

@@ -10,6 +10,7 @@
 </template>
 <script>
 export default {
+    inject: ['alert'],
     props: ['pageData'],
     data: () => {
         return {
@@ -20,14 +21,14 @@ export default {
     methods: {
         loadPrevPage: function(){
             if(this.pageData.page == 1){
-                this.$parent.alert('已经是第一页')
+                this.alert('已经是第一页')
                 return
             }
             this.loadList(this.pageData.page - 1)
         },
         loadNextPage: function(){
             if(this.pageData.page >= this.pageData.total_page){
-                this.$parent.alert('已经是最后一页')
+                this.alert('已经是最后一页')
                 return
             }
             this.loadList(this.pageData.page - 0 + 1)

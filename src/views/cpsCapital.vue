@@ -18,20 +18,22 @@
             <page v-bind:pageData="pageData" @loadList="loadTBData"></page>
         </div>
         <capital-detail v-if="showDetail" v-bind:title="detailTime" v-bind:tbData="detailData"></capital-detail>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
     </div>
 </template>
 <script>
-import Alert from "@/components/common/alert.vue";
 import request from "@/axios";
 import flatpicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
 import Page from '@/components/content/page.vue'
 import CapitalDetail from '@/components/content/capitalDetail.vue'
 
+// require('@/mock')
+
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     data: () => {
         const now = new Date()
         now.setDate(now.getDate() - 30)
@@ -43,14 +45,12 @@ export default {
             'start_time': nStr,
             'end_time': '',
             dateConfig: {
-                'time_24hr': true
+                'time_24hr': true,
+                locale: Mandarin
             },
             tbData: [],
-            showAlert: false,
-            alertParams: { header: '', content: '' },
             showDetail: false,
             tableHeader: [],
-            requestNum: 0,
             pageData: {
                 'total_page': 0,
                 page: 1,
@@ -63,7 +63,6 @@ export default {
         }
     },
     components: {
-        'alert': Alert,
         'flat-picker': flatpicker,
         'detail-table': DetailTable,
         'page': Page,
@@ -165,26 +164,6 @@ export default {
             for(let idx = 0; idx < dt.length; idx++){
                 this.fields.push(dt[idx].field)
             }
-        },
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
-        showLoading: function(){
-            if(this.requestNum == 0){
-                this.$parent.$parent.isShowLoading = true
-            }
-            this.requestNum++
-        },
-        hideLoading: function(){
-            if(this.requestNum == 1){
-                this.$parent.$parent.isShowLoading = false
-            }
-            this.requestNum--
         },
         loadFieldsAndTableHeader: function(){
             return request({

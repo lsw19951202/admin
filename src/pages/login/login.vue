@@ -29,15 +29,16 @@
             <div class="vcode-box row">
             <div class="ipt-box">
                 <input placeholder v-model.trim="vcode" :class="'vcode-ipt' + (vcodeError?' error':'')" @change="change" type="text" />
-                <div class="vcode">
-                <img
+                <div class="vcode" @click="getVCode" alt="换一个" title="换一个">
+                <!-- <img
                     id="captcha_img"
                     :src="vcodeSrc"
                     alt="换一个"
                     title="换一个"
                     @click="changeVcode"
                     style="cursor:pointer;vertical-align:middle;"
-                />
+                /> -->
+                {{vcodeSrc}}
                 </div>
             </div>
             </div>
@@ -59,10 +60,13 @@ import setting from '@/setting'
 
 Vue.use(VueCookies)
 
+// import axios from 'axios'
+
 export default {
     data: () => {
         return {
-            vcodeSrc: Setting.baseUrl + "/login/captcha",
+            vcodeSrc: '',
+            token: '',
             username: "",
             passwd: "",
             vcode: "",
@@ -77,6 +81,9 @@ export default {
     components: {
         alert: Alert
     },
+    created: function(){
+        this.getVCode()
+    },
     methods: {
         alertOkClicked: function(){
             this.showAlert = false
@@ -87,10 +94,33 @@ export default {
             this.alertParams.content = str
             this.showAlert = true
         },
-        changeVcode: function() {
-            console.log(123);
-            this.vcodeSrc = this.vcodeSrc.split("?")[0] + "?" + new Date().getTime();
+        getVCode: function(){
+            request({
+                url: '/login/captcha',
+                method: 'get',
+                params: {}
+            }).then((resp) => {
+                if(resp.status == 200){
+                    const rst = resp.data
+                    if(rst.code == 200){
+                        this.token = rst.data.token
+                        this.vcodeSrc = rst.data.code
+                    }else{
+                        this.alert(rst.message || '获取验证码失败')
+                    }
+                }else{
+                    this.alert('获取验证码失败')
+                }
+            }).catch((error) => {
+                console.log(error)
+                this.alert('获取验证码失败')
+            })
         },
+        // changeVcode: function() {
+        //     // console.log(123);
+        //     // this.vcodeSrc = this.vcodeSrc.split("?")[0] + "?" + new Date().getTime();
+        //     this.getVCode()
+        // },
         login: function() {
             if (this.username == null || this.username == "" || this.username == undefined) {
                 this.usernameError = true;
@@ -111,7 +141,8 @@ export default {
                 data: qs.stringify({
                     username: this.username,
                     passwd: MD5(this.sign + "_" + this.passwd),
-                    'verify_code': this.vcode
+                    'verify_code': this.vcode,
+                    token: this.token
                 })
             })
                 .then((response) => {
@@ -244,5 +275,10 @@ body.login {
 .vcode {
     display: inline-block;
     text-align: center;
+    cursor: pointer;
+    width: 54%;
+    margin-left: 4%;
+    background-color: #f0f1f6;
+    vertical-align: middle;
 }
 </style>

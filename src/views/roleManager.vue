@@ -8,7 +8,6 @@
         </div>
         <role-editor @reloadRoleList="loadRoleList" v-else v-bind:roleInfo="currentRoleInfo" v-bind:authInfo="authInfo" v-bind:authTree="authTree" v-bind:editRole="editRole" v-bind:old_name="currentRoleInfo.name"></role-editor>
         <confirm @confirmClicked="confirmClicked" v-bind:isShow="showConfirm" v-bind:confirmParams="confirmParams"></confirm>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
     </div>
 </template>
 <script>
@@ -17,10 +16,9 @@ import DetailTable from '@/components/content/table.vue'
 import confirm from '@/components/common/confirm.vue'
 import RoleEditor from '@/components/content/roleEditor.vue'
 import request from '@/axios'
-import Alert from '@/components/common/alert.vue'
 
 export default {
-    // props: ['contentData'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     data: function(){
         return {
             tableHeader: setting.tableHeader.roleManager,
@@ -32,31 +30,19 @@ export default {
             showConfirm: false,
             confirmParams: {},
             tbType: 'role',
-            alertParams: {header: '', content: ''},
-            showAlert: false,
             contentData: {actions: [], data: {}}
         }
     },
     components:{
         'detail-table': DetailTable,
         'confirm': confirm,
-        'role-editor': RoleEditor,
-        'alert': Alert
+        'role-editor': RoleEditor
     },
     created: function(){
         this.loadAuthTree()
         this.loadRoleList(1)
     },
     methods: {
-         alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            console.log(str)
-            this.alertParams.header = '操作提示'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
         confirmClicked: function(data){
             this.showConfirm = false
             if(!data){
@@ -116,8 +102,7 @@ export default {
             this.showConfirm = true
         },
         loadRoleList: function(){
-            // this.$emit('reloadList', 1)
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             request({
                 url: '/auth_role/index',
                 method: 'get'
@@ -135,7 +120,7 @@ export default {
             }).catch((error) => {
                 this.alert('请求角色列表失败')
             }).then(() => {
-                this.$parent.$parent.isShowLoading = false
+                this.hideLoading()
             })
         },
         loadAuthTree: function(){

@@ -79,16 +79,15 @@
             </div>
             <page v-bind:pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
         <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams"></pop-ups>
     </div>
 </template>
 <script>
 import CardContainer from '@/components/content/cardContainer.vue'
-import Alert from "@/components/common/alert.vue";
 import request from "@/axios";
 import flatpicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
 import Page from '@/components/content/page.vue'
@@ -97,6 +96,7 @@ import PopUps from '@/components/common/popUps.vue'
 // require('@/mock')
 
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     data: () => {
         const now = new Date()
         let nStr = ''
@@ -110,13 +110,11 @@ export default {
             'start_time': startTime,
             'end_time': nStr,
             cardData: [],
-            showAlert: false,
-            alertParams: { header: '', content: '' },
-            requestNum: 0,
             tableHeader: setting.tableHeader.cpsCollect,
             dateConfig: {
                 'time_24hr': true,
-                maxDate: nStr
+                maxDate: nStr,
+                locale: Mandarin
             },
             txData: {
                 'yesterday_withdraw': 0,
@@ -149,7 +147,6 @@ export default {
     },
     components: {
         'card-container': CardContainer,
-        'alert': Alert,
         'flat-picker': flatpicker,
         'detail-table': DetailTable,
         'page': Page,
@@ -197,14 +194,6 @@ export default {
             }).then(() => {
                 this.hideLoading()
             })
-        },
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
         },
         loadCardData: function(){
             console.log('加载昨日数据')
@@ -351,18 +340,6 @@ export default {
             }).then(() => {
                 this.hideLoading()
             })
-        },
-        showLoading: function(){
-            if(this.requestNum == 0){
-                this.$parent.$parent.isShowLoading = true
-            }
-            this.requestNum++
-        },
-        hideLoading: function(){
-            if(this.requestNum == 1){
-                this.$parent.$parent.isShowLoading = false
-            }
-            this.requestNum--
         }
     }
 }

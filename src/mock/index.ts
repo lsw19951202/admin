@@ -118,3 +118,11 @@ Mock.mock(/\/api\/statistics\/capital-detail\?[\s\S]*?/, 'get', () => {
 Mock.mock(/\/api\/statistics\/all\?[\s\S]*?/, 'get', () => {
     return dts['/api/statistics/all']
 })
+
+Mock.mock(/\/api\/excel\/manuallist\?[\s\S]*?/, 'get', () => {
+    return dts['/api/excel/manuallist']
+})
+
+Mock.mock(/\/api\/excel\/manualinfo\?[\s\S]*?/, 'get', () => {
+    return dts['/api/excel/manualinfo']
+})

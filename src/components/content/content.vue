@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <content-header v-bind:title="title" v-bind:subTitle1="subTitle1" v-bind:subTitle2="subTitle2"></content-header>
-        <component :is="currentView"></component>
+        <component :is="currentView" v-if="isContentAlive" ref="contentView"></component>
     </div>
 </template>
 <script>
@@ -23,12 +23,18 @@ import cpsAccountsOrderVue from '../../views/cpsAccountsOrder.vue'
 import cpsCompanyOrderVue from '../../views/cpsCompanyOrder.vue'
 import cpsCapitalVue from '../../views/cpsCapital.vue'
 import cpsStatisticsCount from '../../views/cpsStatisticsCount.vue'
+import cpsHandData from '../../views/cpsHandData.vue'
 
 export default {
-    props: ['currentView', 'title', 'subTitle1'],
+    props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
     data: () => {
         return {
             subTitle2: ''
+        }
+    },
+    methods: {
+        reload: function(){
+            this.$children[1].reload()
         }
     },
     components: {
@@ -48,7 +54,8 @@ export default {
         'cps-accounts-order': cpsAccountsOrderVue,
         'cps-company-order':cpsCompanyOrderVue,
         'cps-capital': cpsCapitalVue,
-        'cps-statistics-count': cpsStatisticsCount
+        'cps-statistics-count': cpsStatisticsCount,
+        'cps-handdata': cpsHandData
     }
 }
 </script>

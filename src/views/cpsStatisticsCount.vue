@@ -1,7 +1,6 @@
 <template>
     <div class="detail-container">
         <div style="width: 100%; height: 100%;" ref="chart"></div>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
     </div>
 </template>
 <script>
@@ -10,36 +9,23 @@ import tooltip from 'echarts/lib/component/tooltip'
 import title from 'echarts/lib/component/title'
 import line from 'echarts/lib/chart/line'
 import legend from 'echarts/lib/component/legend'
-import Alert from "@/components/common/alert.vue";
 import request from '@/axios'
 
 // require('@/mock')
 
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     data: () => {
         return {
-            showAlert: false,
-            alertParams: { header: '', content: '' },
             echart: null
         }
-    },
-    components: {
-        alert: Alert
     },
     created: function(){
         this.loadAllData()
     },
     methods: {
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
         loadAllData: function(){
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             request({
                 url: '/api/statistics/all',
                 method: 'get',
@@ -58,7 +44,7 @@ export default {
             }).catch((error) => {
                 this.alert('加载统计数据失败')
             }).then( data => {
-                this.$parent.$parent.isShowLoading = false
+                this.hideLoading()
             })
         },
         createDateItems: function(from, to){

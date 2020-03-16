@@ -16,27 +16,23 @@
         </div>
         <user-editor @reloadUserList="loadUserList" v-else v-bind:userInfo="currUserInfo" v-bind:authInfo="authInfo" v-bind:authTree="authTree" v-bind:editUser="editUser"></user-editor>
         <confirm @confirmClicked="confirmClicked" v-bind:isShow="showConfirm" v-bind:confirmParams="confirmParams"></confirm>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
     </div>
 </template>
 <script>
-// import ActionBtn from '@/components/content/actionBtn.vue'
 import DetailTable from '@/components/content/table.vue'
 import setting from '../setting'
 import UserEditor from '@/components/content/userEditor.vue'
 import request from '@/axios'
 import confirm from '@/components/common/confirm.vue'
 import qs from 'qs'
-import Alert from '@/components/common/alert.vue'
 
 export default {
-    // props: ['contentData'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
         // 'action-btn': ActionBtn,
         'detail-table': DetailTable,
         'user-editor': UserEditor,
-        'confirm': confirm,
-        'alert': Alert
+        'confirm': confirm
     },
     data: function(){
         return {
@@ -51,9 +47,7 @@ export default {
             authTree: null,
             editUser: false,
             showConfirm: false,
-            showAlert: false,
             confirmParams: {},
-            alertParams: {header: '', content: ''},
             authInfo: null,
             contentData: {actions: {}, data: {}, total: 1, page: 1, 'total_page': 1}
         }
@@ -63,15 +57,6 @@ export default {
         this.loadUserList(1)
     },
     methods: {
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            console.log(str)
-            this.alertParams.header = '操作提示'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
         confirmClicked: function(data){
             this.showConfirm = false
             if(!data){
@@ -138,8 +123,7 @@ export default {
             }
         },
         loadUserList: function(pageNum){
-            // this.$emit('reloadList', pageNum || this.currPage)
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             request({
                 url: '/auth_user/index',
                 method: 'get',
@@ -161,7 +145,7 @@ export default {
                 console.log(error)
                 this.alert('请求用户列表数据失败')
             }).then(() => {
-                this.$parent.$parent.isShowLoading = false
+                this.hideLoading()
             })
         },
         showEditUserView: function(){

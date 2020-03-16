@@ -12,22 +12,21 @@
             <button class="search-btn" @click="loadAppCountData">搜索</button>
         </header>
         <card-container v-bind:cardData="cardData"></card-container>
-        <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
     </div>
 </template>
 <script>
 import flatPicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import CardContainer from '@/components/content/cardContainer.vue'
-import Alert from '@/components/common/alert.vue'
 
 import request from '@/axios'
 
 export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
         'flat-picker': flatPicker,
-        'card-container': CardContainer,
-        alert: Alert
+        'card-container': CardContainer
     },
     data: () => {
         const now = new Date()
@@ -42,11 +41,10 @@ export default {
             'start_time': startTime,
             'end_time': nStr,
             cardData: [],
-            showAlert: false,
-            alertParams: { header: '', content: '' },
             dateConfig: {
                 'time_24hr': true,
-                maxDate: nStr
+                maxDate: nStr,
+                locale: Mandarin
             }
         }
     },
@@ -54,22 +52,14 @@ export default {
         this.loadAppCountData()
     },
     methods: {
-        alertOkClicked: function(){
-            this.showAlert = false
-        },
-        alert: function(str){
-            this.alertParams.header = '提示信息'
-            this.alertParams.content = str
-            this.showAlert = true
-        },
         loadAppCountData: function(){
             // console.log(this.start_time)
             // console.log(this.end_time)
             if(new Date(this.start_time) > new Date(this.end_time)){
-                this.alertParams("起始时间不能大于结束时间")
+                this.alert("起始时间不能大于结束时间")
                 return
             }
-            this.$parent.$parent.isShowLoading = true
+            this.showLoading()
             const orderRequest = new Promise((resolve, reject) => {
                 return request({
                     url: '/api/home/index-order',
@@ -117,7 +107,7 @@ export default {
             }).catch((error) => {
                 this.alert('加载APP首页数据失败')
             }).then(() => {
-                this.$parent.$parent.isShowLoading = false
+                this.hideLoading()
             })
         },
         createCardData: function(dt){
