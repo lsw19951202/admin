@@ -1,7 +1,7 @@
 <template>
-    <div class="pop">
-        <div class="pop-mark" v-if="isShow" @click="hidePop"></div>
-        <div class="pop-box" v-if="isShow" :style="popParams.style" ref="popBox">
+    <div class="pop" v-if="isShow">
+        <div class="pop-mark" @click="hidePop"></div>
+        <div class="pop-box" :style="popParams.style" ref="popBox">
         </div>
     </div>
 </template>
@@ -26,9 +26,9 @@ export default {
     },
     updated: function(){
         this.$refs.popBox&&this.$nextTick().then(() => {
-            if(!this.echart){
-                this.echart = echarts.init(this.$refs.popBox)
-            }
+            // if(!this.echart){
+            this.echart = echarts.init(this.$refs.popBox)
+            // }
             this.echart.setOption(this.popParams.echartOption)
         })
     }

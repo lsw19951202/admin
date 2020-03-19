@@ -4,7 +4,7 @@
             <header class="search-header">
                 <div class="search-group">
                     <label>日期筛选:</label>
-                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time" aria-placeholder="起始时间"></flat-picker>
+                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time" placeholder="起始时间"></flat-picker>
                     <div class="split-line">
                         <div></div>
                     </div>

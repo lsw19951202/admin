@@ -4,7 +4,7 @@
             <header class="search-header">
                 <div class="search-group">
                     <label>日期筛选:</label>
-                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time" aria-placeholder="起始时间"></flat-picker>
+                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time" placeholder="起始时间"></flat-picker>
                     <div class="split-line">
                         <div></div>
                     </div>
@@ -137,7 +137,7 @@ export default {
             this.pageData.total = dt.total || 0
             this.pageData.page = dt.page || 1
 
-            const fields = ['statistics_day', 'platform', 'lm_predict_amount', 'lm_settlement_amount', 'lm_settlement_amount', 'db_settlement_amount']
+            const fields = ['statistics_day', 'platform', 'lm_predict_amount', 'lm_settlement_amount', 'lm_settlement_amount', 'db_settlement_amount', 'diff_predict_amount', 'diff_settlement_amount']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 const item = dt.data[idx]

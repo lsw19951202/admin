@@ -1,7 +1,7 @@
 <template>
-    <div class="pop">
-        <div class="pop-mark" v-if="isShow" @click="hidePop"></div>
-        <div class="pop-box" v-if="isShow" :style="popParams.style" v-html="popParams.htmlContent">
+    <div class="pop" v-if="isShow" >
+        <div class="pop-mark" @click="hidePop"></div>
+        <div class="pop-box" :style="popParams.style" v-html="popParams.htmlContent">
         </div>
     </div>
 </template>

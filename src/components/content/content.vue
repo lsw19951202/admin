@@ -24,6 +24,11 @@ import cpsCompanyOrderVue from '../../views/cpsCompanyOrder.vue'
 import cpsCapitalVue from '../../views/cpsCapital.vue'
 import cpsStatisticsCount from '../../views/cpsStatisticsCount.vue'
 import cpsHandData from '../../views/cpsHandData.vue'
+import userList from '../../views/userList.vue'
+import orderList from '../../views/orderList.vue'
+import withdrawListVue from '../../views/withdrawList.vue'
+import materialListVue from '../../views/materialList.vue'
+import orderSalesListVue from '../../views/orderSalesList.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -55,7 +60,12 @@ export default {
         'cps-company-order':cpsCompanyOrderVue,
         'cps-capital': cpsCapitalVue,
         'cps-statistics-count': cpsStatisticsCount,
-        'cps-handdata': cpsHandData
+        'cps-handdata': cpsHandData,
+        'user-list': userList,
+        'order-list': orderList,
+        'withdraw-list': withdrawListVue,
+        'material-list': materialListVue,
+        'order-saleslist': orderSalesListVue
     }
 }
 </script>

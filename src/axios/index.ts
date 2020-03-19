@@ -9,8 +9,8 @@ Vue.use(VueCookies)
 let requestNum = 0
 
 const instance = axios.create({
-    baseURL: Setting.baseUrl,
-    timeout: 6000
+    baseURL: Setting.baseUrl//,
+    // timeout: 6000
 })
 
 instance.defaults.responseType = 'json'

@@ -1,0 +1,237 @@
+<template>
+    <div class="detail-container">
+        <div class="detail-data-box" v-show="!showTeamList">
+            <header class="search-header">
+                <div class="search-group">
+                    <label>用户ID:</label>
+                    <input type="text" placeholder="请输入" v-model="id">
+                </div>
+                <div class="search-group">
+                    <label>用户昵称:</label>
+                    <input type="text" placeholder="请输入" v-model="nickName">
+                </div>
+                <div class="search-group">
+                    <label>电话号码:</label>
+                    <input type="text" placeholder="请输入" v-model="phone">
+                </div>
+                <div class="search-group">
+                    <label>团队ID:</label>
+                    <input type="text" placeholder="请输入" v-model="teamId">
+                </div>
+                <div class="search-group">
+                    <label>日期筛选:</label>
+                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeBegin" placeholder="起始时间"></flat-picker>
+                    <div class="split-line">
+                        <div></div>
+                    </div>
+                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeEnd" placeholder="结束时间"></flat-picker>
+                </div>
+                <selector class="search-group" v-bind:value="rank" v-bind:selectParams="selectParams" @selectOptsClicked="selectOptsClicked"></selector>
+                <button class="search-btn" @click="loadTBData(1)">搜索</button>
+            </header>
+            <div class="table-container">
+                <detail-table v-bind:tbType="tbType" v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" @showMyTeam="loadTeamList" @changeUserRank="changeUserRank" @checkUser="changeUserCheckStatu" v-bind:selectUserList="selectedUserList"></detail-table>
+            </div>
+            <div class="page-footer" style="display: flex;">
+                <div style="margin-top: .3rem; height: .875rem; line-height: .875rem;">
+                    <input @click="changeAllUserCheckStatu($event)" type="checkbox" :checked="allUserChecked" style="margin-left: 1rem;">
+                    <label style="font-size: .375rem; color: #666666; display: inline-block; height: 100%; line-height: 1rem; margin-left: .3125rem; vertical-align: top;">全选</label>
+                    <button class="action-btn" @click="moveTeam">团队迁移</button>
+                </div>
+                <page style="width: 0; flex: 1;" v-bind:pageData="pageData" @loadList="loadTBData"></page>
+            </div>
+        </div>
+        <team-list v-if="showTeamList" :teamId="teamId"></team-list>
+    </div>
+</template>
+<script>
+import flatPicker from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
+import Selector from '@/components/common/select.vue'
+import request from '@/axios'
+import DetailTable from '@/components/content/table.vue'
+import setting from '@/setting'
+import page from '@/components/content/page.vue'
+import TeamList from '@/components/content/teamList.vue'
+
+export default {
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
+    components: {
+        'flat-picker': flatPicker,
+        'selector': Selector,
+        'detail-table': DetailTable,
+        'page': page,
+        'team-list': TeamList
+    },
+    data: () => {
+        const now = new Date()
+        let nStr = ''
+        nStr += now.getFullYear() + '-'
+        nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
+        nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
+        return {
+            showTeamList: false,
+            dateConfig: {
+                'time_24hr': true,
+                maxDate: nStr,
+                locale: Mandarin
+            },
+            id: '',
+            nickName: '',
+            phone: '',
+            teamId: '',
+            createTimeBegin: '',
+            createTimeEnd: '',
+            selectParams: {
+                label: '职级',
+                placeholder: '请选择',
+                options: [{
+                    value: '',
+                    text: '请选择'
+                },{
+                    value: 1,
+                    text: '会员'
+                }, {
+                    value: 2,
+                    text: '团长'
+                }, {
+                    value: 3,
+                    text: '总监'
+                }]
+            },
+            rank: '',
+            tbData: [],
+            tbType: 'userList',
+            tableHeader: setting.tableHeader.userList,
+            pageData: {
+                'total': 0,
+                'page': 1,
+                'total_page': 0
+            },
+            selectedUserList: []
+        }
+    },
+    created: function(){
+        this.loadTBData()
+    },
+    methods: {
+        changeInviteCode: function(idx, inviteCode){
+            // return request({
+            //     url: ''
+            // })
+            return Promise.resolve().then(() => {
+                console.log(idx)
+                console.log(inviteCode)
+                console.log(this.tbData[idx])
+                return true
+            })
+        },
+        changeAllUserCheckStatu: function(e){
+            const checked = e.target.checked
+            for(let idx = 0; idx < this.selectedUserList.length; idx++){
+                this.selectedUserList[idx].checked = checked
+            }
+        },
+        changeUserCheckStatu: function(idx){
+            this.selectedUserList[idx].checked = !this.selectedUserList[idx].checked
+        },
+        moveTeam: function(){
+            let flag = false
+            for(let idx = 0; idx < this.selectedUserList.length; idx++){
+                if(this.selectedUserList[idx].checked){
+                    flag = true
+                    break
+                }
+            }
+            if(!flag){
+                this.alert('请选择要迁移的团队成员')
+                return
+            }else{
+                console.log(this.selectedUserList)
+            }
+        },
+        changeUserRank: function(user){
+            console.log(user)
+        },
+        loadTeamList: function(user){
+            this.showTeamList = true
+            this.$parent.subTitle2 = '我的团队'
+            this.teamId = user[0]
+            console.log(this.teamId)
+        },
+        selectOptsClicked: function(dt){
+            this.rank = dt
+        },
+        loadTBData: function(pageNum){
+            this.showLoading()
+            request({
+                url: '/user/getAll',
+                method: 'get',
+                params: {
+                    page: pageNum || 1,
+                    id: this.id,
+                    nickName: this.nickName,
+                    phone: this.phone,
+                    teamId: this.teamId,
+                    createTimeBegin: this.createTimeBegin,
+                    createTimeEnd: this.createTimeEnd,
+                    rank: this.rank
+                }
+            }).then((resp) => {
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        this.createTBData(resp.data.data)
+                    }else{
+                        this.alert(resp.data.message || '加载用户列表失败')
+                    }
+                }else{
+                    this.alert('加载用户列表失败')
+                }
+            }).catch((error) => {
+                this.alert('加载用户列表失败')
+            }).then(() => {
+                this.hideLoading()
+            })
+        },
+        createTBData: function(dt){
+            this.pageData.total = dt.total
+            this.pageData['total_page'] = dt.pageCount || dt.total_page || 0
+            this.pageData.page = dt.page
+            const fields = ['userId', 'rank', 'avatar', 'nickName', 'mobile', 'gender', 'wechat', 'inviteCode', 'availableAmount', 'withdrawAmount', 'createTime', 'lastLoginTime']
+            const tbData = []
+            const selectedUserList = []
+            for(let idx = 0; idx < dt.data.length; idx++){
+                const item = dt.data[idx]
+                tbData.push([])
+                for(let idxx = 0; idxx < fields.length; idxx++){
+                    tbData[idx].push(item[fields[idxx]] || (item[fields[idxx]] === 0 ? item[fields[idxx]] : '--'))
+                }
+                selectedUserList.push({
+                    data: tbData[idx],
+                    checked: false
+                })
+            }
+            this.tbData = Object.assign([], tbData)
+            this.selectedUserList = Object.assign([], selectedUserList)
+        }
+    },
+    computed: {
+        allUserChecked: function(){
+            let flag = true
+            for(let idx = 0; idx < this.selectedUserList.length; idx++){
+                if(!this.selectedUserList[idx].checked){
+                    flag = false
+                    break
+                }
+            }
+            return flag
+        }
+    }
+}
+</script>
+<style scoped>
+.detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
+.search-header { display: block; }
+.search-group { margin-bottom: .5rem; }
+</style>

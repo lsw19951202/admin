@@ -1,6 +1,6 @@
 <template>
     <div class="detail-container">
-        <header class="search-header">
+        <header class="search-header" style="padding-left: .625rem; padding-right: .71875rem; margin-bottom: .5rem;">
             <div class="search-group">
                 <label>日期筛选:</label>
                 <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time" placeholder="起始时间"></flat-picker>
@@ -34,11 +34,8 @@ export default {
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
-        now.setDate(now.getDate() - 15)
-        let startTime = ''
-        startTime = now.getFullYear() + '-' + (((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1)) + '-' + (((now.getDate() < 10) ? '0' : '') + now.getDate())
         return {
-            'start_time': startTime,
+            'start_time': nStr,
             'end_time': nStr,
             cardData: [],
             dateConfig: {

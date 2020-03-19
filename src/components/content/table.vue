@@ -2,7 +2,7 @@
     <table cellspacing="0" ref="table">
         <thead :class="tableHeaderFixed?'theadFixed':''" ref="thead">
             <tr v-for="(row, index) in tableHeader" v-bind:key="index">
-                <td v-for="(col, idx) in row" v-bind:key="idx" :colspan="col.colspan">
+                <td v-for="(col, idx) in row" v-bind:key="idx" :colspan="col.colspan || 1">
                     {{col.name}}
                     <div v-if="col.canSort" class="sort">
                         <span :class="'asc' + (sortType == 'asc' ? ' hover' : '')" @click="sortTBData('asc', col.sortBy)"></span>
@@ -66,18 +66,123 @@
                 </td>
             </tr>
         </tbody>
+        <tbody v-if="tbType == 'userList'" ref="tbody" class="user-list">
+            <tr v-for="(tbRow, index) in tbData" v-bind:key="index">
+                <td style="width: 2.5625rem; text-align: center;">
+                    <input type="checkbox" @click="changeCheckStatus($event, index)" :checked="selectUserList[index].checked">
+                </td>
+                <td v-for="(tbCol, idx) in tbRow" v-bind:key="idx">
+                    <img :src="tbCol" v-if="idx == 2 && tbCol != '--'" style="width: 1.375rem; height: 1.375rem; border-radius: 50%;">
+                    <div v-else-if="idx == 7" style="width: 100%; height: 100%; text-align: center;">
+                        <div class="editable-box">
+                            <div class="editable-dom" contenteditable="true" @click="startEdit($event)">{{tbCol}}</div>
+                            <div class="editable-ok" @click="changeInviteCode($event, index)"></div>
+                            <div class="editable-cancel" @click="cancelEdit($event)"></div>
+                        </div>
+                    </div>
+                    <slot v-else>{{tbCol}}</slot>
+                </td>
+                <td>
+                    <a @click="showMyTeam(tbRow)">我的团队</a>
+                    <a @click="changeUserRank(tbRow)">用户调级</a>
+                </td>
+            </tr>
+        </tbody>
+        <tbody v-if="tbType == 'teamList'" ref="tbody" class="team-list">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <img :src="tbCol" v-if="idx == 2 && tbCol != '--'" style="width: 1.375rem; height: 1.375rem; border-radius: 50%;">
+                    <slot v-else>{{tbCol}}</slot>
+                </td>
+            </tr>
+        </tbody>
+        <tbody v-if="tbType == 'orderList'" ref="tbody" class="order-list">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <img :src="tbCol" v-if="idx == 3 && tbCol != '--'" style="width: 1.375rem; height: 1.375rem; border-radius: 50%;">
+                    <slot v-else>{{tbCol}}</slot>
+                </td>
+            </tr>
+        </tbody>
+        <tbody v-if="tbType == 'withdrawList'" ref="tbody" class="withdraw-list">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">{{tbCol}}</td>
+                <td>
+                    <a v-if="tbRow[3] == '等待审核'" @click="checkWithdraw(tbRow, index)">提现审核</a>
+                    <slot v-else>--</slot>
+                </td>
+            </tr>
+        </tbody>
+        <tbody v-if="tbType == 'materialList'" ref="tbody" class="material-list">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <switch-progress v-if="idx == 4" :statusData="idx" :turnOn="tbCol == 1" @changeSwitchStatus="changeSwitchStatus"></switch-progress>
+                    <div v-else-if="idx == 6">
+                        <img v-for="(imgSrc, idxx) in tbCol" :key="idxx" :src="imgSrc.indexOf('http') >= 0 ? imgSrc : ('http://' + imgSrc)">
+                    </div>
+                    <slot v-else>{{tbCol}}</slot>
+                </td>
+                <td>
+                    <a @click="modifyMaterial(index)">修改</a>
+                    <a @click="delMaterial(index)">删除</a>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 <script>
+import switchProgress from '@/components/common/switch.vue'
 
 export default {
-    props: ['tableHeader', 'tbData', 'tbType', 'tableHeaderFixed', 'tableBodyClick', 'reduceData'],
+    props: ['tableHeader', 'tbData', 'tbType', 'tableHeaderFixed', 'tableBodyClick', 'reduceData', 'selectUserList'],
     data: () => {
         return {
             'sortType': ''
         }
     },
+    components: {
+        'switch-progress': switchProgress
+    },
     methods: {
+        changeSwitchStatus: function(dt){
+            this.$emit('changeSwitchStatus', dt)
+        },
+        delMaterial: function(idx){
+            this.$emit('delMaterial', idx)
+        },
+        modifyMaterial: function(idx){
+            this.$emit('modifyMaterial', idx)
+        },
+        checkWithdraw: function(dt, index){
+            this.$emit('checkWithdraw', {data: dt, idx: index})
+        },
+        changeInviteCode: function(e, index){
+            // console.log(e.target.parentNode.childNodes[0].innerHTML.trim())
+            this.$parent.changeInviteCode(index, e.target.parentNode.childNodes[0].innerHTML.trim())
+                .then((dt) => {
+                    if(dt){
+                        e.target.parentNode.className = 'editable-box'
+                    }
+                })
+            // e.target.parentNode.childNodes[0].focus()
+        },
+        cancelEdit: function(e){
+            e.target.parentNode.className = 'editable-box'
+        },
+        startEdit: function(e){
+            e.target.parentNode.className = 'editable-box focus'
+            // e.target.contenteditable = true
+            // e.target.focus()
+        },
+        changeCheckStatus: function(e, idx){
+            this.$emit('checkUser', idx)
+        },
+        changeUserRank: function(user){
+            this.$emit('changeUserRank', user)
+        },
+        showMyTeam: function(user){
+            this.$emit('showMyTeam', user)
+        },
         showHandDetail: function(handData){
             this.$emit('loadHandDetail', handData)
         },
@@ -136,9 +241,33 @@ tr.auth-menu { background-color: transparent; }
 .sort>span:last-child { margin-top: 1px; }
 .sort>span:first-child::after { content: ''; width: .3125rem; height: .3125rem; background-color: #999999; transform: rotate(45deg); position: absolute; bottom: -.15625rem; left: 0; cursor: pointer; }
 .sort>span:last-child::before { content: ''; width: .3125rem; height: .3125rem; background-color: #999999; transform: rotate(45deg); position: absolute; top: -.15625rem; left: 0; cursor: pointer; }
-.sort>span.hover::after,.sort>span.hover::before { background-color: #333333; }
 tbody.scrollable { display: block; overflow-y: scroll; }
 tbody.scrollable tr { display: table; width: 100%; table-layout: fixed; }
 .scrollable td { overflow-x: scroll; white-space: nowrap; }
 .special_reduce { background-color: red; color: white; }
+.user-list>tr>td:nth-child(3),.user-list>tr>td:nth-child(4),.user-list>tr>td:nth-child(7) { padding: 0 0.2rem; }
+.user-list>tr>td:nth-child(5) { max-width: 4rem; white-space: nowrap; overflow-x: scroll; min-width: 4rem; width: 4rem; }
+.user-list>tr>td:nth-child(8) { max-width: 2.5rem; min-width: 2.5rem; width: 2.5rem; white-space: nowrap; overflow-x: scroll; }
+.user-list>tr>td:nth-child(9) { max-width: 4.5rem; min-width: 4.5rem; width: 4.5rem; }
+.user-list>tr>td:nth-child(13),.user-list>tr>td:nth-child(12) { max-width: 3.5rem; width: 3.5rem; min-width: 3.5rem; }
+.user-list a,.withdraw-list a,.material-list a { cursor: pointer; color: #4381E6; }
+.user-list a:last-child,.material-list a:last-child { margin-left: .5rem; }
+.editable-box { position: relative; width: 4.3rem; height: .90625rem; box-sizing: border-box; line-height: .90625rem; display: inline-block; text-align: center; }
+.focus .editable-dom { text-align: left; padding-left: .25rem; background-color: #F8F8F8; }
+.editable-ok,.editable-cancel { cursor: pointer; display: none; width: .4375rem; height: .4375rem; position: absolute; background-repeat: no-repeat; background-size: 100% 100%; background-position: center center; border-radius: 50%; top: .21875rem; }
+.editable-ok { right: .75rem; background-image: url(../../assets/icon_save.png); }
+.editable-cancel { background-image: url(../../assets/icon_close2.png); right: .21875rem; }
+.focus .editable-ok, .focus .editable-cancel { display: block; }
+.team-list>tr>td:nth-child(1),.team-list>tr>td:nth-child(2),.team-list>tr>td:nth-child(3),.team-list>tr>td:nth-child(6) { padding: 0 0.2rem; }
+.team-list>tr>td:nth-child(15),.team-list>tr>td:nth-child(16) { max-width: 3.5rem; min-width: 3.5rem; width: 3.5rem; }
+.team-list>tr>td:nth-child(4) { max-width: 3rem; min-width: 3rem; width: 3rem; white-space: nowrap; overflow-x: scroll; }
+.order-list>tr>td:nth-child(1),.order-list>tr>td:nth-child(2) { width: 4rem; max-width: 4rem; min-width: 4rem; white-space: nowrap; overflow-x: scroll; padding: 0 .2rem; }
+.order-list>tr>td:nth-child(14),.order-list>tr>td:nth-child(15) { max-width: 3.5rem; min-width: 3.5rem; width: 3.5rem; }
+.order-list>tr>td:nth-child(3) { width: 3rem; max-width: 3rem; min-width: 3rem; overflow-x: scroll; white-space: nowrap; padding: 0 .2rem; }
+.material-list>tr>td:nth-child(5) { padding: 0 .3rem; }
+.material-list>tr>td:nth-child(6) { padding: 0 .3rem; width: 15rem; min-width: 15rem; max-width: 15rem; overflow-y: scroll; }
+.material-list>tr>td:nth-child(7) { width: 9rem; min-width: 9rem; max-width: 9rem; text-align: center; }
+.material-list>tr>td:nth-child(10),.material-list>tr>td:nth-child(11) { width: 3.5rem; min-width: 3.5rem; max-width: 3.5rem; }
+.material-list img { width: 1.875rem; height: 1.875rem; margin-left: .5rem; }
+.material-list img:first-child { margin-left: 0; }
 </style>
