@@ -57,7 +57,7 @@
             </div>
             <page v-bind:pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams"></pop-ups>
+        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams" @hidePop="hideMoneyPoolPop"></pop-ups>
     </div>
 </template>
 <script>
@@ -130,6 +130,9 @@ export default {
         this.loadCardData()
     },
     methods: {
+        hideMoneyPoolPop: function(){
+            this.showPop = false
+        },
         loadTBData: function(pageNum){
             console.log(pageNum)
             if(new Date(this.start_time) > new Date(this.end_time)){

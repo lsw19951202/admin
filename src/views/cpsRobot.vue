@@ -27,8 +27,9 @@
                 <detail-table @sortTBData="sortTBData" @tableBodyClicked="tableBodyClicked" v-bind:tableHeaderFixed="tableHeaderFixed" v-bind:tableBodyClick="tableBodyClick" v-bind:tbData="tbData" v-bind:reduceData="reduceData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType"></detail-table>
             </div>
         </div>
-        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams"></pop-ups>
-        <pop-chart v-bind:isShow="showPopChart" v-bind:popParams="popParams"></pop-chart>
+        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams" @hidePop="hideMoneyPoolPop"></pop-ups>
+        <pop-ups :isShow="showPopChart" :popParams="echartPopParams" @hidePop="hideEchartPop"></pop-ups>
+        <!-- <pop-chart v-bind:isShow="showPopChart" v-bind:popParams="popParams"></pop-chart> -->
     </div>
 </template>
 <script>
@@ -39,7 +40,7 @@ import request from '@/axios'
 import PopUps from '@/components/common/popUps.vue'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
-import PopChart from '@/components/common/popChart.vue'
+// import PopChart from '@/components/common/popChart.vue'
 
 // require('@/mock')
 
@@ -48,8 +49,8 @@ export default {
     components: {
         'flat-picker': flatPicker,
         'pop-ups': PopUps,
-        'detail-table': DetailTable,
-        'pop-chart': PopChart
+        'detail-table': DetailTable //,
+        // 'pop-chart': PopChart
     },
     data: () => {
         const now = new Date()
@@ -76,7 +77,8 @@ export default {
             tableBodyClick: true,
             showPop: false,
             showPopChart: false,
-            popParams: { style: 'width: 23.44rem; height: 17.81rem;', htmlContent: '', popType: 'echart', echartOption: {} },
+            popParams: { style: 'font-size: 0.5rem; width: 20rem; height: 8.21rem; padding: 1.25rem 0.625rem;', htmlContent: '' },
+            echartPopParams: { style: 'width: 23.44rem; height: 17.81rem;', echartOption: {} },
             newUserNum: 0,
             'robot_name': '',
             currSortType: ''
@@ -86,6 +88,12 @@ export default {
         this.loadTBData()
     },
     methods: {
+        hideMoneyPoolPop: function(){
+            this.showPop = false
+        },
+        hideEchartPop: function(){
+            this.showPopChart = false
+        },
         tableBodyClicked: function(evt){
             // console.log(evt.target)
             let target = evt.target;
@@ -146,7 +154,8 @@ export default {
                 }
             }
             // console.log(options)
-            this.popParams = Object.assign({}, { style: 'width: 23.44rem; height: 17.81rem;', htmlContent: '', popType: 'echart', echartOption: options })
+            // this.popParams = Object.assign({}, { style: 'width: 23.44rem; height: 17.81rem;', echartOption: options })
+            this.echartPopParams.echartOption = options
             this.showPopChart = true
         },
         createDateItems: function(fromTime, endTime){
@@ -429,12 +438,6 @@ export default {
                         str += '<div style="width: 49%; display: inline-block; height: 1.5rem; line-height: 1.5rem;">提现资金池:<span style="color: #ff2a2a;">' + (result.data['pool_five'] || 0) + '</span></div>'
                         str += '<div style="width: 49%; display: inline-block; height: 1.5rem; line-height: 1.5rem;">余额资金池:<span style="color: #ff2a2a;">' + (result.data['pool_six'] || 0) + '</span></div>'
                         this.popParams.htmlContent = str
-                        this.popParams.style = {
-                            'font-size': '0.5rem',
-                            'width': '20rem',
-                            'height': '8.21rem',
-                            'padding': '1.25rem 0.625rem'
-                        }
                         this.showPop = true
                     }else{
                         this.alert(result.message || '加载资金池数据失败')

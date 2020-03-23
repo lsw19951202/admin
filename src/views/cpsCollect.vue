@@ -79,7 +79,7 @@
             </div>
             <page v-bind:pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams"></pop-ups>
+        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams" @hidePop="hideMoneyPoolPop"></pop-ups>
     </div>
 </template>
 <script>
@@ -158,6 +158,9 @@ export default {
         this.loadTXData()
     },
     methods: {
+        hideMoneyPoolPop: function(){
+            this.showPop = false
+        },
         showPool: function(){
             console.log('显示资金池数据')
             this.showLoading()

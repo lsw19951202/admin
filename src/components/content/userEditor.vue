@@ -285,9 +285,9 @@ export default {
 </script>
 <style scoped>
 .user-editor { color: #666; overflow: scroll; }
-.checkbox { margin-top: .15rem; vertical-align: sub; position: relative; padding: 0; box-sizing: border-box; margin-right: .5rem; z-index: 5000; }
-.checkbox:checked::after { background: #fff url(../../assets/checked.png) no-repeat left center/auto; }
-.checkbox::after { z-index: 5000; content: " "; position: absolute; top: -0.15rem; width: 1rem; height: 1rem; overflow: hidden; background: #fff url(../../assets/check.png) no-repeat left center/auto; }
+.checkbox { vertical-align: sub; position: relative; padding: 0; box-sizing: border-box; margin-right: .5rem; width: .625rem; height: .625rem; }
+.checkbox:checked::after { background-image: url(../../assets/checked.png); }
+.checkbox::after { background-color: #fff; background-image: url(../../assets/check.png); position: absolute; content: ' '; background-repeat: no-repeat; background-position: center center; background-size: 100% 100%; width: 0.625rem; height: 0.625rem; }
 .tree-box { background: #fff url(../../assets/xu_line.png) .25rem center / 1px no-repeat repeat; }
 .tree-box.child { padding-left: 2rem }
 .tree-item { margin: .3rem 0; background-color: #fff; margin-top: 0; }

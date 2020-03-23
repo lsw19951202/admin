@@ -11,6 +11,14 @@
                     <input type="text" placeholder="请输入" v-model="goodsId">
                 </div>
                 <selector class="search-group" :selectParams="selectParams" @selectOptsClicked="selectOptsClicked" :value="platform"></selector>
+                <div class="search-group">
+                    <label>日期筛选:</label>
+                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeBegin" placeholder="起始时间"></flat-picker>
+                    <div class="split-line">
+                        <div></div>
+                    </div>
+                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeEnd" placeholder="结束时间"></flat-picker>
+                </div>
                 <button class="action-btn" @click="loadTBData(1)">搜索</button>
             </header>
             <div class="table-container">
@@ -26,16 +34,30 @@ import setting from '@/setting'
 import Selector from '@/components/common/select.vue'
 import DetailTable from '@/components/content/table.vue'
 import Page from '@/components/content/page.vue'
+import flatPicker from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
+        'flat-picker': flatPicker,
         'selector': Selector,
         'detail-table': DetailTable,
         'page': Page
     },
     data: () => {
+        const now = new Date()
+        let nStr = ''
+        nStr += now.getFullYear() + '-'
+        nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
+        nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return {
+            dateConfig: {
+                'time_24hr': true,
+                maxDate: nStr,
+                locale: Mandarin
+            },
             goodsTitle: '',
             platform: '',
             goodsId: '',
@@ -68,6 +90,8 @@ export default {
                     text: '美团'
                 }]
             },
+            createTimeBegin: nStr,
+            createTimeEnd: nStr,
             tableHeader: setting.tableHeader.orderSalesList
         }
     },
@@ -84,7 +108,9 @@ export default {
                     page: pageNum || 1,
                     goodsTitle: this.goodsTitle,
                     goodsId: this.goodsId,
-                    platform: this.platform
+                    platform: this.platform,
+                    createTimeBegin: this.createTimeBegin,
+                    createTimeEnd: this.createTimeEnd
                 }
             }).then((resp) => {
                 if(resp.status == 200){

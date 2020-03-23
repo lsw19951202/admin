@@ -124,8 +124,8 @@ export default {
             user: '',
             orderStatus: '',
             platform: '',
-            createTimeBegin: '',
-            createTimeEnd: '',
+            createTimeBegin: nStr,
+            createTimeEnd: nStr,
             tbType: 'orderList'
         }
     },

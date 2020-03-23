@@ -62,7 +62,7 @@
             </div>
             <page v-bind:pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams"></pop-ups>
+        <pop-ups v-bind:isShow="showPop" v-bind:popParams="popParams" @hidePop="hideMoneyPoolPop"></pop-ups>
     </div>
 </template>
 <script>
@@ -111,13 +111,13 @@ export default {
                 label: '公司名称',
                 placeholder: '请选择公司',
                 options: [{
-                    value: 1,
+                    value: 3,
                     text: '全部'
                 }, {
-                    value: 2,
+                    value: 1,
                     text: '四川云瞻'
                 }, {
-                    value: 3,
+                    value: 2,
                     text: '成都云瞻'
                 }]
             },
@@ -152,6 +152,9 @@ export default {
         this.loadCardData()
     },
     methods: {
+        hideMoneyPoolPop: function(){
+            this.showPop = false
+        },
         loadTBData: function(pageNum){
             console.log(pageNum)
             if(new Date(this.start_time) > new Date(this.end_time)){

@@ -84,7 +84,7 @@
                 </td>
                 <td>
                     <a @click="showMyTeam(tbRow)">我的团队</a>
-                    <a @click="changeUserRank(tbRow)">用户调级</a>
+                    <a @click="changeUserRank(tbRow, index)">用户调级</a>
                 </td>
             </tr>
         </tbody>
@@ -116,7 +116,7 @@
         <tbody v-if="tbType == 'materialList'" ref="tbody" class="material-list">
             <tr v-for="(tbRow, index) in tbData" :key="index">
                 <td v-for="(tbCol, idx) in tbRow" :key="idx">
-                    <switch-progress v-if="idx == 4" :statusData="idx" :turnOn="tbCol == 1" @changeSwitchStatus="changeSwitchStatus"></switch-progress>
+                    <switch-progress v-if="idx == 4" :statusData="index" :turnOn="tbCol == 1" @changeSwitchStatus="changeSwitchStatus"></switch-progress>
                     <div v-else-if="idx == 6">
                         <img v-for="(imgSrc, idxx) in tbCol" :key="idxx" :src="imgSrc.indexOf('http') >= 0 ? imgSrc : ('http://' + imgSrc)">
                     </div>
@@ -177,8 +177,8 @@ export default {
         changeCheckStatus: function(e, idx){
             this.$emit('checkUser', idx)
         },
-        changeUserRank: function(user){
-            this.$emit('changeUserRank', user)
+        changeUserRank: function(user, idx){
+            this.$emit('changeUserRank', {user: user, idx: idx})
         },
         showMyTeam: function(user){
             this.$emit('showMyTeam', user)
@@ -270,4 +270,7 @@ tbody.scrollable tr { display: table; width: 100%; table-layout: fixed; }
 .material-list>tr>td:nth-child(10),.material-list>tr>td:nth-child(11) { width: 3.5rem; min-width: 3.5rem; max-width: 3.5rem; }
 .material-list img { width: 1.875rem; height: 1.875rem; margin-left: .5rem; }
 .material-list img:first-child { margin-left: 0; }
+input[type="checkbox"] { position: relative; width: 0.625rem; height: .625rem; vertical-align: sub; }
+input[type="checkbox"]::after { background-color: #fff; background-image: url(../../assets/check.png); position: absolute; content: ' '; background-repeat: no-repeat; background-position: center center; background-size: 100% 100%; width: 0.625rem; height: 0.625rem; }
+input[type="checkbox"]:checked::after { background-image: url(../../assets/checked.png); }
 </style>

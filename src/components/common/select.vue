@@ -79,4 +79,7 @@ export default {
         height: 0%;
     }
 }
+.pop-box .body .pop-groups.user-level-selector { width: 100%; height: 1.25rem; line-height: 1.25rem; font-size: .4375rem; margin-top: 1rem; }
+.pop-box .body .pop-groups.user-level-selector label { width: 4.28125rem; text-align: right; height: 1.25rem; line-height: 1.25rem; }
+.pop-box .body .pop-groups.user-level-selector .select-box { width: 9.375rem; height: 1.25rem; line-height: 1.25rem; color: #999999; font-size: .4375rem; margin-left: .25rem; }
 </style>

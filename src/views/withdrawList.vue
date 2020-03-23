@@ -23,6 +23,7 @@
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>
         </div>
+        <pop-ups :isShow="showPopUps" :popParams="popParams" @popSave="saveWithdraw" @popCancel="cancelWithdraw" @popReject="rejectWithdraw"></pop-ups>
     </div>
 </template>
 <script>
@@ -34,6 +35,7 @@ import request from '@/axios'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
 import page from '@/components/content/page.vue'
+import popUpsVue from '../components/common/popUps.vue'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
@@ -41,7 +43,8 @@ export default {
         'flat-picker': flatPicker,
         'selector': Selector,
         'detail-table': DetailTable,
-        'page': page
+        'page': page,
+        'pop-ups': popUpsVue
     },
     data: () => {
         const now = new Date()
@@ -50,6 +53,16 @@ export default {
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return {
+            popParams: {
+                header: '提现审核',
+                type: 'withdraw',
+                style: 'width: 17.3125rem;',
+                reject: false,
+                rejectReason: '',
+                data: null
+            },
+            withdrawList: [],
+            showPopUps: false,
             dateConfig: {
                 'time_24hr': true,
                 maxDate: nStr,
@@ -106,6 +119,24 @@ export default {
         this.loadTBData()
     },
     methods: {
+        saveWithdraw: function(){
+            console.log(this.popParams)
+            this.showPopUps = false
+            // TODO
+            if(this.popParams.reject){
+                console.log('拒绝提现,原因是:' + this.popParams.rejectReason)
+            }else{
+                console.log('同意提现')
+            }
+        },
+        cancelWithdraw: function(){
+            console.log('cancel')
+            this.showPopUps = false
+            console.log('取消提现')
+        },
+        rejectWithdraw: function(){
+            this.popParams.reject = true
+        },
         loadTBData: function(pageNum){
             this.showLoading()
             request({
@@ -143,6 +174,15 @@ export default {
             const fields = ['username', 'applyAmount', 'auditStatus', 'applyPlat', 'createTime', 'dealTime']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
+                const item = dt.data[idx]
+                if(item.applyPlat == '微信'){
+                    item.applyPlat = 0
+                }else if(item.applyPlat == '支付宝'){
+                    item.applyPlat = 1
+                }
+                this.withdrawList.push(item)
+            }
+            for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
                 const item = dt.data[idx]
                 tbData[idx].push((idx < 9 ? '0' : '') + (idx + 1))
@@ -160,6 +200,10 @@ export default {
         },
         checkWithdraw: function(dt){
             console.log(dt)
+            this.popParams.data = this.withdrawList[dt.idx]
+            this.popParams.reject = false
+            this.popParams.rejectReason = ''
+            this.showPopUps = true
         }
     }
 }

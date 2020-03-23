@@ -1,6 +1,6 @@
 <template>
     <div class="detail-container">
-        <div class="detail-data-box">
+        <div class="detail-data-box" v-show="!showMaterialEditor">
             <header class="search-header">
                 <div class="search-group">
                     <label>关键字:</label>
@@ -15,6 +15,7 @@
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>
         </div>
+        <material-editor v-show="showMaterialEditor" :material="material" @saveMaterial="saveMaterial" @cancelEditMaterial="cancelEditMaterial"></material-editor>
     </div>
 </template>
 <script>
@@ -23,16 +24,21 @@ import request from '@/axios'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
 import page from '@/components/content/page.vue'
+import materialEditorVue from '../components/content/materialEditor.vue'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components: {
         'selector': Selector,
         'detail-table': DetailTable,
-        'page': page
+        'page': page,
+        'material-editor': materialEditorVue
     },
     data: () => {
         return {
+            showMaterialEditor: false,
+            material: {id: null, type: null, keyWord: '', title: '', status: 1, detail: '', imgs: [], adderId: null, uperId: null, updateTime: '', createTime: '', adderName: '', uperName: ''},
+            materials: [],
             keyWord: '',
             status: '',
             tbType: 'materialList',
@@ -62,8 +68,19 @@ export default {
         this.loadTBData()
     },
     methods: {
+        saveMaterial: function(){
+            console.log(this.material)
+        },
         changeMaterialStatus: function(dt){
             console.log(dt)
+            this.showLoading()
+            // TODO
+            Promise.resolve().then(() => {
+                this.tbData[dt.data][4] = dt.status ? 1 : 0
+                this.tbData = Object.assign([], this.tbData)
+                this.materials[dt.data].status = dt.status ? 1 : 0
+                this.hideLoading()
+            })
         },
         loadTBData: function(pageNum){
             this.showLoading()
@@ -96,6 +113,7 @@ export default {
             this.pageData.page = dt.page
             this.pageData['total_page'] = dt.total_page || dt.pageCount || 0
 
+            this.materials = dt.data || []
             const tbData = []
             const fields = ['type', 'keyWord', 'title', 'status', 'detail', 'imgs', 'adderName', 'uperName', 'createTime', 'updateTime']
             for(let idx = 0; idx < dt.data.length; idx++){
@@ -113,16 +131,35 @@ export default {
         },
         modifyMaterial: function(idx){
             console.log(idx)
+            this.material = Object.assign({}, this.materials[idx])
+            while(this.material.detail.indexOf('&lt;br&gt;') >= 0){
+                this.material.detail = this.material.detail.replace('&lt;br&gt;', '<br>')
+            }
+            this.showMaterialEditor = true
+            this.$parent.subTitle2 = '编辑素材'
         },
         delMaterial: function(idx){
             console.log(idx)
+            // TODO
+            this.tbData.splice(idx , 1)
+            this.materials.splice(idx, 1)
+            for(let idx = 0; idx < this.tbData.length; idx++){
+                this.tbData[idx][0] = (idx < 9 ? '0' : '') + (idx + 1)
+            }
         },
         addMaterial: function(){
             console.log('add material')
+            this.material = {id: null, type: null, keyWord: '', title: '', status: 1, detail: '', imgs: [], adderId: null, uperId: null, updateTime: '', createTime: '', adderName: '', uperName: ''}
+            this.showMaterialEditor = true
+            this.$parent.subTitle2 = '新增素材'
+        },
+        cancelEditMaterial: function(){
+            this.showMaterialEditor = false
         }
     }
 }
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
+.detail-data-box { margin-top: 0; }
 </style>
