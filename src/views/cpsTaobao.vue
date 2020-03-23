@@ -11,7 +11,7 @@
                     </div>
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="end_time" placeholder="结束时间"></flat-picker>
                 </div>
-                <selector class="search-group" v-bind:value="order_type" v-bind:selectParams="selectParams" @selectOptsClicked="selectOptsClicked"></selector>
+                <selector class="search-group" v-bind:value="company_id" v-bind:selectParams="selectParams" @selectOptsClicked="selectOptsClicked"></selector>
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
                 <button class="action-btn" @click="showPool">资金池</button>
             </header>
@@ -144,7 +144,7 @@ export default {
             showPop: false,
             popParams: { style: '', htmlContent: '' },
             'order_type': 2,
-            'company_id': 1
+            'company_id': 3
         }
     },
     created: function(){
