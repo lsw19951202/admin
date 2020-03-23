@@ -137,7 +137,7 @@ export default {
             this.pageData.total = dt.total || 0
             this.pageData.page = dt.page || 1
 
-            const fields = ['statistics_day', 'platform', 'lm_predict_amount', 'lm_settlement_amount', 'lm_settlement_amount', 'db_settlement_amount', 'diff_predict_amount', 'diff_settlement_amount']
+            const fields = ['statistics_day', 'platform', 'lm_predict_amount', 'lm_settlement_amount', 'db_predict_amount', 'db_settlement_amount', 'diff_predict_amount', 'diff_settlement_amount']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 const item = dt.data[idx]
