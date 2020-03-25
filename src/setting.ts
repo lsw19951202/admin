@@ -44,10 +44,6 @@ export default {
             ]
         }
     },
-    // 不同组件名称
-    components: {
-
-    },
     // 表头
     tableHeader: {
         userManager: [
@@ -104,7 +100,7 @@ export default {
             [{name: '商品ID'}, {name: '商品名称'}, {name: '商品价格'}, {name: '销售数量'}, {name: '平台'}]
         ],
         teamSortList: [
-            [{name: '用户ID'}, {name: '级别'}, {name: '手机号'}, {name: '昵称'}, {name: '微信号'}, {name: '数量|金额'}, {name: '统计时间'}]
+            [{name: '用户ID'}, {name: '级别'}, {name: '手机号'}, {name: '昵称'}, {name: '微信号'}, {name: '数量|金额'}, {name: '统计时间'}, {name: '上级ID'}, {name: '上级昵称'}]
         ]
     },
     views: {

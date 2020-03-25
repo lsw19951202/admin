@@ -117,6 +117,7 @@
             <tr v-for="(tbRow, index) in tbData" :key="index">
                 <td v-for="(tbCol, idx) in tbRow" :key="idx">
                     <switch-progress v-if="idx == 4" :statusData="index" :turnOn="tbCol == 1" @changeSwitchStatus="changeSwitchStatus"></switch-progress>
+                    <div v-else-if="idx == 5" v-html="tbCol"></div>
                     <div v-else-if="idx == 6">
                         <img v-for="(imgSrc, idxx) in tbCol" :key="idxx" :src="imgSrc.indexOf('http') >= 0 ? imgSrc : ('http://' + imgSrc)">
                     </div>
@@ -265,7 +266,7 @@ tbody.scrollable tr { display: table; width: 100%; table-layout: fixed; }
 .order-list>tr>td:nth-child(14),.order-list>tr>td:nth-child(15) { max-width: 3.5rem; min-width: 3.5rem; width: 3.5rem; }
 .order-list>tr>td:nth-child(3) { width: 3rem; max-width: 3rem; min-width: 3rem; overflow-x: scroll; white-space: nowrap; padding: 0 .2rem; }
 .material-list>tr>td:nth-child(5) { padding: 0 .3rem; }
-.material-list>tr>td:nth-child(6) { padding: 0 .3rem; width: 15rem; min-width: 15rem; max-width: 15rem; overflow-y: scroll; }
+.material-list>tr>td:nth-child(6) { padding: 0 .3rem; width: 15rem; min-width: 15rem; max-width: 15rem; overflow-y: scroll; text-align: left; }
 .material-list>tr>td:nth-child(7) { width: 9rem; min-width: 9rem; max-width: 9rem; text-align: center; }
 .material-list>tr>td:nth-child(10),.material-list>tr>td:nth-child(11) { width: 3.5rem; min-width: 3.5rem; max-width: 3.5rem; }
 .material-list img { width: 1.875rem; height: 1.875rem; margin-left: .5rem; }

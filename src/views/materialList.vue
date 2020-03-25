@@ -124,7 +124,18 @@ export default {
                 tbData.push([])
                 tbData[idx].push((idx < 9 ? '0' : '') + (idx + 1))
                 for(let idxx = 0; idxx < fields.length; idxx++){
-                    tbData[idx].push(item[fields[idxx]] || '--')
+                    if(fields[idxx] == 'detail'){
+                        let detail = item[fields[idxx]] || '--'
+                        while(detail.indexOf('&lt;') >= 0){
+                            detail = detail.replace('&lt;', '<')
+                        }
+                        while(detail.indexOf('&gt;') >= 0){
+                            detail = detail.replace('&gt;', '>')
+                        }
+                        tbData[idx].push(detail)
+                    }else{
+                        tbData[idx].push(item[fields[idxx]] || '--')
+                    }
                 }
             }
             this.tbData = Object.assign([], tbData)
@@ -135,8 +146,11 @@ export default {
         modifyMaterial: function(idx){
             console.log(idx)
             this.material = Object.assign({}, this.materials[idx])
-            while(this.material.detail.indexOf('&lt;br&gt;') >= 0){
-                this.material.detail = this.material.detail.replace('&lt;br&gt;', '<br>')
+            while(this.material.detail.indexOf('&lt;') >= 0){
+                this.material.detail = this.material.detail.replace('&lt;', '<')
+            }
+            while(this.material.detail.indexOf('&gt;') >= 0){
+                this.material.detail = this.material.detail.replace('&gt;', '>')
             }
             this.showMaterialEditor = true
             this.$parent.subTitle2 = '编辑素材'

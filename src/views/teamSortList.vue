@@ -111,6 +111,12 @@ export default {
                 }, {
                     value: 8,
                     text: '总监邀请数量'
+                }, {
+                    value: 9,
+                    text: '直邀数量'
+                }, {
+                    value: 10,
+                    text: '间邀数量'
                 }]
             }
         }
@@ -160,7 +166,7 @@ export default {
             this.pageData.total = dt.total
             this.pageData['total_page'] = dt.pageCount || dt.total_page || 0
             this.pageData.page = dt.page
-            const fields = ['userId', 'rank', 'mobile', 'nickName', 'wechat', 'amount', 'statistics_day']
+            const fields = ['userId', 'rank', 'mobile', 'nickName', 'wechat', 'amount', 'statistics_day', 'parentId', 'parentName']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 const item = dt.data[idx]

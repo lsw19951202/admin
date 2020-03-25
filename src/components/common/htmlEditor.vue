@@ -20,6 +20,26 @@
             <div class="emoji-container" ref="emojiContainer" v-if="showEmojiContainer">
                 <div v-html="initEmoji" @click="emojiItemClicked"></div>
             </div>
+            <div class="image-container" ref="imageContainer" v-if="showImageContainer">
+                <div>
+                    <label>选中本地图片:</label>
+                    <input type="file" accept=".jpeg, .jpg, .png, .gif">
+                </div>
+            </div>
+            <div class="link-container" ref="linkContainer" v-if="showLinkContainer">
+                <div>
+                    <label>超链接地址:</label>
+                    <input type="text" v-model="linkUrl" placeholder="超链接地址">
+                </div>
+                <div>
+                    <label>显示文本:</label>
+                    <input type="text" v-model="linkText" placeholder="页面显示内容">
+                </div>
+                <div>
+                    <label>是否新页面打开:</label>
+                    <input type="checkbox" v-model="linkToBlank">
+                </div>
+            </div>
         </div>
         <div class="html-editor-content" ref="editorContent">
             <div contenteditable="" v-html="htmlText" @input.prevent="editorInput" @focus="editorFocus" @blur="editorBlur" ref="editor"></div>
@@ -69,7 +89,10 @@ export default {
             editorPos: {
                 left: 0,
                 top: 0
-            }
+            },
+            linkUrl: '',
+            linkText: '',
+            linkToBlank: false
         }
     },
     created: function(){
@@ -79,6 +102,7 @@ export default {
         document.removeEventListener('selectionchange', this.selectionChange)
     },
     methods: {
+        // 获取所有选中节点
         selectionChange: function(evt){
             const range = this.getRange()
             let srcElement = null
@@ -287,12 +311,32 @@ export default {
             this.$emit('changeContent', htmlContent)
         },
         changeLinkStatu: function(){
-            console.log('link')
+            if(!this.showLinkContainer){
+                this.showImageContainer = false
+                this.showEmojiContainer = false
+            }
+            this.showLinkContainer = !this.showLinkContainer
         },
-        changeImageStatu: function(){
-            console.log('image')
+        changeImageStatu: function(evt){
+            if(!this.showImageContainer){
+                this.showEmojiContainer = false
+                this.showLinkContainer = false
+            }
+            this.showImageContainer = !this.showImageContainer
+            this.showImageContainer&&this.$nextTick(function(){
+                if(this.$refs.editorBody){
+                    // let editorBodyHeight = 0
+                    const baseFontSize = document.documentElement.style.fontSize.replace('px', '')
+                    // const editorContentHeight = window.getComputedStyle(this.$refs.editorContent).height.replace('px', '')
+                    // console.log(evt)
+                }
+            })
         },
-        changeEmojiStatu: function(){
+        changeEmojiStatu: function(evt){
+            if(!this.showEmojiContainer){
+                this.showImageContainer = false
+                this.showLinkContainer = false
+            }
             this.showEmojiContainer = !this.showEmojiContainer
             this.showEmojiContainer&&this.$nextTick(function(){
                 if(this.$refs.editorBody){
