@@ -58,11 +58,8 @@ export default {
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 11) ? '0' : '') + (now.getDate() - 1)
-        now.setDate(now.getDate() - 15)
-        let startTime = ''
-        startTime = now.getFullYear() + '-' + (((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1)) + '-' + (((now.getDate() < 10) ? '0' : '') + now.getDate())
         return {
-            'start_time': startTime,
+            'start_time': nStr,
             'end_time': nStr,
             dateConfig: {
                 'time_24hr': true,

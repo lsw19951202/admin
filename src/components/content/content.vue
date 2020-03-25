@@ -29,6 +29,7 @@ import orderList from '../../views/orderList.vue'
 import withdrawListVue from '../../views/withdrawList.vue'
 import materialListVue from '../../views/materialList.vue'
 import orderSalesListVue from '../../views/orderSalesList.vue'
+import teamSortListVue from '../../views/teamSortList.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -65,7 +66,8 @@ export default {
         'order-list': orderList,
         'withdraw-list': withdrawListVue,
         'material-list': materialListVue,
-        'order-saleslist': orderSalesListVue
+        'order-saleslist': orderSalesListVue,
+        'team-sort-list': teamSortListVue
     }
 }
 </script>

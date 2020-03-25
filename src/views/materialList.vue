@@ -15,7 +15,7 @@
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <material-editor v-show="showMaterialEditor" :material="material" @saveMaterial="saveMaterial" @cancelEditMaterial="cancelEditMaterial"></material-editor>
+        <material-editor v-if="showMaterialEditor" :material="material" @saveMaterial="saveMaterial" @cancelEditMaterial="cancelEditMaterial"></material-editor>
     </div>
 </template>
 <script>
@@ -68,6 +68,9 @@ export default {
         this.loadTBData()
     },
     methods: {
+        // changeDetail: function(htmlStr){
+        //     this.material.detail = htmlStr
+        // },
         saveMaterial: function(){
             console.log(this.material)
         },

@@ -102,6 +102,9 @@ export default {
         ],
         orderSalesList: [
             [{name: '商品ID'}, {name: '商品名称'}, {name: '商品价格'}, {name: '销售数量'}, {name: '平台'}]
+        ],
+        teamSortList: [
+            [{name: '用户ID'}, {name: '级别'}, {name: '手机号'}, {name: '昵称'}, {name: '微信号'}, {name: '邀请(数量|金额)'}, {name: '统计时间'}]
         ]
     },
     views: {
@@ -209,6 +212,11 @@ export default {
             name: 'material-list',
             title: '素材管理',
             subTitle1: '素材列表'
+        },
+        '/team/list': {
+            name: 'team-sort-list',
+            title: '用户管理',
+            subTitle1: '团队排行'
         }
     }
 }

@@ -32,7 +32,7 @@
             <div class="editor-groups" style="flex: 1; height: 0;">
                 <label>素材内容</label>
                 <div>
-                    <html-editor :htmlText="material.detail" :config="htmlEditorConfig"></html-editor>
+                    <html-editor :htmlText="material.detail" :config="htmlEditorConfig" ></html-editor>
                 </div>
             </div>
             <div class="editor-groups" style="height: 5.21875rem;">
@@ -63,10 +63,16 @@ export default {
         return {
             htmlEditorConfig: {
                 actions: {
+                    bold: true,
+                    italic: true,
+                    alignLeft: true,
+                    alignCenter: true,
+                    alignRight: true,
+                    strikethrough: true,
+                    underline: true,
                     emoji: true,
-                    image: true,
-                    link: true,
-                    bold: true
+                    image: false,
+                    link: false
                 }
             },
             imageConfig: {}
@@ -74,11 +80,15 @@ export default {
     },
     methods: {
         saveMaterial: function(){
-            this.$emit('saveMaterial')
+            // this.$emit('saveMaterial')
+            console.log(this.$children[0].getContent())
         },
         cancelEdit: function(){
             this.$emit('cancelEditMaterial')
-        }
+        }//,
+        // changeDetail: function(htmlStr){
+        //     this.$emit('changeDetail', htmlStr)
+        // }
     }
 }
 </script>
