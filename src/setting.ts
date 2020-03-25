@@ -104,7 +104,7 @@ export default {
             [{name: '商品ID'}, {name: '商品名称'}, {name: '商品价格'}, {name: '销售数量'}, {name: '平台'}]
         ],
         teamSortList: [
-            [{name: '用户ID'}, {name: '级别'}, {name: '手机号'}, {name: '昵称'}, {name: '微信号'}, {name: '邀请(数量|金额)'}, {name: '统计时间'}]
+            [{name: '用户ID'}, {name: '级别'}, {name: '手机号'}, {name: '昵称'}, {name: '微信号'}, {name: '数量|金额'}, {name: '统计时间'}]
         ]
     },
     views: {

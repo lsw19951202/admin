@@ -93,14 +93,16 @@ export default {
                 const selectedNodes = []
                 if(window.getSelection){
                     for(let idx = 0; idx < children.length; idx++){
-                        console.log(idx)
+                        // console.log(idx)
                         let node = children[idx]
                         if(node.nodeType == 3){
                             node = node.parentElement
                         }
-                        if(node == this.$refs.editor){
-                            break
+                        if(node == this.$refs.editor || node.tagName.toLowerCase() == 'br'){
+                            // break
+                            continue
                         }
+                        this.computedStyle(node)
                     }
                 }else{
                     console.log(range.htmlText)
@@ -128,17 +130,19 @@ export default {
                 const computedStyle = window.getComputedStyle(parent)
                 rst = this.mergeStyle(rst, computedStyle)
             }
+            console.log(parent)
+            console.log(rst)
             return rst
         },
         mergeStyle: function(oldStyle, newStyle){
             return {
-                bold: oldStyle.bold && ((newStyle.fontWeight == 700) || newStyle.bold),
-                italic: oldStyle.italic && ((newStyle.fontSize == 'italic') || newStyle.italic),
-                alignLeft: oldStyle.alignLeft && ((newStyle.textAlign == 'left') || newStyle.alignLeft),
-                alignCenter: oldStyle.alignCenter && ((newStyle.textAlign == 'center') || newStyle.alignCenter),
-                alignRight: oldStyle.alignRight && ((newStyle.textAlign == 'right') || newStyle.alignRight),
-                strikethrough: oldStyle.strikethrough && ((newStyle.textDecorationLine == 'line-through') || newStyle.strikethrough),
-                underline: oldStyle.underline && ((newStyle.textDecorationLine == 'underline') || newStyle.underline)
+                bold: oldStyle.bold && (newStyle.bold || (newStyle.fontWeight == 700)),
+                italic: oldStyle.italic && (newStyle.italic || (newStyle.fontSize == 'italic')),
+                alignLeft: oldStyle.alignLeft && (newStyle.alignLeft || (newStyle.textAlign == 'left')),
+                alignCenter: oldStyle.alignCenter && (newStyle.alignCenter || (newStyle.textAlign == 'center')),
+                alignRight: oldStyle.alignRight && (newStyle.alignRight || (newStyle.textAlign == 'right')),
+                strikethrough: oldStyle.strikethrough && (newStyle.strikethrough || (newStyle.textDecorationLine == 'line-through')),
+                underline: oldStyle.underline && (newStyle.underline || (newStyle.textDecorationLine == 'underline'))
             }
         },
         emojiItemClicked: function(e){

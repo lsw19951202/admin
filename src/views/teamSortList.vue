@@ -101,10 +101,10 @@ export default {
                     text: '用户佣金'
                 }, {
                     value: 5,
-                    text: '团长订单'
+                    text: '团长订单数量'
                 }, {
                     value: 6,
-                    text: '总监订单'
+                    text: '总监订单数量'
                 }, {
                     value: 7,
                     text: '团长邀请数量'
