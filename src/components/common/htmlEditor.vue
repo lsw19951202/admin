@@ -102,38 +102,149 @@ export default {
         document.removeEventListener('selectionchange', this.selectionChange)
     },
     methods: {
-        // 获取所有选中节点
+        /**
+         * 当选中内容发生改变时
+         * 根据选中内容修改编辑器头部样式按钮的选中状态
+         */
         selectionChange: function(evt){
             const range = this.getRange()
             let srcElement = null
-            const bold = true, italic = true, alignLeft = true, alignCenter = true, alignRight = true, strikethrough = true, underline = true
+            let bold = true, italic = true, alignLeft = true, alignCenter = true, alignRight = true, strikethrough = true, underline = true
             if(window.getSelection){
                 srcElement = range.commonAncestorContainer
             }else{
                 srcElement = range.parentElement()
             }
             if(this.$refs.editor.contains(srcElement)){
-                const children = this.$refs.editor.childNodes
-                const selectedNodes = []
-                if(window.getSelection){
-                    for(let idx = 0; idx < children.length; idx++){
-                        // console.log(idx)
-                        let node = children[idx]
-                        if(node.nodeType == 3){
-                            node = node.parentElement
-                        }
-                        if(node == this.$refs.editor || node.tagName.toLowerCase() == 'br'){
-                            // break
-                            continue
-                        }
-                        this.computedStyle(node)
+                // 如果光标开始和结束是同一节点内
+                if(range.startContainer == range.endContainer){
+                    console.log('光标在一个节点内')
+                    // 选中的是text元素，元素是编辑器的直接子元素
+                    // 所以没有任何样式
+                    if(range.startContainer.parentElement == this.$refs.editor){
+                        bold = false
+                        italic = false
+                        alignLeft = true
+                        alignCenter = false
+                        alignRight = false
+                        strikethrough = false
+                        underline = false
+                    }else{
+                        // 光标所在的text元素不是编辑器的直接子元素
+                        const rst = this.computeSingleNodeStyle(range.startContainer.parentElement)
+                        bold = rst.bold
+                        italic = rst.italic
+                        alignLeft = rst.alignLeft
+                        alignCenter = rst.alignCenter
+                        alignRight = rst.alignRight
+                        strikethrough = rst.strikethrough
+                        underline = rst.underline
                     }
                 }else{
-                    console.log(range.htmlText)
+                    console.log('光标在多个节点内')
+                    const lines = this.getSelectedLines(range)
+                    // 遍历所有选中的行
+                    for(let idx = 0; idx < lines.length; idx++){
+                        // 只有元素节点有样式
+                        if(lines[idx].nodeType == 1){
+                            const rst = this.computeSingleNodeStyle(lines[idx])
+                            alignLeft = alignLeft && rst.alignLeft
+                            alignCenter = alignCenter && rst.alignCenter
+                            alignRight = alignRight && rst.alignRight
+                        }else{
+                            alignLeft = false
+                            alignCenter = false
+                            alignRight = false
+                        }
+                    }
+                }
+                console.log('--------------')
+                console.log('bold:' + bold)
+                console.log('italic:' + italic)
+                console.log('textAlign:' + (alignLeft ? 'left' : (alignCenter ? 'center' : 'right')))
+                console.log('strikethrough:' + strikethrough)
+                console.log('underline:' + underline)
+                this.contentBold = bold
+                this.contentItalic = italic
+                this.contentAlignLeft = alignLeft
+                this.contentAlignCenter = alignCenter
+                this.contentAlignRight = alignRight
+                this.contentStrikethrough = strikethrough
+                this.contentUnderline = underline
+            }
+        },
+        /**
+         * 获取选中的所有段落----光标所在的所有编辑器的直接子元素
+         */
+        getSelectedLines: function(range){
+            // 编辑器的所有直接子节点
+            const editorChildren = this.$refs.editor.childNodes
+            const lines = []
+            let node = range.startContainer
+            let currIdx = 0
+            for(let idx = 0; idx < editorChildren.length; idx++){
+                if(editorChildren[idx].contains(node)){
+                    currIdx = idx
+                    node = editorChildren[currIdx]
+                    lines.push(node)
+                    break
+                }
+            }
+            do{
+                node = editorChildren[++currIdx]
+                if(node.nodeType == 1 && node.tagName.toLowerCase() == 'br'){
+                    console.log('换行')
+                }else{
+                    lines.push(node)
+                }
+            }while(node && !node.contains(range.endContainer))
+            return lines
+        },
+        /**
+         * 获取可编辑div中，指定节点的下一个节点
+         * 1、如果当前节点是父节点的最后一个子节点
+         * 1.1 返回父节点的下一个兄弟节点的第一个最深的子节点或者父节点
+         * 2、否则直接返回当前节点的下一个兄弟节点的最深子节点或者兄弟节点本身
+         * @param node
+         * @returns nextNode
+         */
+        getNextNode: function(node){
+            // if(node == this.$refs.editor){
+            //     return
+            // }
+            const parent = node.nodeType == 3 ? node.parentElement : node
+            for(let idx = 0; idx < parent.childNodes.length; idx++){
+                if(parent.childNodes[idx] == node){
+                    if(idx == parent.childNodes.length - 1){
+                        return this.getNextNode(parent)
+                    }else{
+                        return this.getFirstSubNode(parent.childNodes[idx + 1])
+                    }
                 }
             }
         },
-        // 遍历parent的所有子节点
+        /**
+         * 获取节点的第一个子节点
+         * 
+         * 如果node有子节点，返回第一个子节点
+         * 如果node没有子节点，返回node
+         * 
+         * @param node
+         * @returns 第一个子节点或者node
+         */
+        getFirstSubNode: function(node){
+            if(node.childNodes.length > 0){
+                return this.getFirstSubNode(node.childNodes[0])
+            }else{
+                return node
+            }
+        },
+        /**
+         * 遍历parent的所有子节点
+         * 
+         * @param parent
+         * @returns 
+         */
         computedStyle: function(parent){
             const children = parent.children
             let rst = {
@@ -158,11 +269,41 @@ export default {
             console.log(rst)
             return rst
         },
+        /**
+         * 获取当前节点的样式
+         * 如果是编辑器的直接子节点，直接返回当前节点的样式
+         * 否则，text-align以及text-decoration样式需要判断上级
+         *      text-align的根据编辑器的直接子节点判断
+         *      text-decoration如果有一个父节点有，则认为当前节点有
+         */
+        computeSingleNodeStyle: function(node){
+            let computedStyle = window.getComputedStyle(node)
+            const rst = {
+                bold: computedStyle.fontWeight == 700,
+                italic: computedStyle.fontStyle == 'italic',
+                alignLeft: computedStyle.textAlign == 'left' || computedStyle.textAlign == 'start',
+                alignCenter: computedStyle.textAlign == 'center',
+                alignRight: computedStyle.textAlign == 'right',
+                strikethrough: computedStyle.textDecorationLine == 'line-through',
+                underline: computedStyle.textDecorationLine == 'underline'
+            }
+            let parentNode = node.parentElement
+            while(parentNode != this.$refs.editor){
+                computedStyle = window.getComputedStyle(parentNode)
+                rst.alignLeft = computedStyle.textAlign == 'left' || computedStyle.textAlign == 'start'
+                rst.alignCenter = computedStyle.textAlign == 'center'
+                rst.alignRight = computedStyle.textAlign == 'right'
+                rst.strikethrough = rst.strikethrough || (computedStyle.textDecorationLine == 'line-through')
+                rst.underline = rst.underline || (computedStyle.textDecorationLine == 'underline')
+                parentNode = parentNode.parentElement
+            }
+            return rst
+        },
         mergeStyle: function(oldStyle, newStyle){
             return {
                 bold: oldStyle.bold && (newStyle.bold || (newStyle.fontWeight == 700)),
                 italic: oldStyle.italic && (newStyle.italic || (newStyle.fontSize == 'italic')),
-                alignLeft: oldStyle.alignLeft && (newStyle.alignLeft || (newStyle.textAlign == 'left')),
+                alignLeft: oldStyle.alignLeft && (newStyle.alignLeft || (newStyle.textAlign == 'left') || (newStyle.textAlign == 'start')),
                 alignCenter: oldStyle.alignCenter && (newStyle.alignCenter || (newStyle.textAlign == 'center')),
                 alignRight: oldStyle.alignRight && (newStyle.alignRight || (newStyle.textAlign == 'right')),
                 strikethrough: oldStyle.strikethrough && (newStyle.strikethrough || (newStyle.textDecorationLine == 'line-through')),

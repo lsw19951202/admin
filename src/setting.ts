@@ -5,7 +5,10 @@ export default {
     // baseUrl: 'http://tongji.chenlong.com',
     baseUrl: 'http://dash.yunzhanxinxi.com',
     urls: {
-
+        // 用户管理-用户排行-表头数据+排序数据
+        userRankTableHeader: '/app/field',
+        // 用户管理-用户排行-列表
+        userRankList: '/user/ranking'
     },
     // 图片地址
     images:{
@@ -213,6 +216,11 @@ export default {
             name: 'team-sort-list',
             title: '用户管理',
             subTitle1: '团队排行'
+        },
+        '/user/rank': {
+            name: 'user-rank-list',
+            title: '用户管理',
+            subTitle1: '用户排行'
         }
     }
 }
