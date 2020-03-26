@@ -6,7 +6,7 @@
         <div class="root-container">
             <div class="sidebar-wrapper">
                 <div class="sidebar-logo">
-                    <img src="@/assets/logo1.png" />
+                    <img :src="logo" />
                 </div>
                 <menu-container :items="menuData" @subItemClicked="loadContent"></menu-container>
             </div>
@@ -54,11 +54,14 @@ export default {
             title: '',
             subTitle1: '',
             isContentAlive: true,
-            requestNum: 0
+            requestNum: 0,
+            logo: ''
         }
     },
     created: function(){
         this.getMenuInfo();
+        // 设置logo
+        this.logo = this.$cookies.get('adminType') == 1 ? setting.images.logo.cps : setting.images.logo.app
     },
     components:{
         cover: Cover,

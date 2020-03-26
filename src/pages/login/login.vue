@@ -151,6 +151,7 @@ export default {
                         console.log(resp)
                         if(resp.code == 200){
                             this.$cookies.set('skey', resp.data.skey)
+                            this.$cookies.set('adminType', resp.data.log_show)
                             const date = new Date()
                             date.setHours(date.getHours() + 6)
                             // this.$cookies.set('PHPSESSID', resp.data.session_id, date, '/', setting.baseUrl, false)

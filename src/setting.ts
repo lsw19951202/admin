@@ -45,6 +45,10 @@ export default {
                 require('@/assets/menu_img_selected.png'),
                 require('@/assets/menu_img_normal.png')
             ]
+        },
+        logo: {
+            cps: require('@/assets/logo1.png'),
+            app: require('@/assets/logo.png')
         }
     },
     // 表头

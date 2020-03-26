@@ -107,71 +107,93 @@ export default {
          * 根据选中内容修改编辑器头部样式按钮的选中状态
          */
         selectionChange: function(evt){
-            const range = this.getRange()
-            let srcElement = null
-            let bold = true, italic = true, alignLeft = true, alignCenter = true, alignRight = true, strikethrough = true, underline = true
-            if(window.getSelection){
-                srcElement = range.commonAncestorContainer
-            }else{
-                srcElement = range.parentElement()
-            }
-            if(this.$refs.editor.contains(srcElement)){
-                // 如果光标开始和结束是同一节点内
-                if(range.startContainer == range.endContainer){
-                    console.log('光标在一个节点内')
-                    // 选中的是text元素，元素是编辑器的直接子元素
-                    // 所以没有任何样式
-                    if(range.startContainer.parentElement == this.$refs.editor){
-                        bold = false
-                        italic = false
-                        alignLeft = true
-                        alignCenter = false
-                        alignRight = false
-                        strikethrough = false
-                        underline = false
-                    }else{
-                        // 光标所在的text元素不是编辑器的直接子元素
-                        const rst = this.computeSingleNodeStyle(range.startContainer.parentElement)
-                        bold = rst.bold
-                        italic = rst.italic
-                        alignLeft = rst.alignLeft
-                        alignCenter = rst.alignCenter
-                        alignRight = rst.alignRight
-                        strikethrough = rst.strikethrough
-                        underline = rst.underline
-                    }
+            try{
+                const range = this.getRange()
+                let srcElement = null
+                let bold = true, italic = true, alignLeft = true, alignCenter = true, alignRight = true, strikethrough = true, underline = true
+                if(window.getSelection){
+                    srcElement = range.commonAncestorContainer
                 }else{
-                    console.log('光标在多个节点内')
-                    const lines = this.getSelectedLines(range)
-                    // 遍历所有选中的行
-                    for(let idx = 0; idx < lines.length; idx++){
-                        // 只有元素节点有样式
-                        if(lines[idx].nodeType == 1){
-                            const rst = this.computeSingleNodeStyle(lines[idx])
-                            alignLeft = alignLeft && rst.alignLeft
-                            alignCenter = alignCenter && rst.alignCenter
-                            alignRight = alignRight && rst.alignRight
-                        }else{
-                            alignLeft = false
+                    srcElement = range.parentElement()
+                }
+                if(this.$refs.editor.contains(srcElement)){
+                    // 如果光标开始和结束是同一节点内
+                    if(range.startContainer == range.endContainer){
+                        console.log('光标在一个节点内')
+                        // 选中的是text元素，元素是编辑器的直接子元素
+                        // 所以没有任何样式
+                        if(range.startContainer.parentElement == this.$refs.editor){
+                            bold = false
+                            italic = false
+                            alignLeft = true
                             alignCenter = false
                             alignRight = false
+                            strikethrough = false
+                            underline = false
+                        }else{
+                            // 光标所在的text元素不是编辑器的直接子元素
+                            const rst = this.computeSingleNodeStyle(range.startContainer.parentElement)
+                            bold = rst.bold
+                            italic = rst.italic
+                            alignLeft = rst.alignLeft
+                            alignCenter = rst.alignCenter
+                            alignRight = rst.alignRight
+                            strikethrough = rst.strikethrough
+                            underline = rst.underline
+                        }
+                    }else{
+                        console.log('光标在多个节点内')
+                        const lines = this.getSelectedLines(range)
+                        // 遍历所有选中的行 判断对齐方式  对齐方式只需要判断编辑器的直接子节点
+                        for(let idx = 0; idx < lines.length; idx++){
+                            // 只有元素节点有样式  文本节点没有对齐方式，只能是左对齐  文本节点没有下划线中横线
+                            if(lines[idx].nodeType == 1){
+                                const rst = this.computeSingleNodeStyle(lines[idx])
+                                alignLeft = alignLeft && rst.alignLeft
+                                alignCenter = alignCenter && rst.alignCenter
+                                alignRight = alignRight && rst.alignRight
+                            }else{
+                                // alignLeft = true
+                                alignCenter = false
+                                alignRight = false
+                                strikethrough = false
+                                underline = false
+                            }
+                        }
+                        // 遍历所有选中的行 判断文字样式，是否是粗体和斜体，判断所有的文本节点是否是粗体斜体
+                        const textNodes = this.getSelectedTextNodes(range)
+                        for(let idx = 0; idx < textNodes.length; idx++){
+                            if(textNodes.parentElement == this.$refs.editor){
+                                bold = false
+                                italic = false
+                            }else{
+                                const rst = this.computeSingleNodeStyle(textNodes.parentElement)
+                                bold = bold && rst.bold
+                                italic = italic && rst.bold
+                            }
                         }
                     }
+                    // console.log('--------------')
+                    // console.log('bold:' + bold)
+                    // console.log('italic:' + italic)
+                    // console.log('textAlign:' + (alignLeft ? 'left' : (alignCenter ? 'center' : 'right')))
+                    // console.log('strikethrough:' + strikethrough)
+                    // console.log('underline:' + underline)
+                    this.contentBold = bold
+                    this.contentItalic = italic
+                    this.contentAlignLeft = alignLeft
+                    this.contentAlignCenter = alignCenter
+                    this.contentAlignRight = alignRight
+                    this.contentStrikethrough = strikethrough
+                    this.contentUnderline = underline
                 }
-                console.log('--------------')
-                console.log('bold:' + bold)
-                console.log('italic:' + italic)
-                console.log('textAlign:' + (alignLeft ? 'left' : (alignCenter ? 'center' : 'right')))
-                console.log('strikethrough:' + strikethrough)
-                console.log('underline:' + underline)
-                this.contentBold = bold
-                this.contentItalic = italic
-                this.contentAlignLeft = alignLeft
-                this.contentAlignCenter = alignCenter
-                this.contentAlignRight = alignRight
-                this.contentStrikethrough = strikethrough
-                this.contentUnderline = underline
+            }catch(e){
+                console.log(e)
             }
+        },
+        getSelectedTextNodes: function(range){
+            const textNodes = []
+            return textNodes
         },
         /**
          * 获取选中的所有段落----光标所在的所有编辑器的直接子元素
@@ -192,10 +214,12 @@ export default {
             }
             do{
                 node = editorChildren[++currIdx]
-                if(node.nodeType == 1 && node.tagName.toLowerCase() == 'br'){
-                    console.log('换行')
-                }else{
-                    lines.push(node)
+                if(node){
+                    if(node.nodeType == 1 && node.tagName.toLowerCase() == 'br'){
+                        console.log('换行')
+                    }else{
+                        lines.push(node)
+                    }
                 }
             }while(node && !node.contains(range.endContainer))
             return lines
