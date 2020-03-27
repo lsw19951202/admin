@@ -63,13 +63,13 @@ export default {
         return {
             htmlEditorConfig: {
                 actions: {
-                    bold: true,
-                    italic: true,
-                    alignLeft: true,
-                    alignCenter: true,
-                    alignRight: true,
-                    strikethrough: true,
-                    underline: true,
+                    bold: false,
+                    italic: false,
+                    alignLeft: false,
+                    alignCenter: false,
+                    alignRight: false,
+                    strikethrough: false,
+                    underline: false,
                     emoji: true,
                     image: false,
                     link: false

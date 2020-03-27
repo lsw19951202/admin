@@ -134,7 +134,7 @@ export default {
             this.pageData['total_page'] = dt.total_page || dt.pageCount || 0
 
             const plats = {'jd': '京东', 'pdd': '拼多多', 'tb': '淘宝', 'elm': '饿了么', 'mt': '美团'}
-            const fields = ['goods_id', 'goods_title', 'goods_price', 'sale_num', 'platform']
+            const fields = ['goods_id', 'goods_title', 'goods_price', 'sale_num', 'platform', 'plat_commission_amount', 'order_amount']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])

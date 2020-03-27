@@ -163,11 +163,12 @@ export default {
                         // 遍历所有选中的行 判断文字样式，是否是粗体和斜体，判断所有的文本节点是否是粗体斜体
                         const textNodes = this.getSelectedTextNodes(range)
                         for(let idx = 0; idx < textNodes.length; idx++){
-                            if(textNodes.parentElement == this.$refs.editor){
+                            if(textNodes[idx].parentElement == this.$refs.editor){
                                 bold = false
                                 italic = false
+                                break
                             }else{
-                                const rst = this.computeSingleNodeStyle(textNodes.parentElement)
+                                const rst = this.computeSingleNodeStyle(textNodes[idx].parentElement)
                                 bold = bold && rst.bold
                                 italic = italic && rst.bold
                             }
