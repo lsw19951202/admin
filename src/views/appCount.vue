@@ -21,6 +21,7 @@ import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import CardContainer from '@/components/content/cardContainer.vue'
 
 import request from '@/axios'
+import setting from '../setting'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
@@ -59,7 +60,7 @@ export default {
             this.showLoading()
             const orderRequest = new Promise((resolve, reject) => {
                 return request({
-                    url: '/api/home/index-order',
+                    url: setting.urls.appCountOrder,
                     method: 'get',
                     params: {
                         'start_time': this.start_time,
@@ -80,7 +81,7 @@ export default {
             })
             const userReqeust = new Promise((resolve, reject) => {
                 return request({
-                    url: '/api/home/index-user',
+                    url: setting.urls.appCountUser,
                     method: 'get',
                     params: {
                         'start_time': this.start_time,
@@ -116,7 +117,7 @@ export default {
                 [{text: '拼多多预估毛利', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '京东预估毛利', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '淘宝预估毛利', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '饿了么预估毛利', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '拼多多结算毛利', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '京东结算毛利', num: 0, imgSrc: require('@/assets/blue_doller.png')}],
                 [{text: '淘宝结算毛利', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '饿了么结算毛利', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '淘宝下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '京东下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '拼多多下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '饿了么下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}],
                 [{text: '淘宝预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '京东预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '拼多多预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '饿了么预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '淘宝结算返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '京东结算返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}],
-                [{text: '拼多多结算返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '饿了么结算返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '淘宝技术服务费', num: 0, imgSrc: require('@/assets/red_doller.png')}]
+                [{text: '拼多多结算返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '饿了么结算返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '淘宝技术服务费', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '美团订单数量', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '美团预估收入', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '美团预估返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}]
             ]
             dt = Object.assign(dt[0], dt[1])
             const fields = [
@@ -127,7 +128,7 @@ export default {
                 "pddPredictGrossProfit", "jdPredictGrossProfit", "tbPredictGrossProfit", "elmPredictGrossProfit", "pddSettlementGrossProfit", "jdSettlementGrossProfit",
                 "tbSettlementGrossProfit", "elmSettlementGrossProfit", "tbOrderNum", "jdOrderNum", "pddOrderNum", "elmOrderNum",
                 "tbPredictRebateAmount", "jdPredictRebateAmount", "pddPredictRebateAmount", "elmPredictRebateAmount", "tbSettlementRebateAmount", "jdSettlementRebateAmount",
-                "pddSettlementRebateAmount", "elmSettlementRebateAmount", "tbServiceFee"
+                "pddSettlementRebateAmount", "elmSettlementRebateAmount", "tbServiceFee", "mtOrderNum", "mtPredictAmount", "mtPredictRebateAmount"
             ];
             let count = 0
             for(let row = 0;row < cardData.length; row++){

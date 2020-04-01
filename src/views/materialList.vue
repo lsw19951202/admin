@@ -21,6 +21,7 @@
 <script>
 import Selector from '@/components/common/select.vue'
 import request from '@/axios'
+import qs from 'qs'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
 import page from '@/components/content/page.vue'
@@ -67,12 +68,70 @@ export default {
     created: function(){
         this.loadTBData()
     },
+    provide: function(){
+        return {
+            removeCurrImage: this.removeImage,
+            setImage: this.setImage
+        }
+    },
     methods: {
-        // changeDetail: function(htmlStr){
-        //     this.material.detail = htmlStr
-        // },
+        /**
+         * 编辑或者新增素材
+         * 保存完成后更新列表显示
+         * 更新tbData和materials中的数据
+         */
         saveMaterial: function(){
-            console.log(this.material)
+            this.material.imgs = this.material.imgs || []
+            for(let idx = this.material.imgs.length - 1; idx >= 0; idx--){
+                if(!this.material.imgs[idx]){
+                    this.material.imgs.splice(idx, 1)
+                }
+            }
+            this.showLoading()
+            request({
+                url: setting.urls.editMaterial,
+                method: 'post',
+                data: qs.stringify(this.material)
+            }).then((resp) => {
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        if(this.material.id){
+                            for(let idx = 0; idx < this.materials.length; idx++){
+                                if(this.materials[idx]['id'] == this.material.id){
+                                    this.materials[idx] = this.material
+                                    const fields = ['type', 'keyWord', 'title', 'status', 'detail', 'imgs', 'adderName', 'uperName', 'createTime', 'updateTime']
+                                    const material = []
+                                    material.push((idx < 9 ? '0' : '') + (idx + 1))
+                                    for(let idxx = 0; idxx < fields.length; idxx++){
+                                        if(fields[idxx] == 'detail'){
+                                            let detail = this.material[fields[idxx]] || '--'
+                                            while(detail.indexOf('&lt;') >= 0){
+                                                detail = detail.replace('&lt;', '<')
+                                            }
+                                            while(detail.indexOf('&gt;') >= 0){
+                                                detail = detail.replace('&gt;', '>')
+                                            }
+                                            material[idx].push(detail)
+                                        }else{
+                                            material[idx].push(this.material[fields[idxx]] || '--')
+                                        }
+                                    }
+                                    this.tbData[idx] = material
+                                }
+                            }
+                        }
+                        this.showMaterialEditor = false
+                    }else{
+                        this.alert(resp.data.message || '保存素材失败')
+                    }
+                }else{
+                    this.alert('保存素材失败')
+                }
+            }).catch((e) => {
+                this.alert('保存素材失败')
+            }).then(() => {
+                this.hideLoading()
+            })
         },
         changeMaterialStatus: function(dt){
             console.log(dt)
@@ -88,7 +147,7 @@ export default {
         loadTBData: function(pageNum){
             this.showLoading()
             request({
-                url: '/material/query',
+                url: setting.urls.materialList,
                 method: 'get',
                 params: {
                     page: pageNum || 1,
@@ -145,7 +204,9 @@ export default {
         },
         modifyMaterial: function(idx){
             console.log(idx)
-            this.material = Object.assign({}, this.materials[idx])
+            // 如果直接赋值，在编辑界面删除图片时会删除原数据
+            const mat = JSON.parse(JSON.stringify(this.materials[idx]))
+            this.material = Object.assign({}, mat)
             while(this.material.detail.indexOf('&lt;') >= 0){
                 this.material.detail = this.material.detail.replace('&lt;', '<')
             }
@@ -172,6 +233,23 @@ export default {
         },
         cancelEditMaterial: function(){
             this.showMaterialEditor = false
+        },
+        /**
+         * 删除对应图片，并显示空白
+         */
+        removeImage: function(idx){
+            this.material.imgs.splice(idx, 1, '')
+        },
+        /**
+         * 上传图片成功之后调用，显示上传结果
+         */
+        setImage: function(dt){
+            // this.material.imgs.splice(dt.idx, 1, dt.imgUrl)
+            console.log(dt)
+            const imgs = this.material.imgs || []
+            imgs[dt.idx] = dt.imgUrl
+            this.material.imgs = Object.assign([], imgs)
+            console.log(this.material)
         }
     }
 }

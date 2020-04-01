@@ -10,6 +10,7 @@ import title from 'echarts/lib/component/title'
 import line from 'echarts/lib/chart/line'
 import legend from 'echarts/lib/component/legend'
 import request from '@/axios'
+import setting from '../setting'
 
 // require('@/mock')
 
@@ -27,7 +28,7 @@ export default {
         loadAllData: function(){
             this.showLoading()
             request({
-                url: '/api/statistics/all',
+                url: setting.urls.cpsAll,
                 method: 'get',
                 params: {}
             }).then((resp) => {

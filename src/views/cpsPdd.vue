@@ -84,10 +84,11 @@ export default {
     },
     data: () => {
         const now = new Date()
+        now.setDate(now.getDate() - 1)
         let nStr = ''
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
-        nStr += ((now.getDate() < 11) ? '0' : '') + (now.getDate() - 1)
+        nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         now.setDate(now.getDate() - 15)
         let startTime = ''
         startTime = now.getFullYear() + '-' + (((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1)) + '-' + (((now.getDate() < 10) ? '0' : '') + now.getDate())
@@ -147,7 +148,7 @@ export default {
             }
             this.showLoading()
             request({
-                url: '/api/statistics/detail',
+                url: setting.urls.cpsCollect,
                 method: 'get',
                 params: {
                     page: pageNum || 1,
@@ -195,7 +196,7 @@ export default {
             console.log('显示资金池')
             this.showLoading()
             request({
-                url: '/api/statistics/pool',
+                url: setting.urls.pool,
                 method: 'get',
                 params: {}
             }).then((response) => {
@@ -231,7 +232,7 @@ export default {
         loadCardData: function(){
             this.showLoading()
             request({
-                url: '/api/statistics/yesterday',
+                url: setting.urls.cpsYesterday,
                 method: 'get',
                 params: {
                     'order_type': this.order_type

@@ -42,10 +42,11 @@ export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     data: () => {
         const now = new Date()
+        now.setDate(now.getDate() - 1)
         let nStr = ''
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
-        nStr += ((now.getDate() < 11) ? '0' : '') + (now.getDate() - 1)
+        nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         now.setDate(now.getDate() - 15)
         let startTime = ''
         startTime = now.getFullYear() + '-' + (((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1)) + '-' + (((now.getDate() < 10) ? '0' : '') + now.getDate())
@@ -103,7 +104,7 @@ export default {
             const fd = new FormData()
             fd.append('file', file)
             request({
-                url: '/importexcel',
+                url: setting.urls.cpsHandImport,
                 method: 'post',
                 data: fd
             }).then((resp) => {
@@ -152,7 +153,7 @@ export default {
             console.log(pageNum)
             this.showLoading()
             request({
-                url: '/api/excel/manuallist',
+                url: setting.urls.cpsHandList,
                 method: 'get',
                 params: {
                     'start_time': this.start_time,

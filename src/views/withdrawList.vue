@@ -140,7 +140,7 @@ export default {
         loadTBData: function(pageNum){
             this.showLoading()
             request({
-                url: '/cash/query',
+                url: setting.urls.withdrawList,
                 method: 'get',
                 params: {
                     page: pageNum || 1,
@@ -174,6 +174,14 @@ export default {
             const fields = ['username', 'applyAmount', 'auditStatus', 'applyPlat', 'createTime', 'dealTime']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
+                tbData.push([])
+                const item = dt.data[idx]
+                tbData[idx].push((idx < 9 ? '0' : '') + (idx + 1))
+                for(let idxx = 0; idxx < fields.length; idxx++){
+                    tbData[idx].push(item[fields[idxx]] || (item[fields[idxx]] == 0 ? item[fields[idxx]] : '--'))
+                }
+            }
+            for(let idx = 0; idx < dt.data.length; idx++){
                 const item = dt.data[idx]
                 if(item.applyPlat == '微信'){
                     item.applyPlat = 0
@@ -181,14 +189,6 @@ export default {
                     item.applyPlat = 1
                 }
                 this.withdrawList.push(item)
-            }
-            for(let idx = 0; idx < dt.data.length; idx++){
-                tbData.push([])
-                const item = dt.data[idx]
-                tbData[idx].push((idx < 9 ? '0' : '') + (idx + 1))
-                for(let idxx = 0; idxx < fields.length; idxx++){
-                    tbData[idx].push(item[fields[idxx]] || (item[fields[idxx]] == 0 ? item[fields[idxx]] : '--'))
-                }
             }
             this.tbData = Object.assign([], tbData)
         },

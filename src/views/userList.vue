@@ -303,7 +303,7 @@ export default {
         loadTBData: function(pageNum){
             this.showLoading()
             request({
-                url: '/user/getAll',
+                url: setting.urls.userList,
                 method: 'get',
                 params: {
                     page: pageNum || 1,

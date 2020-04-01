@@ -54,6 +54,7 @@
 <script>
 import request from '@/axios'
 import qs from 'qs'
+import setting from '@/setting'
 
 export default {
     props: ['userInfo', 'editUser', "authInfo", 'authTree'],
@@ -121,10 +122,10 @@ export default {
             }
             if(this.editUser){
                 requestData['user_id'] = this.userInfo['user_id']
-                url = '/auth_user/edit_user'
+                url = setting.urls.userEdit
             }else{
                 requestData.password = this.userInfo.passwd
-                url = '/auth_user/add_user'
+                url = setting.urls.userAdd
             }
 
             for(const key in this.roles){

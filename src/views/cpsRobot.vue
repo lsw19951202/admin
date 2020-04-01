@@ -54,10 +54,11 @@ export default {
     },
     data: () => {
         const now = new Date()
+        now.setDate(now.getDate() - 1)
         let nStr = ''
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
-        nStr += ((now.getDate() < 11) ? '0' : '') + (now.getDate() - 1)
+        nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return {
             'start_time': nStr,
             'end_time': nStr,
@@ -106,7 +107,7 @@ export default {
                 this.showLoading()
                 // console.log(robotName)
                 request({
-                    url: '/api/statistics/robot-detail',
+                    url: setting.urls.robotDetail,
                     method: 'get',
                     params: {
                         'robot_name': robotName
@@ -349,7 +350,7 @@ export default {
             console.log('load table data')
             this.showLoading()
             request({
-                url: '/api/statistics/robot',
+                url: setting.urls.robtoList,
                 method: 'get',
                 params: {
                     'start_time': this.start_time,
@@ -421,7 +422,7 @@ export default {
             console.log('显示资金池')
             this.showLoading()
             request({
-                url: '/api/statistics/pool',
+                url: setting.urls.pool,
                 method: 'get',
                 params: {}
             }).then((response) => {

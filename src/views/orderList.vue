@@ -152,7 +152,7 @@ export default {
         loadTBData: function(pageNum){
             this.showLoading()
             request({
-                url: '/order/getAll',
+                url: setting.urls.appOrderList,
                 method: 'get',
                 params: {
                     page: pageNum || 1,

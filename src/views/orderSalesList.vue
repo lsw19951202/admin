@@ -102,7 +102,7 @@ export default {
         loadTBData: function(pageNum){
             this.showLoading()
             request({
-                url: '/order/salesranking',
+                url: setting.urls.appSaleRank,
                 method: 'get',
                 params: {
                     page: pageNum || 1,

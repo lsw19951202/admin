@@ -8,7 +8,126 @@ export default {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
         // 用户管理-用户排行-列表
-        userRankList: '/user/ranking'
+        userRankList: '/user/ranking',
+        // 上传图片
+        uploadImage: '/file/upload',
+        // 编辑素材
+        editMaterial: '/material/edit',
+        // 手工数据详情
+        cpsHandDetail: '/api/excel/manualinfo',
+        // 新增主菜单
+        authMenu: '/auth_auth/menu',
+        // 新增功能菜单
+        authAdd: '/auth_auth/add',
+        // 新增操作菜单
+        authEffect: '/auth_auth/effect',
+        // 编辑角色
+        roleEdit: '/auth_role/edit',
+        // 新增角色
+        roleAdd: '/auth_role/add',
+        // 获取团队列表
+        teamAll: '/team/getAll',
+        // 编辑用户
+        userEdit: '/auth_user/edit_user',
+        // 新增用户
+        userAdd: '/auth_user/add_user',
+        // 用户登出
+        logout: '/index/logout',
+        // 获取用户菜单
+        authIndex: '/auth/index',
+        // 获取验证码
+        vcode: '/login/captcha',
+        // 登陆
+        login: '/login/login',
+        // app统计订单数据
+        appCountOrder: '/api/home/index-order',
+        // app统计用户数据
+        appCountUser: '/api/home/index-user',
+        // 联盟账号订单默认参数
+        cpsAccountOrderDefault: '/api/new/accounts-default',
+        // 联盟账号订单表头和列表字段
+        cpsAccountOrderField: '/api/new/field',
+        // 联盟账号订单列表
+        cpsAccountOrder: '/api/new/accounts',
+        // 资金管理详情
+        capitalDetail: '/api/statistics/capital-detail',
+        // 资金管理表头和列表字段
+        capitalField: '/api/new/field',
+        // 资金管理列表数据
+        capitalList: '/api/statistics/capital',
+        // 资金池
+        pool: '/api/statistics/pool',
+        // cps昨日数据
+        cpsYesterday: '/api/statistics/yesterday',
+        // cps统计列表数据
+        cpsCollect: '/api/statistics/detail',
+        // cps提现
+        cpsWithdraw: '/api/withdraw/index',
+        // 公司账号订单默认参数
+        companyDefault: '/api/new/company-default',
+        // 公司账号订单表头和列表字段
+        companyField: '/api/new/field',
+        // 公司账号订单列表数据
+        companyList: '/api/new/company',
+        // cps今日数据
+        cpsToday: '/api/statistics/today',
+        // cps本月数据
+        cpsMonth: '/api/statistics/thismonth',
+        // cps上月
+        cpsLastMonth: '/api/statistics/lastmonth',
+        // 手工数据导入
+        cpsHandImport: '/importexcel',
+        // 手工数据列表
+        cpsHandList: '/api/excel/manuallist',
+        // 机器人统计数据 弹窗折线图数据
+        robotDetail: '/api/statistics/robot-detail',
+        // 机器人管理表格数据
+        robtoList: '/api/statistics/robot',
+        // 机器人订单 所有机器人
+        robots: '/api/new/robot-default',
+        // 机器人订单 表头和表格字段
+        robotField: '/api/new/field',
+        // 机器人订单 表格数据
+        robotOrderList: '/api/new/robot',
+        // cps汇总
+        cpsAll: '/api/statistics/all',
+        // 加载素材列表
+        materialList: '/material/query',
+        // app订单列表
+        appOrderList: '/order/getAll',
+        // app商品销量排行
+        appSaleRank: '/order/salesranking',
+        // 权限管理父级菜单
+        authParentMenu: '/auth_auth/parent_menu',
+        // 编辑权限  权限树
+        authTree: '/auth_auth/full_menu',
+        // 删除权限
+        authDel: '/auth_auth/delete',
+        // 权限列表
+        authList: '/auth_auth/index',
+        // 删除角色
+        roleDel: '/auth_role/delete',
+        // 角色列表
+        roleList: '/auth_role/index',
+        // 角色界面 当前用户的权限树
+        // 用户界面
+        userAuthTree: '/auth_user/auth_tree',
+        // 角色 权限信息
+        roleAuthInfo: '/auth_role/auth_list',
+        // 团队排行列表
+        teamSort: '/team/ranking',
+        // 用户管理 用户列表
+        userList: '/user/getAll',
+        // 用户权限管理 修改密码
+        editPwd: '/auth_user/edit_password',
+        // 用户权限管理 删除用户
+        userDel: '/auth_user/delete',
+        // 用户权限管理 用户列表
+        userAuthList: '/auth_user/index',
+        // 用户权限管理 用户信息
+        userAuthInfo: '/auth_user/auth_user',
+        // 提现列表
+        withdrawList: '/cash/query'
     },
     // 图片地址
     images:{

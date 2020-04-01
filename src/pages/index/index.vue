@@ -109,7 +109,7 @@ export default {
         logout: function(){
             console.log("logout");
             request({
-                url: '/index/logout',
+                url: setting.urls.logout,
                 method: 'get'
             }).then((response) => {
                 if(response.status == 200){
@@ -128,7 +128,7 @@ export default {
         getMenuInfo: function(){
             this.isShowLoading = true;
             request({
-                url: '/auth/index',
+                url: setting.urls.authIndex,
                 method: 'get'
             })
                 .then((response) => {

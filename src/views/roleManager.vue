@@ -50,7 +50,7 @@ export default {
             }
             let url = '',method = 'get', params = {}, successCallback = null, faileCallback = null;
             if(data.type == 'del'){
-                url = '/auth_role/delete'
+                url = setting.urls.roleDel
                 method = 'get'
                 params = {
                     'name': data.name
@@ -104,7 +104,7 @@ export default {
         loadRoleList: function(){
             this.showLoading()
             request({
-                url: '/auth_role/index',
+                url: setting.urls.roleList,
                 method: 'get'
             }).then((response) => {
                 if(response.status == 200){
@@ -125,7 +125,7 @@ export default {
         },
         loadAuthTree: function(){
             if(!this.authTree){
-                return request.get('/auth_user/auth_tree')
+                return request.get(setting.urls.userAuthTree)
                     .then((resp) => {
                         if(resp.status == 200){
                             const result = resp.data
@@ -160,7 +160,7 @@ export default {
         },
         loadAuthInfo: function(roleName){
             return request({
-                url: '/auth_role/auth_list',
+                url: setting.urls.roleAuthInfo,
                 methods: 'get',
                 params: {
                     'name': roleName

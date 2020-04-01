@@ -44,6 +44,7 @@
 <script>
 import request from '@/axios'
 import qs from 'qs'
+import setting from '@/setting'
 
 export default {
     props: ['editRole', 'authInfo', 'authTree', 'roleInfo', 'old_name'],
@@ -100,10 +101,10 @@ export default {
                 'extra_permission': []
             }
             if(this.editRole){
-                url = '/auth_role/edit'
+                url = setting.urls.roleEdit
                 requestData['old_name'] = this.old_name
             }else{
-                url = '/auth_role/add'
+                url = setting.urls.roleAdd
             }
             if(!this.roleInfo['name']){
                 this.$parent.alert('名字必须填写')

@@ -39,7 +39,7 @@
                 <label>图片上传</label>
                 <div>
                     <span>(最多上传9张,点击相应位置上传图片)</span>
-                    <!-- <image-editor :config="imageConfig" :images="material.imgs"></image-editor> -->
+                    <image-editor :config="imageConfig" :images="material.imgs"></image-editor>
                 </div>
             </div>
             <div class="editor-groups">
@@ -54,40 +54,51 @@
 </template>
 <script>
 import htmlEditorVue from '../common/htmlEditor.vue'
+import imageEditorVue from '../common/imageEditor.vue'
 export default {
     props: ['material'],
     components: {
-        'html-editor': htmlEditorVue
+        'html-editor': htmlEditorVue,
+        'image-editor': imageEditorVue
     },
     data: () => {
         return {
             htmlEditorConfig: {
                 actions: {
-                    bold: false,
-                    italic: false,
-                    alignLeft: false,
-                    alignCenter: false,
-                    alignRight: false,
-                    strikethrough: false,
-                    underline: false,
+                    bold: true,
+                    italic: true,
+                    alignLeft: true,
+                    alignCenter: true,
+                    alignRight: true,
+                    strikethrough: true,
+                    underline: true,
                     emoji: true,
                     image: false,
                     link: false
                 }
             },
-            imageConfig: {}
+            imageConfig: {
+                maxImageNum: 9
+            }
         }
     },
     methods: {
         saveMaterial: function(){
-            // this.$emit('saveMaterial')
-            console.log(this.$children[0].getContent())
+            // console.log(this.$children[0].getContent())
+            this.$parent.material.detail = this.$children[0].getContent()
+            this.$emit('saveMaterial')
+            // console.log(this.material)
         },
         cancelEdit: function(){
             this.$emit('cancelEditMaterial')
         }//,
         // changeDetail: function(htmlStr){
         //     this.$emit('changeDetail', htmlStr)
+        // }, 
+        // removeImage: function(idx){
+            // this.$emit('removeImage', idx)
+            // this.material.imgs.splice(idx, 1)
+            // this.material.imgs.slice(idx, '')
         // }
     }
 }
@@ -99,7 +110,7 @@ export default {
 .editor-groups { width: 100%; height: 1.25rem; line-height: 1.25rem; display: flex; margin-top: .625rem; font-size: .4375rem; }
 .editor-groups:first-child { margin-top: 0; }
 .editor-groups label { width: 3.0625rem; height: 100%; line-height: 1.25rem; }
-.editor-groups>div { flex: 1; height: 100%; }
+.editor-groups>div { flex: 1; height: 100%; width: 0; }
 .editor-groups input,.editor-groups select { font-size: .4375rem; width: 15.9375rem; height: 100%; line-height: 1.25rem; border: 1px solid #d9d9d9; border-radius: .125rem; padding: .3125rem; box-sizing: border-box; }
 .editor-groups select { -webkit-appearance: menulist; }
 </style>

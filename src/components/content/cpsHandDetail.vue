@@ -40,11 +40,14 @@ export default {
         this.loadDetailData()
     },
     methods: {
+        /**
+         * 加载手工数据详情
+         */
         loadDetailData: function(pageNum){
             this.showLoading()
             pageNum = pageNum || 1
             request({
-                url: '/api/excel/manualinfo',
+                url: setting.urls.cpsHandDetail,
                 method: 'get',
                 params: {
                     day: this.startTime,

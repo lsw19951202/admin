@@ -96,7 +96,7 @@ export default {
         },
         getVCode: function(){
             request({
-                url: '/login/captcha',
+                url: setting.urls.vcode,
                 method: 'get',
                 params: {}
             }).then((resp) => {
@@ -136,7 +136,7 @@ export default {
             }
             
             request({
-                url: '/login/login',
+                url: setting.urls.login,
                 method: 'post',
                 data: qs.stringify({
                     username: this.username,

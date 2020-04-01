@@ -64,7 +64,7 @@ export default {
             }
             let url = '',method = 'get', queryStr = '', params = {}, successCallback = null, faileCallback = null;
             if(data.type == 'modifyPwd'){
-                url = '/auth_user/edit_password'
+                url = setting.urls.editPwd
                 method = 'post'
                 queryStr = qs.stringify({
                     'user_id': data.user_id,
@@ -77,7 +77,7 @@ export default {
                     this.alert(msg || '修改密码失败')
                 }
             }else if(data.type == 'del'){
-                url = '/auth_user/delete'
+                url = setting.urls.userDel
                 method = 'get'
                 params = {
                     'user_id': data.user_id
@@ -125,7 +125,7 @@ export default {
         loadUserList: function(pageNum){
             this.showLoading()
             request({
-                url: '/auth_user/index',
+                url: setting.urls.userAuthList,
                 method: 'get',
                 params: {
                     page: pageNum || this.currPage
@@ -183,7 +183,7 @@ export default {
         },
         loadAuthTree: function(){
             if(!this.authTree){
-                return request.get('/auth_user/auth_tree')
+                return request.get(setting.urls.userAuthTree)
                     .then((resp) => {
                         if(resp.status == 200){
                             const result = resp.data
@@ -218,23 +218,23 @@ export default {
         },
         loadAuthInfo: function(userId){
             return request({
-                url: '/auth_user/auth_user',
+                url: setting.urls.userAuthInfo,
                 params: {
                     'user_id': userId
                 }
             })
-                .then((resp) => {
-                    if(resp.status == 200){
-                        const result = resp.data
-                        if(result.code == 200){
-                            this.authInfo = Object.assign({}, result.data)
-                            this.showUserEditor = true
-                        }
+            .then((resp) => {
+                if(resp.status == 200){
+                    const result = resp.data
+                    if(result.code == 200){
+                        this.authInfo = Object.assign({}, result.data)
+                        this.showUserEditor = true
                     }
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
         }
     },
     computed: {

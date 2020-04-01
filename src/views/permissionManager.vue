@@ -18,6 +18,7 @@ import confirm from '@/components/common/confirm.vue'
 import PermissionEditor from '@/components/content/permissionEditor.vue'
 import request from '@/axios'
 import qs from 'qs'
+import setting from '../setting'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
@@ -66,7 +67,7 @@ export default {
         },
         loadEffectAuthTree: function(){
             return request({
-                url: '/auth_auth/parent_menu',
+                url: setting.urls.authParentMenu,
                 method: 'get'
             }).then((response) => {
                 if(response.status == 200){
@@ -81,7 +82,7 @@ export default {
         },
         loadAuthAuthTree: function(){
             return request({
-                url: '/auth_auth/full_menu',
+                url: setting.urls.authTree,
                 method: 'get'
             }).then((response) => {
                 if(response.status == 200){
@@ -107,7 +108,7 @@ export default {
             this.showConfirm = false
             if(dt){
                 request({
-                    url: '/auth_auth/delete',
+                    url: setting.urls.authDel,
                     method: 'post',
                     data: qs.stringify({
                         'auth_action': dt.url
@@ -145,7 +146,7 @@ export default {
         loadPermissionList: function(){
             this.showLoading()
             request({
-                url: '/auth_auth/index',
+                url: setting.urls.authList,
                 method: 'get'
             }).then((response) => {
                 if(response.status == 200){

@@ -47,10 +47,11 @@ export default {
     inject: ['alert', 'showLoading', 'hideLoading'],
     data: () => {
         const now = new Date()
+        now.setDate(now.getDate() - 1)
         let nStr = ''
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
-        nStr += ((now.getDate() < 11) ? '0' : '') + (now.getDate() - 1)
+        nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return {
             id: '',
             nickName: '',
@@ -86,7 +87,7 @@ export default {
         loadTBData: function(pageNum){
             this.showLoading()
             request({
-                url: '/team/getAll',
+                url: setting.urls.teamAll,
                 method: 'get',
                 params: {
                     page: pageNum || 1,

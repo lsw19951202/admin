@@ -37,7 +37,7 @@
                 </div>
                 <div>
                     <label>是否新页面打开:</label>
-                    <input type="checkbox" v-model="linkToBlank">
+                    <input type="checkbox" v-model="linkOpenInBlank">
                 </div>
             </div>
         </div>
@@ -92,308 +92,86 @@ export default {
             },
             linkUrl: '',
             linkText: '',
-            linkToBlank: false
+            linkOpenInBlank: false
         }
-    },
-    created: function(){
-        document.addEventListener('selectionchange', this.selectionChange)
-    },
-    destroyed: function(){
-        document.removeEventListener('selectionchange', this.selectionChange)
     },
     methods: {
         /**
-         * 当选中内容发生改变时
-         * 根据选中内容修改编辑器头部样式按钮的选中状态
+         * emoji表情点击事件
+         * 添加表情到光标位置
+         * 如果有选中内容，则替换选中内容
+         * 如果光标不在编辑器内，则添加到末尾
+         * @param event 点击事件，用于获取emoji
          */
-        selectionChange: function(evt){
-            try{
-                const range = this.getRange()
-                let srcElement = null
-                let bold = true, italic = true, alignLeft = true, alignCenter = true, alignRight = true, strikethrough = true, underline = true
-                if(window.getSelection){
-                    srcElement = range.commonAncestorContainer
-                }else{
-                    srcElement = range.parentElement()
-                }
-                if(this.$refs.editor.contains(srcElement)){
-                    // 如果光标开始和结束是同一节点内
-                    if(range.startContainer == range.endContainer){
-                        console.log('光标在一个节点内')
-                        // 选中的是text元素，元素是编辑器的直接子元素
-                        // 所以没有任何样式
-                        if(range.startContainer.parentElement == this.$refs.editor){
-                            bold = false
-                            italic = false
-                            alignLeft = true
-                            alignCenter = false
-                            alignRight = false
-                            strikethrough = false
-                            underline = false
-                        }else{
-                            // 光标所在的text元素不是编辑器的直接子元素
-                            const rst = this.computeSingleNodeStyle(range.startContainer.parentElement)
-                            bold = rst.bold
-                            italic = rst.italic
-                            alignLeft = rst.alignLeft
-                            alignCenter = rst.alignCenter
-                            alignRight = rst.alignRight
-                            strikethrough = rst.strikethrough
-                            underline = rst.underline
-                        }
-                    }else{
-                        console.log('光标在多个节点内')
-                        const lines = this.getSelectedLines(range)
-                        // 遍历所有选中的行 判断对齐方式  对齐方式只需要判断编辑器的直接子节点
-                        for(let idx = 0; idx < lines.length; idx++){
-                            // 只有元素节点有样式  文本节点没有对齐方式，只能是左对齐  文本节点没有下划线中横线
-                            if(lines[idx].nodeType == 1){
-                                const rst = this.computeSingleNodeStyle(lines[idx])
-                                alignLeft = alignLeft && rst.alignLeft
-                                alignCenter = alignCenter && rst.alignCenter
-                                alignRight = alignRight && rst.alignRight
-                            }else{
-                                // alignLeft = true
-                                alignCenter = false
-                                alignRight = false
-                                strikethrough = false
-                                underline = false
-                            }
-                        }
-                        // 遍历所有选中的行 判断文字样式，是否是粗体和斜体，判断所有的文本节点是否是粗体斜体
-                        const textNodes = this.getSelectedTextNodes(range)
-                        for(let idx = 0; idx < textNodes.length; idx++){
-                            if(textNodes[idx].parentElement == this.$refs.editor){
-                                bold = false
-                                italic = false
-                                break
-                            }else{
-                                const rst = this.computeSingleNodeStyle(textNodes[idx].parentElement)
-                                bold = bold && rst.bold
-                                italic = italic && rst.bold
-                            }
-                        }
-                    }
-                    // console.log('--------------')
-                    // console.log('bold:' + bold)
-                    // console.log('italic:' + italic)
-                    // console.log('textAlign:' + (alignLeft ? 'left' : (alignCenter ? 'center' : 'right')))
-                    // console.log('strikethrough:' + strikethrough)
-                    // console.log('underline:' + underline)
-                    this.contentBold = bold
-                    this.contentItalic = italic
-                    this.contentAlignLeft = alignLeft
-                    this.contentAlignCenter = alignCenter
-                    this.contentAlignRight = alignRight
-                    this.contentStrikethrough = strikethrough
-                    this.contentUnderline = underline
-                }
-            }catch(e){
-                console.log(e)
-            }
-        },
-        getSelectedTextNodes: function(range){
-            const textNodes = []
-            return textNodes
-        },
-        /**
-         * 获取选中的所有段落----光标所在的所有编辑器的直接子元素
-         */
-        getSelectedLines: function(range){
-            // 编辑器的所有直接子节点
-            const editorChildren = this.$refs.editor.childNodes
-            const lines = []
-            let node = range.startContainer
-            let currIdx = 0
-            for(let idx = 0; idx < editorChildren.length; idx++){
-                if(editorChildren[idx].contains(node)){
-                    currIdx = idx
-                    node = editorChildren[currIdx]
-                    lines.push(node)
-                    break
-                }
-            }
-            do{
-                node = editorChildren[++currIdx]
-                if(node){
-                    if(node.nodeType == 1 && node.tagName.toLowerCase() == 'br'){
-                        console.log('换行')
-                    }else{
-                        lines.push(node)
-                    }
-                }
-            }while(node && !node.contains(range.endContainer))
-            return lines
-        },
-        /**
-         * 获取可编辑div中，指定节点的下一个节点
-         * 1、如果当前节点是父节点的最后一个子节点
-         * 1.1 返回父节点的下一个兄弟节点的第一个最深的子节点或者父节点
-         * 2、否则直接返回当前节点的下一个兄弟节点的最深子节点或者兄弟节点本身
-         * @param node
-         * @returns nextNode
-         */
-        getNextNode: function(node){
-            // if(node == this.$refs.editor){
-            //     return
-            // }
-            const parent = node.nodeType == 3 ? node.parentElement : node
-            for(let idx = 0; idx < parent.childNodes.length; idx++){
-                if(parent.childNodes[idx] == node){
-                    if(idx == parent.childNodes.length - 1){
-                        return this.getNextNode(parent)
-                    }else{
-                        return this.getFirstSubNode(parent.childNodes[idx + 1])
-                    }
-                }
-            }
-        },
-        /**
-         * 获取节点的第一个子节点
-         * 
-         * 如果node有子节点，返回第一个子节点
-         * 如果node没有子节点，返回node
-         * 
-         * @param node
-         * @returns 第一个子节点或者node
-         */
-        getFirstSubNode: function(node){
-            if(node.childNodes.length > 0){
-                return this.getFirstSubNode(node.childNodes[0])
-            }else{
-                return node
-            }
-        },
-        /**
-         * 遍历parent的所有子节点
-         * 
-         * @param parent
-         * @returns 
-         */
-        computedStyle: function(parent){
-            const children = parent.children
-            let rst = {
-                bold: true,
-                italic: true,
-                alignLeft: true,
-                alignCenter: true,
-                alignRight: true,
-                strikethrough: true,
-                underline: true
-            }
-            if(children.length > 0){
-                for(let idx = 0; idx < children.length; idx++){
-                    const computedStyle = this.computedStyle(children[idx])
-                    rst = this.mergeStyle(rst, computedStyle)
-                }
-            }else{
-                const computedStyle = window.getComputedStyle(parent)
-                rst = this.mergeStyle(rst, computedStyle)
-            }
-            console.log(parent)
-            console.log(rst)
-            return rst
-        },
-        /**
-         * 获取当前节点的样式
-         * 如果是编辑器的直接子节点，直接返回当前节点的样式
-         * 否则，text-align以及text-decoration样式需要判断上级
-         *      text-align的根据编辑器的直接子节点判断
-         *      text-decoration如果有一个父节点有，则认为当前节点有
-         */
-        computeSingleNodeStyle: function(node){
-            let computedStyle = window.getComputedStyle(node)
-            const rst = {
-                bold: computedStyle.fontWeight == 700,
-                italic: computedStyle.fontStyle == 'italic',
-                alignLeft: computedStyle.textAlign == 'left' || computedStyle.textAlign == 'start',
-                alignCenter: computedStyle.textAlign == 'center',
-                alignRight: computedStyle.textAlign == 'right',
-                strikethrough: computedStyle.textDecorationLine == 'line-through',
-                underline: computedStyle.textDecorationLine == 'underline'
-            }
-            let parentNode = node.parentElement
-            while(parentNode != this.$refs.editor){
-                computedStyle = window.getComputedStyle(parentNode)
-                rst.alignLeft = computedStyle.textAlign == 'left' || computedStyle.textAlign == 'start'
-                rst.alignCenter = computedStyle.textAlign == 'center'
-                rst.alignRight = computedStyle.textAlign == 'right'
-                rst.strikethrough = rst.strikethrough || (computedStyle.textDecorationLine == 'line-through')
-                rst.underline = rst.underline || (computedStyle.textDecorationLine == 'underline')
-                parentNode = parentNode.parentElement
-            }
-            return rst
-        },
-        mergeStyle: function(oldStyle, newStyle){
-            return {
-                bold: oldStyle.bold && (newStyle.bold || (newStyle.fontWeight == 700)),
-                italic: oldStyle.italic && (newStyle.italic || (newStyle.fontSize == 'italic')),
-                alignLeft: oldStyle.alignLeft && (newStyle.alignLeft || (newStyle.textAlign == 'left') || (newStyle.textAlign == 'start')),
-                alignCenter: oldStyle.alignCenter && (newStyle.alignCenter || (newStyle.textAlign == 'center')),
-                alignRight: oldStyle.alignRight && (newStyle.alignRight || (newStyle.textAlign == 'right')),
-                strikethrough: oldStyle.strikethrough && (newStyle.strikethrough || (newStyle.textDecorationLine == 'line-through')),
-                underline: oldStyle.underline && (newStyle.underline || (newStyle.textDecorationLine == 'underline'))
-            }
-        },
         emojiItemClicked: function(e){
             const target = e.target
             if(target.className == 'emoji-item'){
-                this.addEmoji(target.innerText)
+                this.insertText(target.innerText)
                 this.showEmojiContainer = false
             }
         },
-        addEmoji: function(emoji){
-            this.$refs.editor.focus()
-            this.insertHtmlAtCaret({
-                tagName: 'span',
-                innerHTML: emoji
-            })
+        /**
+         * 插入文本内容
+         * 主要是插入emoji表情
+         * @param text 文本内容
+         */
+        insertText: function(text){
+            this.insertHTML('<span>' + text + '</span>')
         },
-        insertHtmlAtCaret: function(htmlObj){
+        /**
+         * 编辑器滚动到光标所在位置
+         * 如果编辑器第一次获取焦点
+         * 滚动到编辑器末尾位置
+         * 否则，滚动到编辑器之前的位置
+         */
+        scrollToTarget: function(isNewRange){
+            if(isNewRange){
+                this.editorPos.left = 0
+                this.editorPos.top = this.$refs.editor.childNodes[this.$refs.editor.childNodes.length - 1].offsetTop
+            }
+            this.$refs.editor.scrollTo(this.editorPos.left, this.editorPos.top)
+        },
+        /**
+         * 插入html
+         * text转换成span插入
+         * img，link
+         * 编辑器需要重新获取焦点，设置焦点位置为之前离开编辑器时得位置
+         * 如果在插入元素之前，编辑器未获得过焦点，则将焦点位置设置为编辑器末尾
+         * @param html 要插入的html字符串
+         */
+        insertHTML: function(html){
             if(window.getSelection){
-                const dom = this.createHtmlDom(htmlObj)
+                // 是否新创建的range -- 是否是光标第一次进入编辑器
+                const isNewRange = this.setRange()
+                document.execCommand('insertHTML', false, html)
+                this.scrollToTarget(isNewRange)
+            }else{
+                return
+            }
+        },
+        /**
+         * 设置焦点
+         * 设置焦点为之前离开编辑器时的位置
+         * 如果编辑器初次获得焦点，则this.range为空，设置焦点到编辑器末尾，并设置this.range为当前焦点位置
+         * @returns 是否初次获得焦点
+         */
+        setRange: function(){
+            this.$refs.editor.focus()
+            if(window.getSelection){
                 const sel = window.getSelection()
                 sel.removeAllRanges()
                 if(this.range){
                     sel.addRange(this.range)
-                    this.range.deleteContents()
-                    this.range.insertNode(dom)
+                    return false
                 }else{
                     sel.selectAllChildren(this.$refs.editor)
                     sel.collapseToEnd()
                     this.range = sel.getRangeAt(0)
-                    this.range.insertNode(dom)
-                    this.editorPos.left = 0
-                    this.editorPos.top = dom.offsetTop
+                    return true
                 }
-                sel.collapseToEnd()
-                // this.changeContent(this.$refs.editor.innerHTML)
-            }//else if(document.selection && document.selection.type != "Control"){
-                // const htmlStr = this.createHtmlStr(htmlObj)
-                // if(!this.range){
-                    //     this.range = document.selection.createRange()
-                //     this.range.moveToElementText(this.$refs.editor)
-                //     this.range.collapse(false)
-                //     this.range.select()
-                // }
-                // this.range.pasteHTML(htmlStr)
-            // }
-            this.$refs.editor.scrollTo(this.editorPos.left, this.editorPos.top)
-        },
-        createHtmlDom: function(htmlObj){
-            const dom = document.createElement(htmlObj.tagName)
-            dom.innerHTML = htmlObj.innerHTML
-            if(htmlObj.style){
-                for(const key in htmlObj.style){
-                    dom.style[key] = htmlObj.style[key]
-                }
+            }else{
+                return false
             }
-            if(htmlObj.props){
-                for(const key in htmlObj.props){
-                    dom[key] = htmlObj.props[key]
-                }
-            }
-            return dom
         },
         createHtmlStr: function(htmlObj){
             let str = ''
@@ -415,23 +193,27 @@ export default {
             str += '</' + htmlObj.tagName + '>'
             return str
         },
-        setCaretPosition: function(pos){
-            if(this.$refs.editor.setSelectionRange){
-                this.$refs.editor.setSelectionRange(pos, pos)
-            }else if(this.$refs.editor.createTextRange){
-                console.log(123)
-            }
-        },
+        /**
+         * 编辑器失去焦点
+         * 保存焦点位置
+         * 保存编辑器滚动参数
+         */
         editorBlur: function(){
             this.range = this.getRange()
             this.editorPos = this.getEditorPos()
         },
+        /**
+         * 获取编辑器滚动参数
+         */
         getEditorPos: function(){
             return {
                 left: this.$refs.editor.scrollLeft,
                 top: this.$refs.editor.scrollTop
             }
         },
+        /**
+         * 获取当前焦点对象
+         */
         getRange: function(){
             if(window.getSelection){
                 const sel = window.getSelection()
@@ -441,41 +223,63 @@ export default {
             }
             return null
         },
-        getCursorPos: function(){
-            let cursorPos = 0
-            if(document.selection){
-                const range = document.selection.createRange()
-                range.moveStart('character', -this.$refs.editor.innerHTML.length)
-                cursorPos = range.text.length
-            }else if(this.$refs.editor.selectionStart || this.$refs.editor.selectionStart == '0'){
-                cursorPos = this.$refs.editor.selectionStart
-            }
-            this.cursorPos = cursorPos
-            console.log(cursorPos)
-        },
+        /**
+         * 修改选中文本的fontWeight
+         */
         changeTextWeight: function(){
-            console.log('changeTextWeight')
+            this.setRange()
+            document.execCommand('bold', false, null)
+            this.scrollToTarget()
         },
+        /**
+         * 修改选中文本是否是斜体
+         */
         changeTextItalic: function(){
-            console.log('italic')
+            this.setRange()
+            document.execCommand('italic', false, null)
+            this.scrollToTarget()
         },
+        /**
+         * 修改选中文本的align
+         */
         changeTextAlign: function(tp){
-            console.log('align')
+            this.setRange()
+            document.execCommand(tp == 'left' ? 'justifyLeft' : (tp == 'center' ? 'justifyCenter' : 'justifyRight'))
+            this.scrollToTarget()
         },
+        /**
+         * 修改选中文本是否加中横线
+         */
         changeTextStrike: function(){
-            console.log('strike')
+            this.setRange()
+            document.execCommand('strikeThrough', false, null)
+            this.scrollToTarget()
         },
+        /**
+         * 修改选中文本是否加下划线
+         */
         changeTextUnderline: function(){
-            console.log('underline')
+            this.setRange()
+            document.execCommand('underline', false, null)
+            this.scrollToTarget()
         },
+        /**
+         * 编辑器内容输入事件
+         */
         editorInput: function(e){
             // this.changeContent(e.target.innerHTML)
             console.log(e)
         },
+        /**
+         * 编辑器内容改变触发
+         */
         changeContent: function(htmlContent){
             console.log(htmlContent)
             this.$emit('changeContent', htmlContent)
         },
+        /**
+         * 显示或者隐藏超链接编辑界面
+         */
         changeLinkStatu: function(){
             if(!this.showLinkContainer){
                 this.showImageContainer = false
@@ -483,6 +287,9 @@ export default {
             }
             this.showLinkContainer = !this.showLinkContainer
         },
+        /**
+         * 显示或者隐藏图片编辑界面
+         */
         changeImageStatu: function(evt){
             if(!this.showImageContainer){
                 this.showEmojiContainer = false
@@ -498,6 +305,9 @@ export default {
                 }
             })
         },
+        /**
+         * 显示或者隐藏emoji编辑界面
+         */
         changeEmojiStatu: function(evt){
             if(!this.showEmojiContainer){
                 this.showImageContainer = false
@@ -518,14 +328,26 @@ export default {
                 }  
             })
         },
+        /**
+         * 编辑器获得焦点事件
+         * 隐藏所有编辑界面
+         * emoji，image，link
+         */
         editorFocus: function(){
             this.hideEditorBody()
         },
+        /**
+         * 隐藏编辑界面
+         */
         hideEditorBody: function(){
             this.showEmojiContainer = false
             this.showImageContainer = false
             this.showLinkContainer = false
         },
+        /**
+         * 获取编辑器内容
+         * 提供给父级组件调用
+         */
         getContent: function(){
             return this.$refs.editor.innerHTML
         }

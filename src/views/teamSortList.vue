@@ -134,7 +134,7 @@ export default {
         loadTBData: function(pageNum){
             this.showLoading()
             request({
-                url: '/team/ranking',
+                url: setting.urls.teamSort,
                 method: 'get',
                 params: {
                     page: pageNum || 1,

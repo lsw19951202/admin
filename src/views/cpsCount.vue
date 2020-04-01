@@ -7,6 +7,7 @@
 import CardContainer from '@/components/content/cardContainer.vue'
 
 import request from '@/axios'
+import setting from '../setting'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
@@ -24,10 +25,10 @@ export default {
     methods: {
         loadData: function(){
             this.showLoading()
-            const todayRequest = this.createRequest('/api/statistics/today', 'get', {})
-            const yesterdayRequest = this.createRequest('/api/statistics/yesterday', 'get', {})
-            const monthRequest = this.createRequest('/api/statistics/thismonth', 'get', {})
-            const lastMonthRequest = this.createRequest('/api/statistics/lastmonth', 'get', {})
+            const todayRequest = this.createRequest(setting.urls.cpsToday, 'get', {})
+            const yesterdayRequest = this.createRequest(setting.urls.cpsYesterday, 'get', {})
+            const monthRequest = this.createRequest(setting.urls.cpsMonth, 'get', {})
+            const lastMonthRequest = this.createRequest(setting.urls.cpsLastMonth, 'get', {})
             Promise.all([todayRequest, yesterdayRequest, monthRequest, lastMonthRequest])
                 .then((data) => {
                     this.createCardData(data)

@@ -54,6 +54,7 @@
 <script>
 import request from '@/axios'
 import qs from 'qs'
+import setting from '@/setting'
 
 export default {
     props: ['editorType', 'authTree'],
@@ -73,7 +74,7 @@ export default {
         saveInfo: function(){
             let url = '', method = '', queryStr = ''
             if(this.editorType == 'menu'){
-                url = '/auth_auth/menu'
+                url = setting.urls.authMenu
                 method = 'post'
                 queryStr = qs.stringify({
                     name: this.name,
@@ -82,7 +83,7 @@ export default {
                 })
                 console.log('menu')
             }else if(this.editorType == 'effect'){
-                url = '/auth_auth/add'
+                url = setting.urls.authAdd
                 method = 'post'
                 queryStr = qs.stringify({
                     url: this.url,
@@ -93,7 +94,7 @@ export default {
                 })
                 console.log('effect')
             }else if(this.editorType == 'auth'){
-                url = '/auth_auth/effect'
+                url = setting.urls.authEffect
                 method = 'post'
                 queryStr = qs.stringify({
                     url: this.url,

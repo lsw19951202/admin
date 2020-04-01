@@ -84,7 +84,7 @@ export default {
             console.log(capital)
             this.showLoading()
             request({
-                url: '/api/statistics/capital-detail',
+                url: setting.urls.capitalDetail,
                 method: 'get',
                 params: {
                     time: capital[0]
@@ -167,7 +167,7 @@ export default {
         },
         loadFieldsAndTableHeader: function(){
             return request({
-                url: '/api/new/field',
+                url: setting.urls.capitalField,
                 method: 'get',
                 params: {
                     'order_type': 'capital'
@@ -185,7 +185,7 @@ export default {
         loadCapitalData: function(pageNum){
             this.showLoading()
             return request({
-                url: '/api/statistics/capital',
+                url: setting.urls.capitalList,
                 method: 'get',
                 params: {
                     'start_time': this.start_time,

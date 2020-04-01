@@ -31,6 +31,7 @@ import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import request from '@/axios'
 import Page from '@/components/content/page.vue'
 import DetailTable from '@/components/content/table.vue'
+import setting from '../setting'
 
 // require('@/mock')
 
@@ -45,10 +46,11 @@ export default {
     },
     data: () => {
         const now = new Date()
+        now.setDate(now.getDate() - 1)
         let nStr = ''
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
-        nStr += ((now.getDate() < 11) ? '0' : '') + (now.getDate() - 1)
+        nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return {
             cardData: [],
             'start_time': '',
@@ -113,7 +115,7 @@ export default {
         loadConfigInfo: function(){
             this.showLoading()
             return request({
-                url: '/api/new/company-default',
+                url: setting.urls.companyDefault,
                 method: 'get',
                 params: {}
             }).then((resp) => {
@@ -161,7 +163,7 @@ export default {
         loadFields: function(orderType){
             if(this.fields[orderType].fields.length == 0){
                 return request({
-                    url: '/api/new/field',
+                    url: setting.urls.companyField,
                     method: 'get',
                     params: {
                         'order_type': (orderType == 0 ? '' : orderType)
@@ -199,7 +201,7 @@ export default {
             console.log('load table data')
             this.showLoading()
             request({
-                url: '/api/new/company',
+                url: setting.urls.companyList,
                 method: 'get',
                 params: {
                     'start_time': this.start_time,
