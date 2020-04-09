@@ -31,6 +31,13 @@ import materialListVue from '../../views/materialList.vue'
 import orderSalesListVue from '../../views/orderSalesList.vue'
 import teamSortListVue from '../../views/teamSortList.vue'
 import userRankListVue from '../../views/userRankList.vue'
+import cpsdealMonthVue from '../../views/cpsdealMonth.vue'
+import cpsDealYearVue from '../../views/cpsDealYear.vue'
+import cpsperMonthVue from '../../views/cpsperMonth.vue'
+import cpsperYearVue from '../../views/cpsperYear.vue'
+import cpsDealAccountsVue from '../../views/cpsDealAccounts.vue'
+import cpsestYearVue from '../../views/cpsestYear.vue'
+import cpsestMonthVue from '../../views/cpsestMonth.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -69,7 +76,14 @@ export default {
         'material-list': materialListVue,
         'order-saleslist': orderSalesListVue,
         'team-sort-list': teamSortListVue,
-        'user-rank-list': userRankListVue
+        'user-rank-list': userRankListVue,
+        'cpsdeal-month': cpsdealMonthVue,
+        'cpsdeal-year': cpsDealYearVue,
+        'cpsdeal-accounts': cpsDealAccountsVue,
+        'cpsper-month': cpsperMonthVue,
+        'cpsper-year': cpsperYearVue,
+        'cpsest-year': cpsestYearVue,
+        'cpsest-month': cpsestMonthVue
     }
 }
 </script>

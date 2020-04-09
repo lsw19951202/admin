@@ -2,7 +2,7 @@
     <table cellspacing="0" ref="table">
         <thead :class="tableHeaderFixed?'theadFixed':''" ref="thead">
             <tr v-for="(row, index) in tableHeader" v-bind:key="index">
-                <td v-for="(col, idx) in row" v-bind:key="idx" :colspan="col.colspan || 1">
+                <td v-for="(col, idx) in row" v-bind:key="idx" :colspan="col.colspan || 1" :rowspan="col.rowspan || 1">
                     {{col.name}}
                     <div v-if="col.canSort" class="sort">
                         <span :class="'asc' + (sortType == 'asc' ? ' hover' : '')" @click="sortTBData('asc', col.sortBy)"></span>
@@ -56,6 +56,11 @@
         <tbody v-if="tbType == 'common'" :style="tableBodyClick?'cursor: pointer;':''" :class="tableHeaderFixed?'scrollable':''" ref="tbody" @click.prevent.stop="tableBodyClicked($event)">
             <tr v-for="(tbRow, index) in tbData" v-bind:key="index" :class="getRowClass(index)" :title="getRowTitle(index)">
                 <td v-for="(tbCol, idx) in tbRow" v-bind:key="idx">{{tbCol}}</td>
+            </tr>
+        </tbody>
+        <tbody v-if="tbType == 'tdSpan'" :style="tableBodyClick?'cursor: pointer;':''" :class="tableHeaderFixed?'scrollable':''" ref="tbody" @click.prevent.stop="tableBodyClicked($event)">
+            <tr v-for="(tbRow, index) in tbData" v-bind:key="index" :class="getRowClass(index)" :title="getRowTitle(index)">
+                <td v-for="(tbCol, idx) in tbRow" v-bind:key="idx" style="background-color: white;" :colspan="tbCol.colspan" :rowspan="tbCol.rowspan">{{tbCol.text}}</td>
             </tr>
         </tbody>
         <tbody v-if="tbType == 'handdata'" ref="tbody">

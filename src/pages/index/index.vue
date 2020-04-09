@@ -36,6 +36,7 @@ import setting from '../../setting'
 import Alert from '@/components/common/alert.vue'
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
+import qs from 'qs'
 // require('@/mock')
 
 Vue.use(VueCookies)
@@ -75,10 +76,81 @@ export default {
             reload: this.reload,
             alert: this.alert,
             showLoading: this.showLoading,
-            hideLoading: this.hideLoading
+            hideLoading: this.hideLoading,
+            loadFields: this.loadFields,
+            createPageData: this.createPageData,
+            loadTBData: this.loadTBData
         }
     },
     methods: {
+        createPageData: function(dt){
+            return {
+                'total_page': dt.total_page || dt.pageCount || 0,
+                'page': dt.page || 1,
+                'total': dt.total || 0
+            }
+        },
+        createRequestParams: function(url, queryParams, method){
+                const requestParams = {
+                    url: url,
+                    method: method || 'get'
+                }
+                if(method == 'post'){
+                    requestParams.data = qs.stringify(queryParams || {})
+                }else{
+                    requestParams.params = queryParams
+                }
+                return requestParams
+        },
+        loadTBData: function(url, queryParams, method){
+            return new Promise((resolve, reject) => {
+                request(this.createRequestParams(url, queryParams, method)).then(resp => {
+                    if(resp.status == 200){
+                        if(resp.data.code == 200){
+                            resolve(resp.data.data)
+                        }else{
+                            reject()
+                        }
+                    }else{
+                        reject()
+                    }
+                    return
+                }).catch(e => {
+                    reject(e)
+                    return
+                })
+            })
+        },
+        loadFields: function(url, queryParams, method){
+            return new Promise((resolve, reject) => {
+                request(this.createRequestParams(url, queryParams, method)).then((resp) => {
+                    if(resp.status == 200){
+                        if(resp.data.code == 200){
+                            const tableHeader = []
+                            const fields = []
+                            tableHeader.push([])
+                            for(let idx = 0; idx < resp.data.data.length; idx++){
+                                const item = resp.data.data[idx]
+                                fields.push(item['field'])
+                                tableHeader[0].push({name: item.name})
+                            }
+                            resolve({
+                                tableHeader: tableHeader,
+                                fields: fields
+                            })
+                        }else{
+                            reject()
+                        }
+                    }else{
+                        reject()
+                    }
+                    return
+                }).catch(e => {
+                    reject(e)
+                    return
+                })
+            })
+        },
         reload: function(){
             console.log('reload')
             this.isContentAlive = false

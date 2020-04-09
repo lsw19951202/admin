@@ -127,7 +127,23 @@ export default {
         // 用户权限管理 用户信息
         userAuthInfo: '/auth_user/auth_user',
         // 提现列表
-        withdrawList: '/cash/query'
+        withdrawList: '/cash/query',
+        // cpsFields
+        cpsFields: '/api/new/field',
+        // cps交易月度交易
+        cpsDealMonth: '/finance/cpsdeal/month',
+        // cps交易年度交易
+        cpsdealYear: '/finance/cpsdeal/year',
+        // cps交易账户交易
+        cpsdealAccounts: '/finance/cpsdeal/accounts',
+        // cps业绩统计月汇总
+        cpsperMonth: '/finance/cpsper/month',
+        // cps业绩统计年汇总
+        cpsperYear: '/finance/cpsper/year',
+        // cps暂估月汇总
+        cpsestMonth: 'finance/cpsest/month',
+        // cps暂估年汇总
+        cpsestYear: '/finance/cpsest/year'
     },
     // 图片地址
     images:{
@@ -163,6 +179,18 @@ export default {
             素材管理: [
                 require('@/assets/menu_img_selected.png'),
                 require('@/assets/menu_img_normal.png')
+            ],
+            CPS交易数据: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            CPS业绩统计: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            CPS暂估收入: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
             ]
         },
         logo: {
@@ -227,6 +255,38 @@ export default {
         ],
         teamSortList: [
             [{name: '用户ID'}, {name: '级别'}, {name: '手机号'}, {name: '昵称'}, {name: '微信号'}, {name: '数量|金额'}, {name: '统计时间'}, {name: '上级ID'}, {name: '上级昵称'}]
+        ],
+        cpsDealMonth: [
+            // [{name: '日期'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
+        ],
+        cpsdealYear: [
+            [{name: '月份'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
+        ],
+        cpsdealAccounts: [
+            [{name: '平台'}, {name: '账户'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
+        ],
+        cpsdealAccountsByPlat: [
+            [{name: '公司'}, {name: '平台'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
+        ],
+        cpsperMonth: [
+            // [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2}, {name: ' 当日预估金额', colspan: 6}, {name: ' 结算金额', colspan: 5}, {name: '税前毛利率', colspan: 2}, {name: '税后毛利率', colspan: 3}],
+            [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2},{name: '付款订单总金额（GMV）'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '预估毛利（税前）'}, {name: '预估毛利（税后）'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '技术服务费'}, {name: '毛利（税前）'}, {name: '毛利（税后）'}, {name: '预估毛利率'}, {name: '结算毛利率'}, {name: '预估毛利率'}, {name: '累计预估毛利'}, {name: '结算毛利率'}]
+        ],
+        cpsperYear: [
+            // [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2}, {name: ' 当日预估金额', colspan: 6}, {name: ' 结算金额', colspan: 5}, {name: '税前毛利率', colspan: 2}, {name: '税后毛利率', colspan: 3}],
+            [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2},{name: '付款订单总金额（GMV）'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '预估毛利（税前）'}, {name: '预估毛利（税后）'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '技术服务费'}, {name: '毛利（税前）'}, {name: '毛利（税后）'}, {name: '预估毛利率'}, {name: '结算毛利率'}, {name: '预估毛利率'}, {name: '累计预估毛利'}, {name: '结算毛利率'}]
+        ],
+        cpsestYear: [
+            [{name: '序号'}, {name: '平台'}, {name: '营销账号'}, {name: '收款账户'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}]
+        ],
+        cpsestYearAll: [
+            [{name: '公司'}, {name: '平台'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}]
+        ],
+        cpsestMonth: [
+            [{name: '序号'}, {name: '平台'}, {name: '营销账号'}, {name: '收款账户'}, {name: '预计结算(含税)'}, {name: '小计'}, {name: '税率'}, {name: '不含税金额'}, {name: '增值税金额'}, {name: '技术服务费'}, {name: '备注'}]
+        ],
+        cpsestMonthAll: [
+            [{name: '公司'}, {name: '平台'}, {name: '暂估结算(含税)'}, {name: '税率6%'}, {name: '不含税金额'}, {name: '增值税金额'}, {name: '技术服务费'}, {name: '备注'}]
         ]
     },
     views: {
@@ -344,6 +404,41 @@ export default {
             name: 'user-rank-list',
             title: '用户管理',
             subTitle1: '用户排行'
+        },
+        '/cpsdeal/accounts': {
+            name: 'cpsdeal-accounts',
+            title: 'CPS交易数据',
+            subTitle1: '账户交易数据'
+        },
+        '/cpsdeal/month': {
+            name: 'cpsdeal-month',
+            title: 'CPS交易数据',
+            subTitle1: '月交易数据'
+        },
+        '/cpsdeal/year': {
+            name: 'cpsdeal-year',
+            title: 'CPS交易数据',
+            subTitle1: '年度交易数据'
+        },
+        '/cpsper/month': {
+            name: 'cpsper-month',
+            title: 'CPS业绩统计',
+            subTitle1: '月业绩统计'
+        },
+        '/cpsper/year': {
+            name: 'cpsper-year',
+            title: 'CPS业绩统计',
+            subTitle1: '年业绩统计'
+        },
+        '/cpsest/month': {
+            name: 'cpsest-month',
+            title: 'CPS暂估收入',
+            subTitle1: '月暂估收入'
+        },
+        '/cpsest/year': {
+            name: 'cpsest-year',
+            title: 'CPS暂估收入',
+            subTitle1: '年暂估收入'
         }
     }
 }
