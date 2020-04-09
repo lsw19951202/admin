@@ -113,6 +113,7 @@ export default {
         createTBData: function(dt){
             const tbData = []
             let sortIdx = 1
+            const countAll = [{text: '合计'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}]
             for(let index = 0; index < dt.length; index++){
                 for(let idx = 0; idx < dt[index]['statistics_list'].length; idx++){
                     const row = dt[index]['statistics_list'][idx]
@@ -127,7 +128,7 @@ export default {
                         // 公司
                         if(this.company_id == 0){
                             tmp.push({
-                                rowspan: dt[index]['statistics_list'].length,
+                                rowspan: (index == dt.length - 1) ? (dt[index]['statistics_list'].length + 1) :  dt[index]['statistics_list'].length,
                                 text: dt[index]['company_name']
                             })
                         }else{// 平台
@@ -165,6 +166,10 @@ export default {
                             tmp.push({
                                 text: monthArr[monthIdx]['settle_commission_amount']
                             })
+                            if((index == dt.length - 1) && (this.company_id == 0)){
+                                countAll[idxx]['text'] = this.caculFloat(countAll[idxx]['text'] == '--' ? 0 : countAll[idxx]['text'], monthArr[monthIdx]['settle_commission_amount'])
+                                countAll[13]['text'] = this.caculFloat(countAll[13]['text'] == '--' ? 0 : countAll[13]['text'], monthArr[monthIdx]['settle_commission_amount'])
+                            }
                             monthIdx++
                         }else{
                             tmp.push({
@@ -177,6 +182,9 @@ export default {
                     })
                     tbData.push(tmp)
                 }
+            }
+            if(this.company_id == 0){
+                tbData.push(countAll)
             }
             this.tbData = Object.assign([], tbData)
         }
