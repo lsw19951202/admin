@@ -26,8 +26,8 @@
                     </div>
                 </div>
             </div>
-            <div class="table-container">
-                <detail-table :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData" :tableHeaderFixed="tableHeaderFixed"></detail-table>
+            <div class="table-container scrollable">
+                <detail-table style="width: 55rem;" :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData" :tableHeaderFixed="tableHeaderFixed"></detail-table>
             </div>
         </div>
     </div>
@@ -136,5 +136,5 @@ export default {
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
-.table-container { overflow: hidden; margin-top: 0; }
+.table-container { overflow-x: scroll; margin-top: 0; }
 </style>
