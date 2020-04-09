@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="table-container scrollable">
-                <detail-table style="width: 55rem;" :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData" :tableHeaderFixed="tableHeaderFixed"></detail-table>
+                <detail-table style="width: 90rem;" :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData" :tableHeaderFixed="tableHeaderFixed"></detail-table>
             </div>
         </div>
     </div>
