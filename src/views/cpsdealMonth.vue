@@ -10,7 +10,7 @@
                 <button class="search-btn" @click="loadCDData">成都云瞻</button>
                 <button class="search-btn" @click="loadAllData">汇总</button>
                 <div style="flex: 1;"></div>
-                <!-- <button class="search-btn" @click="exportData">导出</button> -->
+                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="company[company_id] + start_time + '.xlsx'">导出</a>
             </header>
             <div class="table_title">云瞻信息CPS业务月交易汇总数据统计</div>
             <div class="table_sub_title flex">
@@ -94,6 +94,11 @@ export default {
         }).then(() => {
             this.hideLoading()
         })
+    },
+    computed: {
+        downloadUrl: function(){
+            return setting.baseUrl + setting.urls.cpsDealMonth + '?company_id=' + this.company_id + '&statistics_month=' + this.start_time + '&page=' + this.pageData.page + '&is_excel=1&skey=' + this.$cookies.get('skey')
+        }
     },
     methods: {
         loadData: function(pageNum){

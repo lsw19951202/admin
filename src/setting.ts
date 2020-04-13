@@ -141,7 +141,7 @@ export default {
         // cps业绩统计年汇总
         cpsperYear: '/finance/cpsper/year',
         // cps暂估月汇总
-        cpsestMonth: 'finance/cpsest/month',
+        cpsestMonth: '/finance/cpsest/month',
         // cps暂估年汇总
         cpsestYear: '/finance/cpsest/year'
     },

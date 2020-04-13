@@ -10,7 +10,7 @@
                 <button class="search-btn" @click="loadCDData">成都云瞻</button>
                 <button class="search-btn" @click="loadAllData">汇总暂估</button>
                 <div style="flex: 1;"></div>
-                <!-- <button class="search-btn" @click="exportData">导出</button> -->
+                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="company[company_id] + start_time + '.xlsx'">导出</a>
             </header>
             <div class="table_title">{{getTitle}}</div>
             <div class="table_sub_title flex">
@@ -73,6 +73,9 @@ export default {
     computed: {
         getTitle: function(){
             return this.company[this.company_id] + this.start_time.split('-')[1] + '月CPS暂估收入明细表'
+        },
+        downloadUrl: function(){
+            return setting.baseUrl + setting.urls.cpsestMonth + '?company_id=' + this.company_id + '&statistics_month=' + this.start_time + '&page=' + 1 + '&is_excel=1&skey=' + this.$cookies.get('skey')
         }
     },
     created: function(){

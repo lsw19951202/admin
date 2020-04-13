@@ -14,7 +14,7 @@
                 <button class="search-btn" @click="loadCDData">成都云瞻</button>
                 <button class="search-btn" @click="loadAllData">分平台汇总</button>
                 <div style="flex: 1;"></div>
-                <!-- <button class="search-btn" @click="exportData">导出</button> -->
+                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="company[company_id] + start_time + '-' + end_time + '.xlsx'">导出</a>
             </header>
             <div class="table_title">{{getTitle}}</div>
             <div class="table_sub_title flex">
@@ -98,6 +98,9 @@ export default {
             }else{
                 return '云瞻信息CPS业务分平台汇总交易数据'
             }
+        },
+        downloadUrl: function(){
+            return setting.baseUrl + setting.urls.cpsdealAccounts + '?company_id=' + this.company_id + '&start_time=' + this.start_time + '&end_time=' + this.end_time + '&page=' + this.pageData.page + '&is_excel=1&skey=' + this.$cookies.get('skey')
         }
     },
     methods: {
