@@ -3,12 +3,13 @@
         <cover :isShow="isShowCover"></cover>
         <loading :isShow="isShowLoading"></loading>
         <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
-        <div class="root-container">
-            <div class="sidebar-wrapper">
+        <div class="root-container" @mousemove="resizeSideBar">
+            <div class="sidebar-wrapper" ref="sidebar">
                 <div class="sidebar-logo">
                     <img :src="logo" />
                 </div>
                 <menu-container :items="menuData" @subItemClicked="loadContent"></menu-container>
+                <div class="drag-box" @mousedown="startResize" @mouseup="endResize"></div>
             </div>
             <div class="root-right-container">
                 <div class="right-header">
@@ -56,7 +57,12 @@ export default {
             subTitle1: '',
             isContentAlive: true,
             requestNum: 0,
-            logo: ''
+            logo: '',
+            resizing: false,
+            mousePos: {
+                x: 0,
+                y: 0
+            }
         }
     },
     created: function(){
@@ -83,6 +89,32 @@ export default {
         }
     },
     methods: {
+        /**
+         * 按下鼠标，开始拖动
+         */
+        startResize: function(e){
+            this.resizing = true
+            this.mousePos = {
+                x: e.clientX || e.pageX,
+                y: e.clientY || e.pageY
+            }
+        },
+        // 释放鼠标，结束拖动
+        endResize: function(e){
+            this.resizing = false
+        },
+        // 重新设置sidebar的宽度
+        resizeSideBar: function(e){
+            if(this.resizing){
+                const sidebarCptStyle = window.getComputedStyle(this.$refs['sidebar'])
+                const currMousePos = {
+                    x: e.clientX || e.pageX,
+                    y: e.clientY || e.pageY
+                }
+                this.$refs['sidebar'].style.width = currMousePos.x - this.mousePos.x + (sidebarCptStyle.width.replace('px', '') - 0) + 'px'
+                this.mousePos = currMousePos
+            }
+        },
         createPageData: function(dt){
             return {
                 'total_page': dt.total_page || dt.pageCount || 0,
@@ -245,3 +277,6 @@ export default {
     }
 }
 </script>
+<style scoped>
+.drag-box { position: absolute; right: 0; top: 0; width: 10px; height: 100%; cursor: col-resize; }
+</style>

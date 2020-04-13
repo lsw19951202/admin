@@ -64,7 +64,7 @@ input[type="text"], input[type="password"], input[type="num"] {
 .cover { width: 100%; height: 100%; position: fixed; left: 0; top: 0; background: #000000; opacity: .5; }
 
 /* ====== 左侧sidebar样式 ====== */
-.sidebar-wrapper { height: 100%; width: 10.42%; background: #212943; display: flex; flex-direction: column; }
+.sidebar-wrapper { height: 100%; width: 10.42%; background: #212943; display: flex; flex-direction: column; overflow-y: scroll; position: relative; }
 .sidebar-logo { width: 100%; padding: 1.25em; box-sizing: border-box; }
 .sidebar-logo img { width: 100%; display: block; }
 
@@ -72,7 +72,7 @@ input[type="text"], input[type="password"], input[type="num"] {
 .sidebar-menu-list { width: 100%; height: auto; user-select: none; -webkit-user-select: none; -moz-user-select: none; -moz-user-select: none; box-sizing: border-box; }
 .sidebar-menu-item { width: 100%; cursor: pointer; box-sizing: border-box; }
 .sidebar-menu-item:first-child { margin-top: 0; }
-.sidebar-menu-item-title { width: 100%; height: 1.22em; line-height: 1.22em; box-sizing: border-box; padding-left: 1em; padding-right: 0.6em; overflow: hidden; }
+.sidebar-menu-item-title { width: 100%; height: 1.22em; line-height: 1.22em; box-sizing: border-box; /* padding-left: 1em; padding-right: 0.6em; */ padding-left: .5em; overflow: hidden; }
 .checked .sidebar-menu-item-title { background-color: #4381E6; }
 .sidebar-menu-item-img { width: .6125em; height: 100%; float: left; }
 .sidebar-menu-item-img img { width: 100%; vertical-align: top; margin-top: .28em; }
@@ -94,7 +94,7 @@ input[type="text"], input[type="password"], input[type="num"] {
 .zk.checked .sidebar-menu-item-right .down { display: block; }
 .zk.checked .sidebar-menu-item-right .down-unchecked { display: none; }
 .sidebar-menu-item-l { display: none; width: 100%; box-sizing: border-box; height: auto; }
-.sidebar-menu-item-l li { height: 2.44em; line-height: 2.44em; color: #7686B7; letter-spacing: 2px; box-sizing: border-box; width: 100%; padding-left: 4em; font-size: .5rem; overflow: hidden; }
+.sidebar-menu-item-l li { height: 2.44em; line-height: 2.44em; color: #7686B7; letter-spacing: 2px; box-sizing: border-box; width: 100%; padding-left: 3em; font-size: .5rem; overflow: hidden; }
 .sidebar-menu-item-l li.checked { color: #FFFFFF; }
 .zk .sidebar-menu-item-l { display: block; }
 
