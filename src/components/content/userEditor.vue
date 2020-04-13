@@ -1,5 +1,5 @@
 <template>
-    <div class="user-editor">
+    <div class="user-editor hideScrollBar">
         <div class="form-group lineheight1rem">
             <label>账户名:</label><input class="form-ipt" type="text" v-model.trim="userInfo.user_name">
             <label v-if="!editUser">账户密码:</label><input class="form-ipt" v-if="!editUser" type="password" v-model.trim="userInfo.passwd">

@@ -1,5 +1,5 @@
 <template>
-    <div class="detail-container">
+    <div class="detail-container hideScrollBar">
         <header class="search-header" style="padding-left: .625rem; padding-right: .71875rem; margin-bottom: .5rem;">
             <div class="search-group">
                 <label>日期筛选:</label>

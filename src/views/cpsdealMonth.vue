@@ -143,5 +143,5 @@ export default {
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
-.table-container { overflow-x: scroll; margin-top: 0; }
+.table-container { overflow-x: scroll; margin-top: 0; overflow-y: hidden; }
 </style>

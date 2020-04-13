@@ -4,7 +4,7 @@
             {{title}}
         </div>
         <div class="detail-data-box">
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table v-bind:tableHeader="tableHeader" v-bind:tbType="tbType" v-bind:tbData="tbData"></detail-table>
             </div>
             <div style="width: 100%; height: 1rem;">

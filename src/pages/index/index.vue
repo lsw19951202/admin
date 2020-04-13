@@ -4,7 +4,7 @@
         <loading :isShow="isShowLoading"></loading>
         <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
         <div class="root-container" @mousemove="resizeSideBar">
-            <div class="sidebar-wrapper" ref="sidebar">
+            <div class="sidebar-wrapper hideScrollBar" ref="sidebar">
                 <div class="sidebar-logo">
                     <img :src="logo" />
                 </div>

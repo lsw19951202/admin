@@ -14,7 +14,7 @@
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
                 <button class="action-btn" @click="showPool">资金池</button>
             </header>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType"></detail-table>
             </div>
             <div class="mx-list">

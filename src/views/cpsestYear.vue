@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData"></detail-table>
             </div>
         </div>
@@ -116,7 +116,10 @@ export default {
         createTBData: function(dt){
             const tbData = []
             let sortIdx = 1
+            // 云瞻信息，合计行
             const countAll = [{text: '合计'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}]
+            // 分公司，合计行
+            const companyCount = [{text: ''}, {text: '合计'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}]
             for(let index = 0; index < dt.length; index++){
                 for(let idx = 0; idx < dt[index]['statistics_list'].length; idx++){
                     const row = dt[index]['statistics_list'][idx]
@@ -173,6 +176,10 @@ export default {
                                 countAll[idxx]['text'] = this.caculFloat(countAll[idxx]['text'] == '--' ? 0 : countAll[idxx]['text'], monthArr[monthIdx]['settle_commission_amount'])
                                 countAll[13]['text'] = this.caculFloat(countAll[13]['text'] == '--' ? 0 : countAll[13]['text'], monthArr[monthIdx]['settle_commission_amount'])
                             }
+                            if(this.company_id == 1 || this.company_id == 2){
+                                companyCount[idxx + 3]['text'] = this.caculFloat(companyCount[idxx + 3]['text'] == '--' ? 0 : companyCount[idxx + 3]['text'], monthArr[monthIdx]['settle_commission_amount'])
+                                companyCount[companyCount.length - 1]['text'] = this.caculFloat(companyCount[companyCount.length - 1]['text'] == '--' ? 0 : companyCount[companyCount.length - 1]['text'], monthArr[monthIdx]['settle_commission_amount'])
+                            }
                             monthIdx++
                         }else{
                             tmp.push({
@@ -188,6 +195,9 @@ export default {
             }
             if(this.company_id == 0){
                 tbData.push(countAll)
+            }else{
+                companyCount[0]['text'] = sortIdx
+                tbData.push(companyCount)
             }
             this.tbData = Object.assign([], tbData)
         }

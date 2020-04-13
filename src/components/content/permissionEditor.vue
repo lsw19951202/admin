@@ -1,5 +1,5 @@
 <template>
-    <div class="permission-editor">
+    <div class="permission-editor hideScrollBar">
         <div class="form-group lineheight1rem" v-if="editorType != 'menu'">
             <label>url:</label><input class="form-ipt" type="text" v-model.trim="url">
         </div>
@@ -154,7 +154,7 @@ export default {
 .tree-item>a[data-toggle="collapse"][aria-expanded="false"] { background: #fff url(../../assets/add_fff.png) no-repeat left center/auto; }
 .tree-item>label { margin-bottom: .3rem; display: inline-block; }
 .hide { display: none; }
-.radio { position: relative; vertical-align: text-top; z-index: 5000; }
+.radio { position: relative; vertical-align: text-top; z-index: 5000; width: 0; height: 0; }
 .radio::before,.radio::after { z-index: 5000; content: ''; position: absolute; display: inline-block; width: .625rem; height: .625rem; border-radius: 50%; border: 1px solid #ccc; background-color: #fff; }
 .radio:checked::before,.radio:checked::after { border-color: #00b050; }
 .radio::after { width: .3rem; height: .3rem; background-color: #ddd; top: .1625rem; left: .1625rem; }
@@ -165,5 +165,5 @@ export default {
 .form-ipt { width: 15rem; }
 .tree-item .radio-box { padding-left: 2rem; }
 .radio-item { margin-bottom: .3rem; }
-.radio-item label { margin-left: .3rem; }
+.radio-item label { margin-left: 1rem; }
 </style>

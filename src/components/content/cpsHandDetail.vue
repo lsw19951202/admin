@@ -5,7 +5,7 @@
                 <label>手工数据详情</label>
             </div>
         </header>
-        <div class="table-container">
+        <div class="table-container hideScrollBar">
             <detail-table v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType"></detail-table>
         </div>
         <page v-bind:pageData="pageData" @loadList="loadDetailData"></page>

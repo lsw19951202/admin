@@ -1,7 +1,7 @@
 <template>
     <div class="detail-data-box material-editor">
         <div class="editor-header">新增/修改素材</div>
-        <div class="editor-body">
+        <div class="editor-body hideScrollBar">
             <div class="editor-groups">
                 <label>素材类别</label>
                 <div>

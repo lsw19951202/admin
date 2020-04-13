@@ -53,7 +53,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody v-if="tbType == 'common'" :style="tableBodyClick?'cursor: pointer;':''" :class="tableHeaderFixed?'scrollable':''" ref="tbody" @click.prevent.stop="tableBodyClicked($event)">
+        <tbody v-if="tbType == 'common'" :style="tableBodyClick?'cursor: pointer;':''" :class="tableHeaderFixed?'scrollable hideScrollBar':''" ref="tbody" @click.prevent.stop="tableBodyClicked($event)">
             <tr v-for="(tbRow, index) in tbData" v-bind:key="index" :class="getRowClass(index)" :title="getRowTitle(index)">
                 <td v-for="(tbCol, idx) in tbRow" v-bind:key="idx">{{tbCol}}</td>
             </tr>
@@ -232,7 +232,7 @@ export default {
             const tableStyle = window.getComputedStyle(this.$refs.table)
             const tableContainerStyle = window.getComputedStyle(this.$refs.table.parentNode)
             const theadStyle = window.getComputedStyle(this.$refs.thead)
-            this.$refs.tbody.style.maxHeight = tableContainerStyle.height.replace('px', '') - tableContainerStyle.paddingTop.replace('px', '') - tableContainerStyle.paddingBottom.replace('px', '') - theadStyle.height.replace('px', '') + 'px'
+            this.$refs.tbody.style.maxHeight = tableContainerStyle.height.replace('px', '') - tableContainerStyle.paddingTop.replace('px', '') - tableContainerStyle.paddingBottom.replace('px', '') - theadStyle.height.replace('px', '') - 15 + 'px'
         }
     }
 }

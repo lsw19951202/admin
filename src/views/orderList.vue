@@ -22,7 +22,7 @@
                 </div>
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
             </header>
-            <div class="table-container scrollable">
+            <div class="table-container scrollable hideScrollBar">
                 <detail-table style="width: 100rem;" v-bind:tbType="tbType" v-bind:tbData="tbData" v-bind:tableHeader="tableHeader"></detail-table>
             </div>
             <div class="page-footer">

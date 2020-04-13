@@ -19,7 +19,7 @@
                     <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="nextDay + '.xlsx'">模板下载</a>
                 </div>
             </header>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType" @loadHandDetail="loadHandDetail"></detail-table>
             </div>
             <page v-bind:pageData="pageData" @loadList="loadTBData"></page>
@@ -182,5 +182,5 @@ export default {
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
-.table-container { overflow: hidden; }
+.table-container { overflow-y: scroll; }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="detail-container">
+    <div class="detail-container hideScrollBar">
         <card-container v-bind:cardData="cardData"></card-container>
     </div>
 </template>

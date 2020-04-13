@@ -20,8 +20,9 @@
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeEnd" placeholder="结束时间"></flat-picker>
                 </div>
                 <button class="action-btn" @click="loadTBData(1)">搜索</button>
+                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="createTimeBegin + '.xlsx'">导出</a>
             </header>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table :tbData="tbData" :tbType="tbType" :tableHeader="tableHeader"></detail-table>
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>
@@ -97,6 +98,13 @@ export default {
     },
     created: function(){
         this.loadTBData()
+    },
+    computed: {
+        downloadUrl: function(){
+            return setting.baseUrl + setting.urls.appSaleRank + '?goodsTitle=' + this.goodsTitle + '&goodsId=' + this.goodsId + '&platform=' + this.platform
+                + '&page=' + this.pageData.page + '&createTimeBegin=' + this.createTimeBegin + '&is_excel=1&skey=' + this.$cookies.get('skey')
+                + '&createTimeEnd=' + this.createTimeEnd
+        }
     },
     methods: {
         loadTBData: function(pageNum){

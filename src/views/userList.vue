@@ -29,7 +29,7 @@
                 <selector class="search-group" v-bind:value="rank" v-bind:selectParams="selectParams" @selectOptsClicked="selectOptsClicked"></selector>
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
             </header>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table v-bind:tbType="tbType" v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" @showMyTeam="loadTeamList" @changeUserRank="changeUserRank" @checkUser="changeUserCheckStatu" v-bind:selectUserList="selectedUserList"></detail-table>
             </div>
             <div class="page-footer" style="display: flex;">

@@ -15,7 +15,7 @@
                 <selector class="search-group" v-bind:value="robot_name" v-bind:selectParams="robotSelectParams" @selectOptsClicked="robotSelectOptsClicked"></selector>
                 <button class="search-btn" @click="searchBtnClicked">搜索</button>
             </header>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType"></detail-table>
             </div>
             <page v-bind:pageData="pageData" @loadList="loadList"></page>

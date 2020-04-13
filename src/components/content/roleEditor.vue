@@ -1,5 +1,5 @@
 <template>
-    <div class="role-editor">
+    <div class="role-editor hideScrollBar">
         <div class="form-group lineheight1rem">
             <label>名字:</label><input class="form-ipt" type="text" v-model.trim="roleInfo.name">
         </div>
@@ -265,7 +265,7 @@ export default {
 .role-editor { color: #666; overflow: scroll; }
 .checkbox { margin-top: .15rem; vertical-align: sub; position: relative; padding: 0; box-sizing: border-box; margin-right: .5rem; z-index: 5000; }
 .checkbox:checked::after { background: #fff url(../../assets/checked.png) no-repeat left center/auto; }
-.checkbox::after { z-index: 5000; content: " "; position: absolute; top: -0.15rem; width: 1rem; height: 1rem; overflow: hidden; background: #fff url(../../assets/check.png) no-repeat left center/auto; }
+.checkbox::after { z-index: 5000; content: " "; position: absolute; top: -0.4rem; width: 1rem; height: 1rem; overflow: hidden; background: #fff url(../../assets/check.png) no-repeat left center/auto; }
 .tree-box { background: #fff url(../../assets/xu_line.png) .25rem center / 1px no-repeat repeat; }
 .tree-box.child { padding-left: 2rem }
 .tree-item { margin: .3rem 0; background-color: #fff; margin-top: 0; }

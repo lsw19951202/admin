@@ -10,7 +10,7 @@
                 <button class="action-btn" @click="loadTBData(1)">搜索</button>
                 <button class="action-btn" @click="addMaterial">新增</button>
             </header>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table :tbType="tbType" :tbData="tbData" :tableHeader="tableHeader" @modifyMaterial="modifyMaterial" @delMaterial="delMaterial" @changeSwitchStatus="changeMaterialStatus"></detail-table>
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>

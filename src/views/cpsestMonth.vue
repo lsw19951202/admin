@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData"></detail-table>
             </div>
         </div>

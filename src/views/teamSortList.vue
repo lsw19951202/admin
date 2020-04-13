@@ -26,7 +26,7 @@
                 </div>
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
             </header>
-            <div class="table-container">
+            <div class="table-container hideScrollBar">
                 <detail-table :tbType="tbType" :tbData="tbData" :tableHeader="tableHeader"></detail-table>
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>

@@ -26,11 +26,11 @@
                     <a @click="searchLeader">搜索</a>
                     <div style="flex: 1;"></div>
                 </div>
-                <div class="pop-groups teamleader-container">
+                <div class="pop-groups teamleader-container hideScrollBar">
                     <div class="teamleader-box">
                         <div class="teamleader-info" v-for="(teamLeader, index) in popParams.leaders" :key="index">
                             <img class="teamleader-avator" :src="teamLeader.avatar">
-                            <div class="teamleader-name">{{teamLeader.nickName}}</div>
+                            <div class="teamleader-name hideScrollBar">{{teamLeader.nickName}}</div>
                             <input type="checkbox" :checked="teamLeader.checked" @change="teamLeaderChecked(index)">
                         </div>
                     </div>
