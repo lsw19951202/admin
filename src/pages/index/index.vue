@@ -85,10 +85,30 @@ export default {
             hideLoading: this.hideLoading,
             loadFields: this.loadFields,
             createPageData: this.createPageData,
-            loadTBData: this.loadTBData
+            loadTBData: this.loadTBData,
+            numToStr: this.numToStr,
+            strToNum: this.strToNum
         }
     },
     methods: {
+        // 数字加千分符
+        numToStr: function(num){
+            num = num + ''
+            let str = ''
+            const numArr = num.split('.')
+            while(numArr[0] != 0){
+                str = numArr[0]%1000 + ',' + str
+                numArr[0] = Math.floor(numArr[0]/1000)
+            }
+            str = str.substr(0, str.length - 1)
+            return str + (numArr[1] ? ('.' + numArr[1]) : '')
+        },
+        // 加千分符的字符串去掉逗号
+        strToNum: function(str){
+            str = str + ''
+            const numArr = str.split(',')
+            return numArr.join('')
+        },
         /**
          * 按下鼠标，开始拖动
          */

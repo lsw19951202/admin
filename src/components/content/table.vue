@@ -229,10 +229,20 @@ export default {
     },
     mounted: function(){
         if(this.tableHeaderFixed){
-            const tableStyle = window.getComputedStyle(this.$refs.table)
-            const tableContainerStyle = window.getComputedStyle(this.$refs.table.parentNode)
-            const theadStyle = window.getComputedStyle(this.$refs.thead)
-            this.$refs.tbody.style.maxHeight = tableContainerStyle.height.replace('px', '') - tableContainerStyle.paddingTop.replace('px', '') - tableContainerStyle.paddingBottom.replace('px', '') - theadStyle.height.replace('px', '') - 15 + 'px'
+            this.$nextTick(() => {
+                const baseFontSize = document.documentElement.style.fontSize.replace('px', '')
+                const tableStyle = window.getComputedStyle(this.$refs.table)
+                const tableContainerStyle = window.getComputedStyle(this.$refs.table.parentNode)
+                const theadStyle = window.getComputedStyle(this.$refs.thead)
+                // 如果表头是通过接口返回，则此时thead还未渲染，thead高度为0，所以不通过theadstyle获取表头高度
+                // this.$refs.tbody.style.maxHeight = tableContainerStyle.height.replace('px', '') - tableContainerStyle.paddingTop.replace('px', '') - tableContainerStyle.paddingBottom.replace('px', '') - theadStyle.height.replace('px', '') - 15 + 'px'
+                // 如果横向不滚动，则不需要减去滚动条高度
+                if(tableContainerStyle.overflowX != 'scroll'){
+                    this.$refs.tbody.style.maxHeight = tableContainerStyle.height.replace('px', '') - tableContainerStyle.paddingTop.replace('px', '') - tableContainerStyle.paddingBottom.replace('px', '') - baseFontSize * 1.5 - 1 + 'px'
+                }else{
+                    this.$refs.tbody.style.maxHeight = tableContainerStyle.height.replace('px', '') - tableContainerStyle.paddingTop.replace('px', '') - tableContainerStyle.paddingBottom.replace('px', '') - baseFontSize * 1.5 - 18 + 'px'
+                }
+            })
         }
     }
 }

@@ -40,7 +40,7 @@ import setting from '@/setting'
 import DetailTable from '@/components/content/table.vue'
 
 export default {
-    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadTBData'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadTBData', 'strToNum', 'numToStr'],
     components: {
         'flat-picker': flatPicker,
         'detail-table': DetailTable
@@ -168,17 +168,17 @@ export default {
                     let monthIdx = 0
                     for(let idxx = 1; idxx < 13; idxx++){
                         if(idxx == monthArr[monthIdx].month.split('月')[0]){
-                            count = this.caculFloat(count, monthArr[monthIdx]['settle_commission_amount'])
+                            count = this.numToStr(this.caculFloat(this.strToNum(count), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                             tmp.push({
                                 text: monthArr[monthIdx]['settle_commission_amount']
                             })
                             if((index == dt.length - 1) && (this.company_id == 0)){
-                                countAll[idxx]['text'] = this.caculFloat(countAll[idxx]['text'] == '--' ? 0 : countAll[idxx]['text'], monthArr[monthIdx]['settle_commission_amount'])
-                                countAll[13]['text'] = this.caculFloat(countAll[13]['text'] == '--' ? 0 : countAll[13]['text'], monthArr[monthIdx]['settle_commission_amount'])
+                                countAll[idxx]['text'] = this.numToStr(this.caculFloat(this.strToNum(countAll[idxx]['text'] == '--' ? 0 : countAll[idxx]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
+                                countAll[13]['text'] = this.numToStr(this.caculFloat(this.strToNum(countAll[13]['text'] == '--' ? 0 : countAll[13]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                             }
                             if(this.company_id == 1 || this.company_id == 2){
-                                companyCount[idxx + 3]['text'] = this.caculFloat(companyCount[idxx + 3]['text'] == '--' ? 0 : companyCount[idxx + 3]['text'], monthArr[monthIdx]['settle_commission_amount'])
-                                companyCount[companyCount.length - 1]['text'] = this.caculFloat(companyCount[companyCount.length - 1]['text'] == '--' ? 0 : companyCount[companyCount.length - 1]['text'], monthArr[monthIdx]['settle_commission_amount'])
+                                companyCount[idxx + 3]['text'] = this.numToStr(this.caculFloat(this.strToNum(companyCount[idxx + 3]['text'] == '--' ? 0 : companyCount[idxx + 3]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
+                                companyCount[companyCount.length - 1]['text'] = this.numToStr(this.caculFloat(this.strToNum(companyCount[companyCount.length - 1]['text'] == '--' ? 0 : companyCount[companyCount.length - 1]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                             }
                             monthIdx++
                         }else{
@@ -188,7 +188,7 @@ export default {
                         }
                     }
                     tmp.push({
-                        text: count.toFixed(2)
+                        text: count
                     })
                     tbData.push(tmp)
                 }
