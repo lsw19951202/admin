@@ -1,33 +1,44 @@
 <template>
-    <div class="detail-container">
-        <div class="detail-data-box">
-            <header class="search-header">
-                <div class="search-group">
-                    <label>期间:</label>
-                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time" placeholder="期间"></flat-picker>
-                </div>
-                <button class="search-btn" @click="loadSCData">四川云瞻</button>
-                <button class="search-btn" @click="loadCDData">成都云瞻</button>
-                <button class="search-btn" @click="loadAllData">年度暂估</button>
-                <div style="flex: 1;"></div>
-                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="company[company_id] + start_time + '.xlsx'">导出</a>
-            </header>
-            <div class="table_title">{{getTitle}}</div>
-            <div class="table_sub_title flex">
-                <div class="flex1 text_left">
-                    编制单位：{{company[company_id]}}
-                </div>
-                <div class="flex1 flex">
-                    <div class="text-left flex1">
-                        期间：{{start_time}}
+    <div class="detail-container hideScrollBar">
+        <div class="detail-data-box nopadding">
+            <ul class="tab-box">
+                <li :class="'tab-item' + (company_id == 1 ? ' selected' : '')" @click="tabClicked(1)">四川云瞻</li>
+                <li :class="'tab-item' + (company_id == 2 ? ' selected' : '')" style="left: 145px;" @click="tabClicked(2)">成都云瞻</li>
+                <li :class="'tab-item' + (company_id == 0 ? ' selected' : '')" style="left: 290px;" @click="tabClicked(0)">年度暂估</li>
+            </ul>
+            <div class="detail-main">
+                <header class="search-header">
+                    <div class="search-group" style="margin-left: 0;" v-show="company_id == 1">
+                        <label>期间:</label>
+                        <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time_sc" placeholder="期间"></flat-picker>
                     </div>
-                    <div class="flex1 text-right">
+                    <div class="search-group" style="margin-left: 0;" v-show="company_id == 2">
+                        <label>期间:</label>
+                        <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time_cd" placeholder="期间"></flat-picker>
+                    </div>
+                    <div class="search-group" style="margin-left: 0;" v-show="company_id == 0">
+                        <label>期间:</label>
+                        <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time_all" placeholder="期间"></flat-picker>
+                    </div>
+                    <button class="search-btn" @click="loadData">搜索</button>
+                    <div style="flex: 1;"></div>
+                    <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="company[company_id] + '.xlsx'">导出</a>
+                </header>
+                <div class="table_title">{{getTitle}}</div>
+                <div class="table_sub_title flex">
+                    <div class="text_left" style="width: 100px; white-space: nowrap;">
+                        编制单位：{{company[company_id]}}
+                    </div>
+                    <div class="flex1 text-center">
+                        期间：{{getTimeIn}}
+                    </div>
+                    <div class="text-right" style="width: 100px; white-space: nowrap;">
                         单元：人民币元
                     </div>
                 </div>
-            </div>
-            <div class="table-container hideScrollBar">
-                <detail-table :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData"></detail-table>
+                <locked-table v-show="company_id == 1" :tbData="scTBData" :tbStyle="tbStyle"></locked-table>
+                <locked-table v-show="company_id == 2" :tbData="cdTBData" :tbStyle="tbStyle"></locked-table>
+                <locked-table v-show="company_id == 0" :tbData="allTBData" :tbStyle="tbStyle"></locked-table>
             </div>
         </div>
     </div>
@@ -37,20 +48,22 @@ import flatPicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import setting from '@/setting'
-import DetailTable from '@/components/content/table.vue'
+import LockedTable from '@/components/content/LockedTable.vue'
 
 export default {
-    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadTBData', 'strToNum', 'numToStr'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'loadTBData', 'strToNum', 'numToStr'],
     components: {
         'flat-picker': flatPicker,
-        'detail-table': DetailTable
+        'locked-table': LockedTable
     },
     data: () => {
         const now = new Date()
         let nStr = ''
         nStr += now.getFullYear()
         return {
-            'start_time': nStr,
+            'start_time_sc': nStr,
+            'start_time_cd': nStr,
+            'start_time_all': nStr,
             dateConfig: {
                 'time_24hr': true,
                 maxDate: nStr,
@@ -63,57 +76,133 @@ export default {
                 1: '四川云瞻',
                 2: '成都云瞻'
             },
-            'tableHeader': setting.tableHeader.cpsestYearAll,
-            'tbType': 'tdSpan',
-            tbData: []
+            scTBData: {
+                tableHeader: setting.tableHeader.cpsestYear,
+                tbData: [],
+                lockedRow: 1,
+                lockedCol: 4
+            },
+            cdTBData: {
+                tableHeader: setting.tableHeader.cpsestYear,
+                tbData: [],
+                lockedRow: 1,
+                lockedCol: 4
+            },
+            allTBData: {
+                tableHeader: setting.tableHeader.cpsestYearAll,
+                tbData: [],
+                lockedRow: 1,
+                lockedCol: 2
+            },
+            companyFields: [],
+            fields: [],
+            allFields: [],
+            tbStyle: {
+                width: '100%'
+            }
         }
     },
     computed: {
         getTitle: function(){
-            return this.company[this.company_id] + this.start_time + '年CPS预估结算收入明细表'
+            return this.company[this.company_id] + (this.company_id == 0 ? this.start_time_all : (this.company_id == 1 ? this.start_time_sc : this.start_time_cd)) + '年CPS预估结算收入明细表'
         },
         downloadUrl: function(){
-            return setting.baseUrl + setting.urls.cpsestYear + '?company_id=' + this.company_id + '&statistics_year=' + this.start_time + '&page=' + 1 + '&is_excel=1&skey=' + this.$cookies.get('skey')
+            return setting.baseUrl + setting.urls.cpsestYear + '?company_id=' + this.company_id + '&statistics_year=' + (this.company_id == 1 ? this.start_time_sc : (this.company_id == 2 ? this.start_time_cd : this.start_time_all)) + '&page=' + 1 + '&is_excel=1&skey=' + this.$cookies.get('skey')
+        },
+        getTimeIn: function(){
+            if(this.company_id == 1){
+                return this.start_time_sc
+            }else if(this.company_id == 2){
+                return this.start_time_cd
+            }else{
+                return this.start_time_all
+            }
         }
     },
     created: function(){
-        this.loadData()
+        this.showLoading()
+        return Promise.all([
+            this.loadTBData(setting.urls.cpsestYear, {'company_id': 1, page: 1, 'statistics_year': this.start_time_sc}, 'get'),
+            this.loadTBData(setting.urls.cpsestYear, {'company_id': 2, page: 1, 'statistics_year': this.start_time_cd}, 'get'),
+            this.loadTBData(setting.urls.cpsestYear, {'company_id': 0, page: 1, 'statistics_year': this.start_time_all}, 'get')
+        ]).then(rst => {
+
+            this.scTBData = {
+                tableHeader: this.scTBData.tableHeader,
+                tbData: this.createTBData(rst[0], 1),
+                lockedRow: this.scTBData.lockedRow,
+                lockedCol: this.scTBData.lockedCol
+            }
+
+            this.cdTBData = {
+                tableHeader: this.cdTBData.tableHeader,
+                tbData: this.createTBData(rst[1], 2),
+                lockedRow: this.cdTBData.lockedRow,
+                lockedCol: this.cdTBData.lockedCol
+            }
+
+            this.allTBData = {
+                tableHeader: this.allTBData.tableHeader,
+                tbData: this.createTBData(rst[2], 0),
+                lockedRow: this.allTBData.lockedRow,
+                lockedCol: this.allTBData.lockedCol
+            }
+        }).catch(e => {
+            this.alert(e.message || '加载数据失败')
+        }).then(() => {
+            this.hideLoading()
+        })
     },
     methods: {
-        loadData: function(){
-            this.showLoading()
-            this.loadTBData(setting.urls.cpsestYear, {'company_id': this.company_id, page: 1, 'statistics_year': this.start_time}, 'get').then(rst => {
-                this.createTBData(rst)
-            }).catch(e => {
-                this.alert(e.message || '加载数据失败')
-            }).then(() => {
-                this.hideLoading()
-            })
-        },
-        loadSCData: function(){
-            this.$data['company_id'] = 1
-            this.tableHeader = setting.tableHeader.cpsestYear
-            this.loadData()
-        },
-        loadCDData: function(){
-            this.$data['company_id'] = 2
-            this.tableHeader = setting.tableHeader.cpsestYear
-            this.loadData()
-        },
-        loadAllData: function(){
-            this.$data['company_id'] = 0
-            this.tableHeader = setting.tableHeader.cpsestYearAll
-            this.loadData()
-        },
-        exportData: function(){
-            console.log('导出' + this.start_time + '数据')
-        },
         caculFloat: function(num1, num2){
             num1 = parseInt(num1 * 100 + 0.5, 10)
             num2 = parseInt(num2 * 100 + 0.5, 10)
             return (num1 + num2) / 100
         },
-        createTBData: function(dt){
+        tabClicked: function(companyId){
+            this.$data['company_id'] = companyId
+        },
+        loadData: function(){
+            const queryParams = {
+                'company_id': this.company_id,
+                'page': 1,
+                'statistics_year': this.company_id == 1 ? this.start_time_sc : (this.company_id == 2 ? this.start_time_cd : this.start_time_all)
+            }
+            this.showLoading()
+            this.loadTBData(setting.urls.cpsestYear, queryParams, 'get')
+                .then((rst) => {
+                    const tbData = this.createTBData(rst, this.company_id)
+                    if(this.company_id == 1){
+                        this.scTBData = {
+                            tbData: tbData,
+                            tableHeader: this.scTBData.tableHeader,
+                            lockedRow: this.scTBData.lockedRow,
+                            lockedCol: this.scTBData.lockedCol
+                        }
+                    }
+                    if(this.company_id == 2){
+                        this.cdTBData = {
+                            tbData: tbData,
+                            tableHeader: this.cdTBData.tableHeader,
+                            lockedRow: this.cdTBData.lockedRow,
+                            lockedCol: this.cdTBData.lockedCol
+                        }
+                    }
+                    if(this.company_id == 0){
+                        this.allTBData = {
+                            tbData: tbData,
+                            tableHeader: this.allTBData.tableHeader,
+                            lockedRow: this.allTBData.lockedRow,
+                            lockedCol: this.allTBData.lockedCol
+                        }
+                    }
+                }).catch(e => {
+                    this.alert(e.message || '加载数据失败')
+                }).then(() => {
+                    this.hideLoading()
+                })
+        },
+        createTBData: function(dt, companyId){
             const tbData = []
             let sortIdx = 1
             // 云瞻信息，合计行
@@ -125,14 +214,14 @@ export default {
                     const row = dt[index]['statistics_list'][idx]
                     const tmp = []
                     // 序号
-                    if(this.company_id != 0){
+                    if(companyId != 0){
                         tmp.push({
                             text: sortIdx++
                         })
                     }
                     if(idx == 0){
                         // 公司
-                        if(this.company_id == 0){
+                        if(companyId == 0){
                             tmp.push({
                                 rowspan: (index == dt.length - 1) ? (dt[index]['statistics_list'].length + 1) :  dt[index]['statistics_list'].length,
                                 text: dt[index]['company_name']
@@ -144,7 +233,7 @@ export default {
                             })
                         }
                     }
-                    if(this.company_id == 0){
+                    if(companyId == 0){
                         // 平台
                         tmp.push({
                             text: row['plat_name']
@@ -152,11 +241,11 @@ export default {
                     }else{
                         // 营销账号
                         tmp.push({
-                            text: row['accounts_name']
+                            text: row['accounts_name'] || '--'
                         })
                         // 收款账户
                         tmp.push({
-                            text: row['credited_accounts']
+                            text: row['credited_accounts'] || '--'
                         })
                     }
                     let count = 0
@@ -172,11 +261,11 @@ export default {
                             tmp.push({
                                 text: monthArr[monthIdx]['settle_commission_amount']
                             })
-                            if((index == dt.length - 1) && (this.company_id == 0)){
+                            if((index == dt.length - 1) && (companyId == 0)){
                                 countAll[idxx]['text'] = this.numToStr(this.caculFloat(this.strToNum(countAll[idxx]['text'] == '--' ? 0 : countAll[idxx]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                                 countAll[13]['text'] = this.numToStr(this.caculFloat(this.strToNum(countAll[13]['text'] == '--' ? 0 : countAll[13]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                             }
-                            if(this.company_id == 1 || this.company_id == 2){
+                            if(companyId == 1 || companyId == 2){
                                 companyCount[idxx + 3]['text'] = this.numToStr(this.caculFloat(this.strToNum(companyCount[idxx + 3]['text'] == '--' ? 0 : companyCount[idxx + 3]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                                 companyCount[companyCount.length - 1]['text'] = this.numToStr(this.caculFloat(this.strToNum(companyCount[companyCount.length - 1]['text'] == '--' ? 0 : companyCount[companyCount.length - 1]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                             }
@@ -193,18 +282,31 @@ export default {
                     tbData.push(tmp)
                 }
             }
-            if(this.company_id == 0){
+            if(companyId == 0){
                 tbData.push(countAll)
             }else{
                 companyCount[0]['text'] = sortIdx
                 tbData.push(companyCount)
             }
-            this.tbData = Object.assign([], tbData)
+            return tbData
+        }
+    },
+    watch: {
+        'company_id': function(nVal, oVal){
+            this.$nextTick(() => {
+                if(nVal == 1){
+                    this.$children[3].resizeFixedHead()
+                }else if(nVal == 2){
+                    this.$children[4].resizeFixedHead()
+                }else{
+                    this.$children[5].resizeFixedHead()
+                }
+            })
         }
     }
 }
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
-.table-container { margin-top: 0; }
+/* .table-container { overflow-x: scroll; margin-top: 0; } */
 </style>

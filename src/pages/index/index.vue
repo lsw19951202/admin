@@ -178,17 +178,22 @@ export default {
                 request(this.createRequestParams(url, queryParams, method)).then((resp) => {
                     if(resp.status == 200){
                         if(resp.data.code == 200){
-                            const tableHeader = []
-                            const fields = []
+                            const tableHeader = [], fields = [], lockedFields = [], lockedTableHeader = []
                             tableHeader.push([])
                             for(let idx = 0; idx < resp.data.data.length; idx++){
                                 const item = resp.data.data[idx]
                                 fields.push(item['field'])
                                 tableHeader[0].push({name: item.name})
+                                if(item.locked == 'T'){
+                                    lockedFields.push(item['field'])
+                                    lockedTableHeader.push({name: item['name']})
+                                }
                             }
                             resolve({
                                 tableHeader: tableHeader,
-                                fields: fields
+                                fields: fields,
+                                lockedFields: lockedFields,
+                                lockedTableHeader: lockedTableHeader
                             })
                         }else{
                             reject()

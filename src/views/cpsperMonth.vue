@@ -1,33 +1,44 @@
 <template>
-    <div class="detail-container">
-        <div class="detail-data-box">
-            <header class="search-header">
-                <div class="search-group">
-                    <label>期间:</label>
-                    <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time" placeholder="期间"></flat-picker>
-                </div>
-                <button class="search-btn" @click="loadSCData">四川云瞻</button>
-                <button class="search-btn" @click="loadCDData">成都云瞻</button>
-                <button class="search-btn" @click="loadAllData">业绩汇总</button>
-                <div style="flex: 1;"></div>
-                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="company[company_id] + start_time + '.xlsx'">导出</a>
-            </header>
-            <div class="table_title">{{getTitle}}</div>
-            <div class="table_sub_title flex">
-                <div class="flex1 text_left">
-                    编制单位：{{company[company_id]}}
-                </div>
-                <div class="flex1 flex">
-                    <div class="text-left flex1">
-                        期间：{{start_time}}
+    <div class="detail-container hideScrollBar">
+        <div class="detail-data-box nopadding">
+            <ul class="tab-box">
+                <li :class="'tab-item' + (company_id == 1 ? ' selected' : '')" @click="tabClicked(1)">四川云瞻</li>
+                <li :class="'tab-item' + (company_id == 2 ? ' selected' : '')" style="left: 145px;" @click="tabClicked(2)">成都云瞻</li>
+                <li :class="'tab-item' + (company_id == 0 ? ' selected' : '')" style="left: 290px;" @click="tabClicked(0)">业绩汇总</li>
+            </ul>
+            <div class="detail-main">
+                <header class="search-header">
+                    <div class="search-group" style="margin-left: 0;" v-show="company_id == 1">
+                        <label>期间:</label>
+                        <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time_sc" placeholder="期间"></flat-picker>
                     </div>
-                    <div class="flex1 text-right">
+                    <div class="search-group" style="margin-left: 0;" v-show="company_id == 2">
+                        <label>期间:</label>
+                        <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time_cd" placeholder="期间"></flat-picker>
+                    </div>
+                    <div class="search-group" style="margin-left: 0;" v-show="company_id == 0">
+                        <label>期间:</label>
+                        <flat-picker class="search-time-picker" :config="dateConfig" v-model="start_time_all" placeholder="期间"></flat-picker>
+                    </div>
+                    <button class="search-btn" @click="loadData">搜索</button>
+                    <div style="flex: 1;"></div>
+                    <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="company[company_id] + '.xlsx'">导出</a>
+                </header>
+                <div class="table_title">{{getTitle}}</div>
+                <div class="table_sub_title flex">
+                    <div class="text_left" style="width: 100px; white-space: nowrap;">
+                        编制单位：{{company[company_id]}}
+                    </div>
+                    <div class="flex1 text-center">
+                        期间：{{getTimeIn}}
+                    </div>
+                    <div class="text-right" style="width: 100px; white-space: nowrap;">
                         单元：人民币元
                     </div>
                 </div>
-            </div>
-            <div class="table-container scrollable">
-                <detail-table style="width: 90rem;" :tableHeader="tableHeader" :tbType="tbType" :tbData="tbData" :tableHeaderFixed="tableHeaderFixed"></detail-table>
+                <locked-table v-show="company_id == 1" :tbData="scTBData" :tbStyle="tbStyle"></locked-table>
+                <locked-table v-show="company_id == 2" :tbData="cdTBData" :tbStyle="tbStyle"></locked-table>
+                <locked-table v-show="company_id == 0" :tbData="allTBData" :tbStyle="tbStyle"></locked-table>
             </div>
         </div>
     </div>
@@ -37,13 +48,13 @@ import flatPicker from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import setting from '@/setting'
-import DetailTable from '@/components/content/table.vue'
+import LockedTable from '@/components/content/LockedTable.vue'
 
 export default {
-    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'createPageData', 'loadTBData'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'loadTBData'],
     components: {
         'flat-picker': flatPicker,
-        'detail-table': DetailTable
+        'locked-table': LockedTable
     },
     data: () => {
         const now = new Date()
@@ -51,7 +62,9 @@ export default {
         nStr += now.getFullYear() + '-'
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1)
         return {
-            'start_time': nStr,
+            'start_time_sc': nStr,
+            'start_time_cd': nStr,
+            'start_time_all': nStr,
             dateConfig: {
                 'time_24hr': true,
                 maxDate: nStr,
@@ -64,11 +77,29 @@ export default {
                 1: '四川云瞻',
                 2: '成都云瞻'
             },
-            'tableHeader': setting.tableHeader.cpsperMonth,
-            'tbType': 'common',
-            tbData: [],
+            scTBData: {
+                tableHeader: [],
+                tbData: [],
+                lockedRow: 0,
+                lockedCol: 0
+            },
+            cdTBData: {
+                tableHeader: [],
+                tbData: [],
+                lockedRow: 0,
+                lockedCol: 0
+            },
+            allTBData: {
+                tableHeader: [],
+                tbData: [],
+                lockedRow: 0,
+                lockedCol: 0
+            },
+            companyFields: [],
             fields: [],
-            tableHeaderFixed: true
+            tbStyle: {
+                width: '70rem'
+            }
         }
     },
     computed: {
@@ -80,20 +111,48 @@ export default {
             }
         },
         downloadUrl: function(){
-            return setting.baseUrl + setting.urls.cpsperMonth + '?company_id=' + this.company_id + '&statistics_month=' + this.start_time + '&page=' + 1 + '&is_excel=1&skey=' + this.$cookies.get('skey')
+            return setting.baseUrl + setting.urls.cpsperMonth + '?company_id=' + this.company_id + '&statistics_month=' + (this.company_id == 1 ? this.start_time_sc : (this.company_id == 2 ? this.start_time_cd : this.start_time_all)) + '&page=' + 1 + '&is_excel=1&skey=' + this.$cookies.get('skey')
+        },
+        getTimeIn: function(){
+            if(this.company_id == 1){
+                return this.start_time_sc
+            }else if(this.company_id == 2){
+                return this.start_time_cd
+            }else{
+                return this.start_time_all
+            }
         }
     },
     created: function(){
         this.showLoading()
-        Promise.all([
-            this.loadFields(setting.urls.cpsFields, {'order_type': 'performanceMonth'}),
-            this.loadTBData(setting.urls.cpsperMonth, {'company_id': this.company_id, page: 1, 'statistics_month': this.start_time}, 'get')
+        return Promise.all([
+            this.loadFields(setting.urls.cpsFields, {'order_type': 'performanceYear'}),
+            this.loadTBData(setting.urls.cpsperMonth, {'company_id': 1, page: 1, 'statistics_month': this.start_time_sc}, 'get'),
+            this.loadTBData(setting.urls.cpsperMonth, {'company_id': 2, page: 1, 'statistics_month': this.start_time_cd}, 'get'),
+            this.loadTBData(setting.urls.cpsperMonth, {'company_id': 0, page: 1, 'statistics_month': this.start_time_all}, 'get')
         ]).then(rst => {
-            this.tableHeader = rst[0].tableHeader
             this.fields = rst[0].fields
-            this.createTBData(rst[1])
-            // console.log(this.fields)
-            // console.log(this.tbData)
+
+            this.scTBData = {
+                tableHeader: rst[0].tableHeader,
+                tbData: this.createTBData(rst[1], 1),
+                lockedRow: rst[0].tableHeader.length,
+                lockedCol: rst[0].lockedFields.length
+            }
+
+            this.cdTBData = {
+                tableHeader: rst[0].tableHeader,
+                tbData: this.createTBData(rst[2], 2),
+                lockedRow: rst[0].tableHeader.length,
+                lockedCol: rst[0].lockedFields.length
+            }
+
+            this.allTBData = {
+                tableHeader: rst[0].tableHeader,
+                tbData: this.createTBData(rst[3], 0),
+                lockedRow: rst[0].tableHeader.length,
+                lockedCol: rst[0].lockedFields.length
+            }
         }).catch(e => {
             this.alert(e.message || '加载数据失败')
         }).then(() => {
@@ -101,46 +160,79 @@ export default {
         })
     },
     methods: {
-        loadData: function(pageNum){
+        tabClicked: function(companyId){
+            this.$data['company_id'] = companyId
+        },
+        loadData: function(){
+            const queryParams = {
+                'company_id': this.company_id,
+                'page': 1,
+                'statistics_month': this.company_id == 1 ? this.start_time_sc : (this.company_id == 2 ? this.start_time_cd : this.start_time_all)
+            }
             this.showLoading()
-            this.loadTBData(setting.urls.cpsperMonth, {'company_id': this.company_id, page: pageNum || 1, 'statistics_month': this.start_time}, 'get').then(dt => {
-                this.createTBData(dt)
-            }).catch(e => {
-                this.alert(e && e.message || '加载数据失败')
-            }).then(() => {
-                this.hideLoading()
-            })
+            this.loadTBData(setting.urls.cpsperMonth, queryParams, 'get')
+                .then((rst) => {
+                    const tbData = this.createTBData(rst, this.company_id)
+                    if(this.company_id == 1){
+                        this.scTBData = {
+                            tbData: tbData,
+                            tableHeader: this.scTBData.tableHeader,
+                            lockedRow: this.scTBData.lockedRow,
+                            lockedCol: this.scTBData.lockedCol
+                        }
+                    }
+                    if(this.company_id == 2){
+                        this.cdTBData = {
+                            tbData: tbData,
+                            tableHeader: this.cdTBData.tableHeader,
+                            lockedRow: this.cdTBData.lockedRow,
+                            lockedCol: this.cdTBData.lockedCol
+                        }
+                    }
+                    if(this.company_id == 0){
+                        this.allTBData = {
+                            tbData: tbData,
+                            tableHeader: this.allTBData.tableHeader,
+                            lockedRow: this.allTBData.lockedRow,
+                            lockedCol: this.allTBData.lockedCol
+                        }
+                    }
+                }).catch(e => {
+                    this.alert(e.message || '加载数据失败')
+                }).then(() => {
+                    this.hideLoading()
+                })
         },
-        loadSCData: function(){
-            this.$data['company_id'] = 1
-            this.loadData()
-        },
-        loadCDData: function(){
-            this.$data['company_id'] = 2
-            this.loadData()
-        },
-        loadAllData: function(){
-            this.$data['company_id'] = 0
-            this.loadData()
-        },
-        exportData: function(){
-            console.log('导出' + this.start_time + '数据')
-        },
-        createTBData: function(dt){
+        createTBData: function(dt, companyId){
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
                 const item = dt.data[idx]
                 for(let idxx = 0; idxx < this.fields.length; idxx++){
-                    tbData[idx].push(item[this.fields[idxx]] || (item[this.fields[idxx]] === 0 ? item[this.fields[idxx]] : '--'))
+                    tbData[idx].push({
+                        text: item[this.fields[idxx]] || (item[this.fields[idxx]] === 0 ? item[this.fields[idxx]] : '--')
+                    })
                 }
             }
-            this.tbData = Object.assign([], tbData)
+            return tbData
+        }
+    },
+    watch: {
+        'company_id': function(nVal, oVal){
+            this.$nextTick(() => {
+                if(nVal == 1){
+                    this.$children[3].resizeFixedHead()
+                }else if(nVal == 2){
+                    this.$children[4].resizeFixedHead()
+                }else{
+                    this.$children[5].resizeFixedHead()
+                }
+            })
         }
     }
 }
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
-.table-container { overflow-x: scroll; margin-top: 0; overflow-y: hidden; }
+/* .table-container { overflow-x: scroll; margin-top: 0; } */
 </style>

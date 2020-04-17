@@ -161,7 +161,7 @@ table { border-right: 1px solid #E2E2E2; text-align: center; border-bottom: 1px 
 table { font-size: .375em; color: #666666; width: 100%; box-sizing: border-box; }
 thead { background-color: #FBFBFB; }
 tr { box-sizing: border-box; height: 1.5rem; }
-td { border-left: 1px solid #E2E2E2; border-top: 1px solid #E2E2E2; }
+td { border-left: 1px solid #E2E2E2; border-top: 1px solid #E2E2E2; box-sizing: border-box; }
 tbody>tr:nth-child(even) { background-color: #f0eded; }
 /* 表格中操作按钮 */
 .action-btn.edit-btn { padding: 1px 0.15rem; font-size: 0.375rem; background-color: #5cb85c; }
@@ -280,6 +280,15 @@ input[type="checkbox"] { cursor: pointer; }
 .table_sub_title { width: 100%; height: 1rem; line-height: 1rem; font-size: 0.4375rem; }
 .flex { display: flex; }
 .flex1 { flex: 1; }
+.flex2 { flex: 2; }
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 .text-center { text-align: center; }
+
+/* 财务报表 头部tab */
+.tab-box { width: 100%; height: 32px; line-height: 32px; position: relative; }
+.tab-item { cursor: pointer; position: absolute; z-index: 999; width: 160px; height: 32px; line-height: 30px; font-size: 16px; text-align: center; vertical-align: top; box-sizing: border-box; color: #333; top: 0; }
+.tab-item.selected { z-index: 1000; color: white; background-image: url(images/selected.png); }
+.tab-item { background-image: url(images/normal.png); background-repeat: no-repeat; background-size: 100% 100%; background-position: center center; }
+.detail-data-box.nopadding { padding-top: 0; padding-left: 0; margin-top: 0; padding-right: 0; padding-bottom: 0; background-color: #f2f2f2; }
+.detail-data-box .detail-main { flex: 1; height: 0; background-color: white; padding: .625rem; display: flex; flex-direction: column; }
