@@ -97,10 +97,17 @@ export default {
             let str = ''
             const numArr = num.split('.')
             while(numArr[0] != 0){
-                str = numArr[0]%1000 + ',' + str
+                const lastNum = numArr[0]%1000
+                str = (lastNum < 10 ? ('00' + lastNum) : (lastNum < 100 ? ('0' + lastNum) : lastNum)) + ',' + str
                 numArr[0] = Math.floor(numArr[0]/1000)
             }
-            str = str.substr(0, str.length - 1)
+            if(str.startsWith('00')){
+                str = str.substr(2, str.length - 3)
+            }else if(str.startsWith('0')){
+                str = str.substr(1, str.length - 2)
+            }else{
+                str = str.substr(0, str.length - 1)
+            }
             return str + (numArr[1] ? ('.' + numArr[1]) : '')
         },
         // 加千分符的字符串去掉逗号

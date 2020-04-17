@@ -210,6 +210,7 @@ export default {
             // 分公司，合计行
             const companyCount = [{text: ''}, {text: '合计'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}]
             for(let index = 0; index < dt.length; index++){
+                const xiaoji = [{text: '小计'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}, {text: '--'}]
                 for(let idx = 0; idx < dt[index]['statistics_list'].length; idx++){
                     const row = dt[index]['statistics_list'][idx]
                     const tmp = []
@@ -223,7 +224,7 @@ export default {
                         // 公司
                         if(companyId == 0){
                             tmp.push({
-                                rowspan: (index == dt.length - 1) ? (dt[index]['statistics_list'].length + 1) :  dt[index]['statistics_list'].length,
+                                rowspan: dt[index]['statistics_list'].length + 1,
                                 text: dt[index]['company_name']
                             })
                         }else{// 平台
@@ -265,6 +266,10 @@ export default {
                                 countAll[idxx]['text'] = this.numToStr(this.caculFloat(this.strToNum(countAll[idxx]['text'] == '--' ? 0 : countAll[idxx]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                                 countAll[13]['text'] = this.numToStr(this.caculFloat(this.strToNum(countAll[13]['text'] == '--' ? 0 : countAll[13]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                             }
+                            if((index != dt.length - 1) && (companyId == 0)){
+                                xiaoji[idxx]['text'] = this.numToStr(this.caculFloat(this.strToNum(xiaoji[idxx]['text'] == '--' ? 0 : xiaoji[idxx]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
+                                xiaoji[13]['text'] = this.numToStr(this.caculFloat(this.strToNum(xiaoji[13]['text'] == '--' ? 0 : xiaoji[13]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
+                            }
                             if(companyId == 1 || companyId == 2){
                                 companyCount[idxx + 3]['text'] = this.numToStr(this.caculFloat(this.strToNum(companyCount[idxx + 3]['text'] == '--' ? 0 : companyCount[idxx + 3]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
                                 companyCount[companyCount.length - 1]['text'] = this.numToStr(this.caculFloat(this.strToNum(companyCount[companyCount.length - 1]['text'] == '--' ? 0 : companyCount[companyCount.length - 1]['text']), this.strToNum(monthArr[monthIdx]['settle_commission_amount'])))
@@ -280,6 +285,9 @@ export default {
                         text: count
                     })
                     tbData.push(tmp)
+                }
+                if((index != dt.length - 1) && companyId == 0){
+                    tbData.push(xiaoji)
                 }
             }
             if(companyId == 0){
