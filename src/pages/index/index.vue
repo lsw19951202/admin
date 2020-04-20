@@ -3,13 +3,13 @@
         <cover :isShow="isShowCover"></cover>
         <loading :isShow="isShowLoading"></loading>
         <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>
-        <div class="root-container" @mousemove="resizeSideBar">
+        <div class="root-container" @mousemove="resizeSideBar" @mouseup="endResize">
             <div class="sidebar-wrapper hideScrollBar" ref="sidebar">
                 <div class="sidebar-logo">
                     <img :src="logo" />
                 </div>
                 <menu-container :items="menuData" @subItemClicked="loadContent"></menu-container>
-                <div class="drag-box" @mousedown="startResize" @mouseup="endResize"></div>
+                <div class="drag-box" @mousedown="startResize"></div>
             </div>
             <div class="root-right-container">
                 <div class="right-header">
