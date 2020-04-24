@@ -4,7 +4,7 @@
             <ul class="tab-box">
                 <li :class="'tab-item' + (company_id == 1 ? ' selected' : '')" @click="tabClicked(1)">四川云瞻</li>
                 <li :class="'tab-item' + (company_id == 2 ? ' selected' : '')" style="left: 145px;" @click="tabClicked(2)">成都云瞻</li>
-                <li :class="'tab-item' + (company_id == 0 ? ' selected' : '')" style="left: 290px;" @click="tabClicked(0)">汇总暂估</li>
+                <li :class="'tab-item' + (company_id == 0 ? ' selected' : '')" style="left: 290px;" @click="tabClicked(0)">酬金汇总</li>
             </ul>
             <div class="detail-main">
                 <header class="search-header">
@@ -78,24 +78,23 @@ export default {
                 2: '成都云瞻'
             },
             scTBData: {
-                tableHeader: [],
+                tableHeader: setting.tableHeader.cpsremMonth,
                 tbData: [],
-                lockedRow: 0,
-                lockedCol: 0
+                lockedRow: 1,
+                lockedCol: 4
             },
             cdTBData: {
-                tableHeader: [],
+                tableHeader: setting.tableHeader.cpsremMonth,
                 tbData: [],
-                lockedRow: 0,
-                lockedCol: 0
+                lockedRow: 1,
+                lockedCol: 4
             },
             allTBData: {
-                tableHeader: [],
+                tableHeader: setting.tableHeader.cpsremMonthAll,
                 tbData: [],
-                lockedRow: 0,
-                lockedCol: 0
+                lockedRow: 1,
+                lockedCol: 2
             },
-            companyFields: [],
             fields: [],
             allFields: [],
             tbStyle: {
@@ -105,10 +104,14 @@ export default {
     },
     computed: {
         getTitle: function(){
-            return this.company[this.company_id] + (this.company_id == 0 ? this.start_time_all : (this.company_id == 1 ? this.start_time_sc : this.start_time_cd)).split('-')[1] + '月CPS暂估收入明细表'
+            if(this.company_id == 0){
+                return '云瞻信息' + this.start_time_all.split('-')[1] + '月CPS代理人酬金统计表'
+            }else{
+                return this.company[this.company_id] + 'CPS代理人酬金暂估表'
+            }
         },
         downloadUrl: function(){
-            return setting.baseUrl + setting.urls.cpsestMonth + '?company_id=' + this.company_id + '&statistics_month=' + (this.company_id == 1 ? this.start_time_sc : (this.company_id == 2 ? this.start_time_cd : this.start_time_all)) + '&page=' + 1 + '&is_excel=1&skey=' + this.$cookies.get('skey')
+            return setting.baseUrl + setting.urls.cpsremMonth + '?company_id=' + this.company_id + '&statistics_month=' + (this.company_id == 1 ? this.start_time_sc : (this.company_id == 2 ? this.start_time_cd : this.start_time_all)) + '&page=' + 1 + '&is_excel=1&skey=' + this.$cookies.get('skey')
         },
         getTimeIn: function(){
             if(this.company_id == 1){
@@ -123,11 +126,11 @@ export default {
     created: function(){
         this.showLoading()
         return Promise.all([
-            this.loadFields(setting.urls.cpsFields, {'order_type': 'estimatemonthacc'}),
-            this.loadFields(setting.urls.cpsFields, {'order_type': 'estimatemonth'}),
-            this.loadTBData(setting.urls.cpsestMonth, {'company_id': 1, page: 1, 'statistics_month': this.start_time_sc}, 'get'),
-            this.loadTBData(setting.urls.cpsestMonth, {'company_id': 2, page: 1, 'statistics_month': this.start_time_cd}, 'get'),
-            this.loadTBData(setting.urls.cpsestMonth, {'company_id': 0, page: 1, 'statistics_month': this.start_time_all}, 'get')
+            this.loadFields(setting.urls.cpsFields, {'order_type': 'remunerationCompanyMonth'}),
+            this.loadFields(setting.urls.cpsFields, {'order_type': 'remunerationMonth'}),
+            this.loadTBData(setting.urls.cpsremMonth, {'company_id': 1, page: 1, 'statistics_month': this.start_time_sc}, 'get'),
+            this.loadTBData(setting.urls.cpsremMonth, {'company_id': 2, page: 1, 'statistics_month': this.start_time_cd}, 'get'),
+            this.loadTBData(setting.urls.cpsremMonth, {'company_id': 0, page: 1, 'statistics_month': this.start_time_all}, 'get')
         ]).then(rst => {
             this.fields = rst[0].fields
             this.allFields = rst[1].fields
@@ -139,14 +142,14 @@ export default {
                 tableHeader: companyTableHeader,
                 tbData: this.createTBData(rst[2], 1),
                 lockedRow: rst[0].tableHeader.length,
-                lockedCol: rst[0].lockedFields.length + 1
+                lockedCol: rst[0].lockedFields.length
             }
 
             this.cdTBData = {
                 tableHeader: companyTableHeader,
                 tbData: this.createTBData(rst[3], 2),
                 lockedRow: rst[0].tableHeader.length,
-                lockedCol: rst[0].lockedFields.length + 1
+                lockedCol: rst[0].lockedFields.length
             }
 
             this.allTBData = {
@@ -172,7 +175,7 @@ export default {
                 'statistics_month': this.company_id == 1 ? this.start_time_sc : (this.company_id == 2 ? this.start_time_cd : this.start_time_all)
             }
             this.showLoading()
-            this.loadTBData(setting.urls.cpsestMonth, queryParams, 'get')
+            this.loadTBData(setting.urls.cpsremMonth, queryParams, 'get')
                 .then((rst) => {
                     const tbData = this.createTBData(rst, this.company_id)
                     if(this.company_id == 1){
@@ -233,10 +236,10 @@ export default {
                 for(let index = 0; index < dt.length; index++){
                     const spanData = dt[index]['statistics_data'] || {}
                     for(let idx = 0; ((index < dt.length - 1) && idx < dt[index]['statistics_list'].length) || ((index == dt.length - 1) && idx < 1); idx++){
-                        const row = (index < dt.length - 1) ? dt[index]['statistics_list'][idx] : dt[index]['statistics_list']
+                        const row = dt[index]['statistics_list'][idx]
                         const tmp = []
                         tmp.push({
-                            text: index == dt.length - 1 ? dt[index][this.fields[0]] : ++sortIdx
+                            text: index == dt.length - 1 ? row[this.fields[0]] : ++sortIdx
                         });
                         for(let idxx = 0; idxx < this.fields.length; idxx++){
                             if(idx == 0){
@@ -282,5 +285,4 @@ export default {
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
-/* .table-container { overflow-x: scroll; margin-top: 0; } */
 </style>

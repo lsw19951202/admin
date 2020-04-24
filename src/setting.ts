@@ -143,7 +143,15 @@ export default {
         // cps暂估月汇总
         cpsestMonth: '/finance/cpsest/month',
         // cps暂估年汇总
-        cpsestYear: '/finance/cpsest/year'
+        cpsestYear: '/finance/cpsest/year',
+        // cps代理人酬金月汇总
+        cpsremMonth: '/finance/cpsrem/month',
+        // cps代理人酬金年汇总
+        cpsremYear: '/finance/cpsrem/year',
+        // cps推广月汇总
+        cpsgenMonth: '/finance/cpsgen/month',
+        // cps推广年汇总
+        cpsgenYear: '/finance/cpsgen/year'
     },
     // 图片地址
     images:{
@@ -189,6 +197,14 @@ export default {
                 require('@/assets/menu_cps_normal.png')
             ],
             CPS暂估收入: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            CPS代理人酬金: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            CPS推广费用: [
                 require('@/assets/menu_cps_selected.png'),
                 require('@/assets/menu_cps_normal.png')
             ]
@@ -287,6 +303,24 @@ export default {
         ],
         cpsestMonthAll: [
             [{name: '公司'}, {name: '平台'}, {name: '暂估结算(含税)'}, {name: '税率6%'}, {name: '不含税金额'}, {name: '增值税金额'}, {name: '技术服务费'}, {name: '备注'}]
+        ],
+        cpsremMonth: [
+            [{name: '序号'}, {name: '平台'}, {name: '账户'}, {name: '结算代理人酬金'}, {name: '维权订单酬金'}, {name: '维权失败订单酬金'}, {name: '维权失败订单酬金'}, {name: '备注'}]
+        ],
+        cpsremMonthAll: [
+            [{name: '公司'}, {name: '平台'}, {name: '结算代理人酬金'}, {name: '维权订单酬金'}, {name: '维权失败订单酬金'}, {name: '应付代理人酬金'}, {name: '备注'}]
+        ],
+        cpsremYear: [
+            [{name: '序号'}, {name: '平台'}, {name: '账户'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}, {name: '备注'}]
+        ],
+        cpsremYearAll: [
+            [{name: '公司'}, {name: '平台'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}, {name: '上年数'}]
+        ],
+        cpsgenYear: [
+            [{name: '序号'}, {name: '月份'}, {name: '推新奖励'}, {name: '签到奖励'}, {name: '首单奖励'}, {name: '免单金额'}, {name: '合计'}, {name: '备注'}]
+        ],
+        cpsgenMonth: [
+            [{name: '序号'}, {name: '日期'}, {name: '推新奖励'}, {name: '签到奖励'}, {name: '首单奖励'}, {name: '免单金额'}, {name: '合计'}, {name: '备注'}]
         ]
     },
     views: {
@@ -439,6 +473,26 @@ export default {
             name: 'cpsest-year',
             title: 'CPS暂估收入',
             subTitle1: '年暂估收入'
+        },
+        '/cpsrem/month': {
+            name: 'cpsrem-month',
+            title: 'CPS代理人酬金',
+            subTitle1: '月代理人酬金'
+        },
+        '/cpsrem/year': {
+            name: 'cpsrem-year',
+            title: 'CPS代理人酬金',
+            subTitle1: '年代理人酬金'
+        },
+        '/cpsgen/month': {
+            name: 'cpsgen-month',
+            title: 'CPS推广费用',
+            subTitle1: '月度推广费用'
+        },
+        '/cpsgen/year': {
+            name: 'cpsgen-year',
+            title: 'CPS推广费用',
+            subTitle1: '年度推广费用'
         }
     }
 }

@@ -38,6 +38,10 @@ import cpsperYearVue from '../../views/cpsPerYear.vue'
 import cpsDealAccountsVue from '../../views/cpsDealAccounts.vue'
 import cpsestYearVue from '../../views/cpsEstYear.vue'
 import cpsestMonthVue from '../../views/cpsEstMonth.vue'
+import cpsRemMonthVue from '../../views/cpsRemMonth.vue'
+import cpsRemYearVue from '../../views/cpsRemYear.vue'
+import cpsGenMonthVue from '../../views/cpsGenMonth.vue'
+import cpsGenYearVue from '../../views/cpsGenYear.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -83,7 +87,11 @@ export default {
         'cpsper-month': cpsperMonthVue,
         'cpsper-year': cpsperYearVue,
         'cpsest-year': cpsestYearVue,
-        'cpsest-month': cpsestMonthVue
+        'cpsest-month': cpsestMonthVue,
+        'cpsrem-month': cpsRemMonthVue,
+        'cpsrem-year': cpsRemYearVue,
+        'cpsgen-month': cpsGenMonthVue,
+        'cpsgen-year': cpsGenYearVue
     }
 }
 </script>
