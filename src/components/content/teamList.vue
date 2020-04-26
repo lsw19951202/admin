@@ -15,6 +15,8 @@
                     <label>电话号码:</label>
                     <input type="text" v-model="phone" placeholder="请输入">
                 </div>
+                <selector class="search-group" :value="rank" :selectParams="rankSelectParams" @selectOptsClicked="rankSelectOptsClicked"></selector>
+                <selector class="search-group" :value="isDirect" :selectParams="isDirectSelectParams" @selectOptsClicked="isDirectSelectOptsClicked"></selector>
                 <div class="search-group">
                     <label>日期筛选:</label>
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeBegin" placeholder="起始时间"></flat-picker>
@@ -41,6 +43,7 @@ import request from '@/axios'
 import DetailTable from '@/components/content/table.vue'
 import setting from '@/setting'
 import page from '@/components/content/page.vue'
+import Selector from '@/components/common/select.vue'
 
 export default {
     props: ['teamId'],
@@ -71,6 +74,37 @@ export default {
                 total: 0,
                 page: 1,
                 'total_page': 0
+            },
+            rank: '',
+            rankSelectParams: {
+                label: '职级',
+                options: [{
+                    value: '',
+                    text: '请选择'
+                },{
+                    value: 1,
+                    text: '会员'
+                }, {
+                    value: 2,
+                    text: '团长'
+                }, {
+                    value: 3,
+                    text: '总监'
+                }]
+            },
+            isDirect: 0,
+            isDirectSelectParams: {
+                label: '是否直邀',
+                options:[{
+                    value: 0,
+                    text: '全部'
+                }, {
+                    value: 1,
+                    text: '直邀'
+                }, {
+                    value: 2,
+                    text: '间邀'
+                }]
             }
         }
     },
@@ -78,7 +112,8 @@ export default {
         'card-container': CardContainer,
         'flat-picker': flatPicker,
         'detail-table': DetailTable,
-        'page': page
+        'page': page,
+        'selector': Selector
     },
     created: function(){
         this.loadTBData()
@@ -96,7 +131,9 @@ export default {
                     nickName: this.nickName,
                     phone: this.phone,
                     createTimeBegin: this.createTimeBegin,
-                    createTimeEnd: this.createTimeEnd
+                    createTimeEnd: this.createTimeEnd,
+                    rank: this.rank,
+                    'is_direct': this.isDirect
                 }
             }).then((resp) => {
                 if(resp.status == 200){
@@ -136,7 +173,7 @@ export default {
             })
             this.cardData = Object.assign([], [cardData]) 
             const tbData = []
-            const fields = ['userId', 'rank', 'avatar', 'nickName', 'mobile', 'gender', 'payOrderAmount', 'payOrderNumber', 'availableAmount', 'withdrawAmount', 'teamTotalNumber', 'directNumber', 'otherNumber', 'leaderNumber', 'createTime', 'lastLoginTime']
+            const fields = ['userId', 'rank', 'avatar', 'nickName', 'wechat', 'mobile', 'gender', 'payOrderAmount', 'payOrderNumber', 'availableAmount', 'withdrawAmount', 'teamTotalNumber', 'directNumber', 'otherNumber', 'createTime', 'lastLoginTime']
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
                 const item = dt.data[idx]
@@ -145,6 +182,12 @@ export default {
                 }
             }
             this.tbData = Object.assign([], tbData)
+        },
+        rankSelectOptsClicked: function(dt){
+            this.rank = dt
+        },
+        isDirectSelectOptsClicked: function(dt){
+            this.isDirect = dt
         }
     }
 }
