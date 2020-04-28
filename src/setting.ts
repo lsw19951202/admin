@@ -154,7 +154,7 @@ export default {
         cpsgenYear: '/finance/cpsgen/year'
     },
     // 图片地址
-    images:{
+    images: {
         menu: {
             权限管理: [
                 require('@/assets/menu_cpm_normal.png'),
@@ -217,110 +217,110 @@ export default {
     // 表头
     tableHeader: {
         userManager: [
-            [{name:'账户名', colspan: 1},{name: '用户姓名', colspan: 1},{name: '用户角色', colspan: 1},{name: '管理员', colspan: 1},{name: '创建时间', colspan: 1},{name: '操作', colspan: 1}]
+            [{ name: '账户名', colspan: 1 }, { name: '用户姓名', colspan: 1 }, { name: '用户角色', colspan: 1 }, { name: '管理员', colspan: 1 }, { name: '创建时间', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         roleManager: [
-            [{name:'名称', colspan: 1},{name: '创建时间', colspan: 1},{name: '操作', colspan: 1}]
+            [{ name: '名称', colspan: 1 }, { name: '创建时间', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         permissionManager: [],
         cpsCollect: [
-            [{name: '', colspan: 1}, {name: '订单付款', colspan: 2}, {name: '订单结算佣金', colspan: 2}, {name: '预估佣金', colspan: 2}, {name: '冻结订单', colspan: 2}, {name: '维权订单', colspan: 2},{name: '退款订单', colspan: 2}, {name: '', colspan: 7}],
-            [{name: '日期', colspan: 1}, {name: '订单成交额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '结算佣金金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '订单预估金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '冻结佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '维权佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '退款佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '预估返利金额', colspan: 1}, {name: '结算返利金额', colspan: 1}, {name: '新用户奖励', colspan: 1}, {name: '签到奖励', colspan: 1}, {name: '毛利', colspan: 1}, {name:'毛利率', colspan: 1}, {name: '技术服务费', colspan: 1}]
+            [{ name: '', colspan: 1 }, { name: '订单付款', colspan: 2 }, { name: '订单结算佣金', colspan: 2 }, { name: '预估佣金', colspan: 2 }, { name: '冻结订单', colspan: 2 }, { name: '维权订单', colspan: 2 }, { name: '退款订单', colspan: 2 }, { name: '', colspan: 7 }],
+            [{ name: '日期', colspan: 1 }, { name: '订单成交额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '结算佣金金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '订单预估金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '冻结佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '维权佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '退款佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '预估返利金额', colspan: 1 }, { name: '结算返利金额', colspan: 1 }, { name: '新用户奖励', colspan: 1 }, { name: '签到奖励', colspan: 1 }, { name: '毛利', colspan: 1 }, { name: '毛利率', colspan: 1 }, { name: '技术服务费', colspan: 1 }]
         ],
         cpsTaobao: [
-            [{name: '', colspan: 1}, {name: '订单付款', colspan: 2}, {name: '订单结算佣金', colspan: 2}, {name: '预估佣金', colspan: 2}, {name: '冻结订单', colspan: 2}, {name: '维权订单', colspan: 2},{name: '退款订单', colspan: 2}, {name: '', colspan: 7}],
-            [{name: '日期', colspan: 1}, {name: '订单成交额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '结算佣金金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '订单预估金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '冻结佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '维权佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '退款佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '预估返利金额', colspan: 1}, {name: '结算返利金额', colspan: 1}, {name: '毛利', colspan: 1}, {name:'毛利率', colspan: 1}, {name: '技术服务费', colspan: 1}]
+            [{ name: '', colspan: 1 }, { name: '订单付款', colspan: 2 }, { name: '订单结算佣金', colspan: 2 }, { name: '预估佣金', colspan: 2 }, { name: '冻结订单', colspan: 2 }, { name: '维权订单', colspan: 2 }, { name: '退款订单', colspan: 2 }, { name: '', colspan: 7 }],
+            [{ name: '日期', colspan: 1 }, { name: '订单成交额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '结算佣金金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '订单预估金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '冻结佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '维权佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '退款佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '预估返利金额', colspan: 1 }, { name: '结算返利金额', colspan: 1 }, { name: '毛利', colspan: 1 }, { name: '毛利率', colspan: 1 }, { name: '技术服务费', colspan: 1 }]
         ],
         cpsJingdong: [
-            [{name: '', colspan: 1}, {name: '订单付款', colspan: 2}, {name: '订单结算佣金', colspan: 2}, {name: '预估佣金', colspan: 2}, {name: '冻结订单', colspan: 2}, {name: '维权订单', colspan: 2},{name: '退款订单', colspan: 2}, {name: '', colspan: 7}],
-            [{name: '日期', colspan: 1}, {name: '订单成交额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '结算佣金金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '订单预估金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '冻结佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '维权佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '退款佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '预估返利金额', colspan: 1}, {name: '结算返利金额', colspan: 1}, {name: '毛利', colspan: 1}, {name:'毛利率', colspan: 1}]
+            [{ name: '', colspan: 1 }, { name: '订单付款', colspan: 2 }, { name: '订单结算佣金', colspan: 2 }, { name: '预估佣金', colspan: 2 }, { name: '冻结订单', colspan: 2 }, { name: '维权订单', colspan: 2 }, { name: '退款订单', colspan: 2 }, { name: '', colspan: 7 }],
+            [{ name: '日期', colspan: 1 }, { name: '订单成交额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '结算佣金金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '订单预估金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '冻结佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '维权佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '退款佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '预估返利金额', colspan: 1 }, { name: '结算返利金额', colspan: 1 }, { name: '毛利', colspan: 1 }, { name: '毛利率', colspan: 1 }]
         ],
         cpsPdd: [
-            [{name: '', colspan: 1}, {name: '订单付款', colspan: 2}, {name: '订单结算佣金', colspan: 2}, {name: '预估佣金', colspan: 2}, {name: '冻结订单', colspan: 2}, {name: '维权订单', colspan: 2},{name: '退款订单', colspan: 2}, {name: '', colspan: 7}],
-            [{name: '日期', colspan: 1}, {name: '订单成交额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '结算佣金金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '订单预估金额', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '冻结佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '维权佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '退款佣金', colspan: 1}, {name: '订单数量', colspan: 1}, {name: '预估返利金额', colspan: 1}, {name: '结算返利金额', colspan: 1}, {name: '毛利', colspan: 1}, {name:'毛利率', colspan: 1}]
+            [{ name: '', colspan: 1 }, { name: '订单付款', colspan: 2 }, { name: '订单结算佣金', colspan: 2 }, { name: '预估佣金', colspan: 2 }, { name: '冻结订单', colspan: 2 }, { name: '维权订单', colspan: 2 }, { name: '退款订单', colspan: 2 }, { name: '', colspan: 7 }],
+            [{ name: '日期', colspan: 1 }, { name: '订单成交额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '结算佣金金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '订单预估金额', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '冻结佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '维权佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '退款佣金', colspan: 1 }, { name: '订单数量', colspan: 1 }, { name: '预估返利金额', colspan: 1 }, { name: '结算返利金额', colspan: 1 }, { name: '毛利', colspan: 1 }, { name: '毛利率', colspan: 1 }]
         ],
         cpsRobot: [
-            [{name: '序号', colspan: 1}, {name: '时间', colspan: 1}, {name: '机器人微信号', colspan: 1}, {name: '机器人名称', colspan: 1}, {name: 'time1', colspan: 1}, {name: 'time2', colspan: 1}, {name: 'time3', colspan: 1}, {name: 'time4', colspan: 1}, {name: '新增人数', colspan: 1}, {name: '订单总量', colspan: 1, canSort: true, sortBy: 'order_total_number'}, {name: '淘宝单量', colspan: 1}, {name: '京东单量', colspan: 1}, {name: '拼多多单量', colspan: 1}]
+            [{ name: '序号', colspan: 1 }, { name: '时间', colspan: 1 }, { name: '机器人微信号', colspan: 1 }, { name: '机器人名称', colspan: 1 }, { name: 'time1', colspan: 1 }, { name: 'time2', colspan: 1 }, { name: 'time3', colspan: 1 }, { name: 'time4', colspan: 1 }, { name: '新增人数', colspan: 1 }, { name: '订单总量', colspan: 1, canSort: true, sortBy: 'order_total_number' }, { name: '淘宝单量', colspan: 1 }, { name: '京东单量', colspan: 1 }, { name: '拼多多单量', colspan: 1 }]
         ],
         cpsCapitalDetail: [
-            [{name: '数据库', colspan: 1}, {name: '首单奖励', colspan: 1}, {name: '人为修改', colspan: 1}, {name: '签到奖励', colspan: 1}, {name: '提成奖励', colspan: 1}, {name: '申请提现', colspan: 1}, {name: '消费补贴', colspan: 1}, {name: '维权扣除', colspan: 1}, {name: '退回积分', colspan: 1}, {name: '申请提现未打款', colspan: 1}, {name: '提现成功', colspan: 1}, {name: '提现拒绝退回', colspan: 1}, {name: '提现拒绝没收', colspan: 1}, {name: '用户余额', colspan: 1}]
+            [{ name: '数据库', colspan: 1 }, { name: '首单奖励', colspan: 1 }, { name: '人为修改', colspan: 1 }, { name: '签到奖励', colspan: 1 }, { name: '提成奖励', colspan: 1 }, { name: '申请提现', colspan: 1 }, { name: '消费补贴', colspan: 1 }, { name: '维权扣除', colspan: 1 }, { name: '退回积分', colspan: 1 }, { name: '申请提现未打款', colspan: 1 }, { name: '提现成功', colspan: 1 }, { name: '提现拒绝退回', colspan: 1 }, { name: '提现拒绝没收', colspan: 1 }, { name: '用户余额', colspan: 1 }]
         ],
         cpsHandData: [
-            [{name: '时间', colspan: 1}, {name: '平台', colspan: 1}, {name: '预估收入', colspan: 1}, {name: '结算收入', colspan: 1}, {name: '数据库预估收入', colspan: 1}, {name: '数据库结算收入', colspan: 1}, {name: '预估差异', colspan: 1}, {name: '结算差异', colspan: 1}, {name: '操作', colspan: 1}]
+            [{ name: '时间', colspan: 1 }, { name: '平台', colspan: 1 }, { name: '预估收入', colspan: 1 }, { name: '结算收入', colspan: 1 }, { name: '数据库预估收入', colspan: 1 }, { name: '数据库结算收入', colspan: 1 }, { name: '预估差异', colspan: 1 }, { name: '结算差异', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         cpsHandDetail: [
-            [{name: '时间', colspan: 1}, {name: '平台', colspan: 1}, {name: '联盟账号', colspan: 1}, {name: '联盟ID', colspan: 1}, {name: '预估收入', colspan: 1}, {name: '结算收入', colspan: 1}, {name: '数据库预估收入', colspan: 1}, {name: '数据库结算收入', colspan: 1}, {name: '预估差异', colspan: 1}, {name: '结算差异', colspan: 1}]
+            [{ name: '时间', colspan: 1 }, { name: '平台', colspan: 1 }, { name: '联盟账号', colspan: 1 }, { name: '联盟ID', colspan: 1 }, { name: '预估收入', colspan: 1 }, { name: '结算收入', colspan: 1 }, { name: '数据库预估收入', colspan: 1 }, { name: '数据库结算收入', colspan: 1 }, { name: '预估差异', colspan: 1 }, { name: '结算差异', colspan: 1 }]
         ],
         userList: [
-            [{name: '', colspan: 1}, {name: '用户ID', colspan: 1}, {name: '级别', colspan: 1}, {name: '头像', colspan: 1}, {name: '昵称', colspan: 1}, {name: '电话号码', colspan: 1}, {name: '性别', colspan: 1}, {name: '微信号', colspan: 1}, {name: '邀请码', colspan: 1}, {name: '余额', colspan: 1}, {name: '已提现金额', colspan: 1}, {name: '创建时间', colspan: 1}, {name: '最后登陆时间', colspan: 1}, {name: '操作', colspan: 1}]
+            [{ name: '', colspan: 1 }, { name: '用户ID', colspan: 1 }, { name: '级别', colspan: 1 }, { name: '头像', colspan: 1 }, { name: '昵称', colspan: 1 }, { name: '电话号码', colspan: 1 }, { name: '性别', colspan: 1 }, { name: '微信号', colspan: 1 }, { name: '邀请码', colspan: 1 }, { name: '余额', colspan: 1 }, { name: '已提现金额', colspan: 1 }, { name: '创建时间', colspan: 1 }, { name: '最后登陆时间', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         teamList: [
-            [{name: '用户ID', colspan: 1}, {name: '级别', colspan: 1}, {name: '头像', colspan: 1}, {name: '昵称', colspan: 1}, {name: '微信号', colspan: 1}, {name: '电话号码', colspan: 1}, {name: '性别', colspan: 1}, {name: '付款订单总金额', colspan: 1}, {name: '付款订单总数量', colspan: 1}, {name: '余额', colspan: 1}, {name: '已提现金额', colspan: 1}, {name: '团队总人数', colspan: 1}, {name: '直邀人数', colspan: 1}, {name: '其它直邀人数', colspan: 1}, {name: '创建时间', colspan: 1}, {name: '最后登陆时间', colspan: 1}]
+            [{ name: '用户ID', colspan: 1 }, { name: '级别', colspan: 1 }, { name: '头像', colspan: 1 }, { name: '昵称', colspan: 1 }, { name: '微信号', colspan: 1 }, { name: '电话号码', colspan: 1 }, { name: '性别', colspan: 1 }, { name: '付款订单总金额', colspan: 1 }, { name: '付款订单总数量', colspan: 1 }, { name: '余额', colspan: 1 }, { name: '已提现金额', colspan: 1 }, { name: '团队总人数', colspan: 1 }, { name: '直邀人数', colspan: 1 }, { name: '其它直邀人数', colspan: 1 }, { name: '总返利' }, { name: '个人返利' }, { name: '团队返利' }, { name: '创建时间', colspan: 1 }, { name: '最后登陆时间', colspan: 1 }]
         ],
         orderList: [
-            [{name: '订单编号', colspan: 1}, {name: '订单标题', colspan: 1}, {name: '下单用户', colspan: 1}, {name: '下单用户头像', colspan: 1}, {name: '订单金额', colspan: 1}, {name: '平台佣金', colspan: 1}, {name: '用户佣金', colspan: 1}, {name: '订单状态', colspan: 1}, {name: '订单平台', colspan: 1}, {name: '用户直接返佣', colspan: 1}, {name: '用户间接返佣', colspan: 1}, {name: '团长返佣', colspan: 1}, {name: '总监返佣', colspan: 1}, {name: '订单创建时间', colspan: 1}, {name: '订单更新时间', colspan: 1}, {name: '淘宝子订单号', colspan: 1}, {name: '商品数量', colspan: 1}, {name: '商品单价', colspan: 1}, {name: '付款金额', colspan: 1}, {name: '佣金比例', colspan: 1}, {name: '佣金金额', colspan: 1}, {name: '补贴比例', colspan: 1}, {name: '补贴金额', colspan: 1}, {name: '提成比例', colspan: 1}, {name: '技术服务费比例', colspan: 1}, {name: '技术服务费', colspan: 1}, {name: '付款预估收益', colspan: 1}, {name: '结算预估收益', colspan: 1}, {name: '付定金时间', colspan: 1}, {name: '定金淘客付款时间', colspan: 1}, {name: '定金付款金额', colspan: 1}]
+            [{ name: '订单编号', colspan: 1 }, { name: '订单标题', colspan: 1 }, { name: '下单用户', colspan: 1 }, { name: '下单用户头像', colspan: 1 }, { name: '订单金额', colspan: 1 }, { name: '平台佣金', colspan: 1 }, { name: '用户佣金', colspan: 1 }, { name: '订单状态', colspan: 1 }, { name: '订单平台', colspan: 1 }, { name: '用户直接返佣', colspan: 1 }, { name: '用户间接返佣', colspan: 1 }, { name: '团长返佣', colspan: 1 }, { name: '总监返佣', colspan: 1 }, { name: '订单创建时间', colspan: 1 }, { name: '订单更新时间', colspan: 1 }, { name: '淘宝子订单号', colspan: 1 }, { name: '商品数量', colspan: 1 }, { name: '商品单价', colspan: 1 }, { name: '付款金额', colspan: 1 }, { name: '佣金比例', colspan: 1 }, { name: '佣金金额', colspan: 1 }, { name: '补贴比例', colspan: 1 }, { name: '补贴金额', colspan: 1 }, { name: '提成比例', colspan: 1 }, { name: '技术服务费比例', colspan: 1 }, { name: '技术服务费', colspan: 1 }, { name: '付款预估收益', colspan: 1 }, { name: '结算预估收益', colspan: 1 }, { name: '付定金时间', colspan: 1 }, { name: '定金淘客付款时间', colspan: 1 }, { name: '定金付款金额', colspan: 1 }]
         ],
         withdrawList: [
-            [{name: '序号', colspan: 1}, {name: '提现用户', colspan: 1}, {name: '提现金额', colspan: 1}, {name: '提现状态', colspan: 1}, {name: '提现平台', colspan: 1}, {name: '提现创建时间', colspan: 1}, {name: '提现变动时间', colspan: 1}, {name: '操作', colspan: 1}]
+            [{ name: '序号', colspan: 1 }, { name: '提现用户', colspan: 1 }, { name: '提现金额', colspan: 1 }, { name: '提现状态', colspan: 1 }, { name: '提现平台', colspan: 1 }, { name: '提现创建时间', colspan: 1 }, { name: '提现变动时间', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         materialList: [
-            [{name: '序号', colspan: 1}, {name: '类别', colspan: 1}, {name: '关键字', colspan: 1}, {name: '标题', colspan: 1}, {name: '状态', colspan: 1}, {name: '内容', colspan: 1}, {name: '图片', colspan: 1}, {name: '创建人', colspan: 1}, {name: '修改人', colspan: 1}, {name: '创建时间', colspan: 1}, {name: '修改时间', colspan: 1}, {name: '操作', colspan: 1}]
+            [{ name: '序号', colspan: 1 }, { name: '类别', colspan: 1 }, { name: '关键字', colspan: 1 }, { name: '标题', colspan: 1 }, { name: '状态', colspan: 1 }, { name: '内容', colspan: 1 }, { name: '图片', colspan: 1 }, { name: '创建人', colspan: 1 }, { name: '修改人', colspan: 1 }, { name: '创建时间', colspan: 1 }, { name: '修改时间', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         orderSalesList: [
-            [{name: '商品ID'}, {name: '商品名称'}, {name: '商品价格'}, {name: '销售数量'}, {name: '平台'}, {name: '付款预估收入'}, {name: '付款金额'}]
+            [{ name: '商品ID' }, { name: '商品名称' }, { name: '商品价格' }, { name: '销售数量' }, { name: '平台' }, { name: '付款预估收入' }, { name: '付款金额' }]
         ],
         teamSortList: [
-            [{name: '用户ID'}, {name: '级别'}, {name: '手机号'}, {name: '昵称'}, {name: '微信号'}, {name: '数量|金额'}, {name: '统计时间'}, {name: '上级ID'}, {name: '上级昵称'}]
+            [{ name: '用户ID' }, { name: '级别' }, { name: '手机号' }, { name: '昵称' }, { name: '微信号' }, { name: '数量|金额' }, { name: '统计时间' }, { name: '上级ID' }, { name: '上级昵称' }]
         ],
         cpsDealMonth: [
             // [{name: '日期'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
         ],
         cpsdealYear: [
-            [{name: '月份'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
+            [{ name: '月份' }, { name: '订单笔数' }, { name: '订单金额' }, { name: '预估服务收入' }, { name: '预估代理人酬金' }, { name: '预估技术服务费' }, { name: '累计预估服务收入' }, { name: '累计预估代理人酬金' }, { name: '累积预估技术服务费' }, { name: '结算订单笔数' }, { name: '结算服务收入' }, { name: '结算代理人酬金' }, { name: '结算技术服务费' }, { name: '维权订单服务收入' }, { name: '维权订单代理人酬金' }, { name: '维权订单技术服务费' }, { name: '冻结订单服务收入' }, { name: '冻结订单代理人酬金' }, { name: '冻结订单技术服务费' }]
         ],
         cpsdealAccounts: [
-            [{name: '平台'}, {name: '账户'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
+            [{ name: '平台' }, { name: '账户' }, { name: '订单笔数' }, { name: '订单金额' }, { name: '预估服务收入' }, { name: '预估代理人酬金' }, { name: '预估技术服务费' }, { name: '累计预估服务收入' }, { name: '累计预估代理人酬金' }, { name: '累积预估技术服务费' }, { name: '结算订单笔数' }, { name: '结算服务收入' }, { name: '结算代理人酬金' }, { name: '结算技术服务费' }, { name: '维权订单服务收入' }, { name: '维权订单代理人酬金' }, { name: '维权订单技术服务费' }, { name: '冻结订单服务收入' }, { name: '冻结订单代理人酬金' }, { name: '冻结订单技术服务费' }]
         ],
         cpsdealAccountsByPlat: [
-            [{name: '公司'}, {name: '平台'}, {name: '订单笔数'}, {name: '订单金额'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '累计预估服务收入'}, {name: '累计预估代理人酬金'}, {name: '累积预估技术服务费'}, {name: '结算订单笔数'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '结算技术服务费'}, {name: '维权订单服务收入'}, {name: '维权订单代理人酬金'}, {name: '维权订单技术服务费'}, {name: '冻结订单服务收入'}, {name: '冻结订单代理人酬金'}, {name: '冻结订单技术服务费'}]
+            [{ name: '公司' }, { name: '平台' }, { name: '订单笔数' }, { name: '订单金额' }, { name: '预估服务收入' }, { name: '预估代理人酬金' }, { name: '预估技术服务费' }, { name: '累计预估服务收入' }, { name: '累计预估代理人酬金' }, { name: '累积预估技术服务费' }, { name: '结算订单笔数' }, { name: '结算服务收入' }, { name: '结算代理人酬金' }, { name: '结算技术服务费' }, { name: '维权订单服务收入' }, { name: '维权订单代理人酬金' }, { name: '维权订单技术服务费' }, { name: '冻结订单服务收入' }, { name: '冻结订单代理人酬金' }, { name: '冻结订单技术服务费' }]
         ],
         cpsperMonth: [
             // [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2}, {name: ' 当日预估金额', colspan: 6}, {name: ' 结算金额', colspan: 5}, {name: '税前毛利率', colspan: 2}, {name: '税后毛利率', colspan: 3}],
-            [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2},{name: '付款订单总金额（GMV）'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '预估毛利（税前）'}, {name: '预估毛利（税后）'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '技术服务费'}, {name: '毛利（税前）'}, {name: '毛利（税后）'}, {name: '预估毛利率'}, {name: '结算毛利率'}, {name: '预估毛利率'}, {name: '累计预估毛利'}, {name: '结算毛利率'}]
+            [{ name: '日期', rowspan: 2 }, { name: '总订单量', rowspan: 2 }, { name: '付款订单总金额（GMV）' }, { name: '预估服务收入' }, { name: '预估代理人酬金' }, { name: '预估技术服务费' }, { name: '预估毛利（税前）' }, { name: '预估毛利（税后）' }, { name: '结算服务收入' }, { name: '结算代理人酬金' }, { name: '技术服务费' }, { name: '毛利（税前）' }, { name: '毛利（税后）' }, { name: '预估毛利率' }, { name: '结算毛利率' }, { name: '预估毛利率' }, { name: '累计预估毛利' }, { name: '结算毛利率' }]
         ],
         cpsperYear: [
             // [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2}, {name: ' 当日预估金额', colspan: 6}, {name: ' 结算金额', colspan: 5}, {name: '税前毛利率', colspan: 2}, {name: '税后毛利率', colspan: 3}],
-            [{name: '日期', rowspan: 2}, {name: '总订单量', rowspan: 2},{name: '付款订单总金额（GMV）'}, {name: '预估服务收入'}, {name: '预估代理人酬金'}, {name: '预估技术服务费'}, {name: '预估毛利（税前）'}, {name: '预估毛利（税后）'}, {name: '结算服务收入'}, {name: '结算代理人酬金'}, {name: '技术服务费'}, {name: '毛利（税前）'}, {name: '毛利（税后）'}, {name: '预估毛利率'}, {name: '结算毛利率'}, {name: '预估毛利率'}, {name: '累计预估毛利'}, {name: '结算毛利率'}]
+            [{ name: '日期', rowspan: 2 }, { name: '总订单量', rowspan: 2 }, { name: '付款订单总金额（GMV）' }, { name: '预估服务收入' }, { name: '预估代理人酬金' }, { name: '预估技术服务费' }, { name: '预估毛利（税前）' }, { name: '预估毛利（税后）' }, { name: '结算服务收入' }, { name: '结算代理人酬金' }, { name: '技术服务费' }, { name: '毛利（税前）' }, { name: '毛利（税后）' }, { name: '预估毛利率' }, { name: '结算毛利率' }, { name: '预估毛利率' }, { name: '累计预估毛利' }, { name: '结算毛利率' }]
         ],
         cpsestYear: [
-            [{name: '序号'}, {name: '平台'}, {name: '营销账号'}, {name: '收款账户'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}]
+            [{ name: '序号' }, { name: '平台' }, { name: '营销账号' }, { name: '收款账户' }, { name: '1月' }, { name: '2月' }, { name: '3月' }, { name: '4月' }, { name: '5月' }, { name: '6月' }, { name: '7月' }, { name: '8月' }, { name: '9月' }, { name: '10月' }, { name: '11月' }, { name: '12月' }, { name: '合计' }]
         ],
         cpsestYearAll: [
-            [{name: '公司'}, {name: '平台'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}]
+            [{ name: '公司' }, { name: '平台' }, { name: '1月' }, { name: '2月' }, { name: '3月' }, { name: '4月' }, { name: '5月' }, { name: '6月' }, { name: '7月' }, { name: '8月' }, { name: '9月' }, { name: '10月' }, { name: '11月' }, { name: '12月' }, { name: '合计' }]
         ],
         cpsestMonth: [
-            [{name: '序号'}, {name: '平台'}, {name: '营销账号'}, {name: '收款账户'}, {name: '预计结算(含税)'}, {name: '小计'}, {name: '税率'}, {name: '不含税金额'}, {name: '增值税金额'}, {name: '技术服务费'}, {name: '备注'}]
+            [{ name: '序号' }, { name: '平台' }, { name: '营销账号' }, { name: '收款账户' }, { name: '预计结算(含税)' }, { name: '小计' }, { name: '税率' }, { name: '不含税金额' }, { name: '增值税金额' }, { name: '技术服务费' }, { name: '备注' }]
         ],
         cpsestMonthAll: [
-            [{name: '公司'}, {name: '平台'}, {name: '暂估结算(含税)'}, {name: '税率6%'}, {name: '不含税金额'}, {name: '增值税金额'}, {name: '技术服务费'}, {name: '备注'}]
+            [{ name: '公司' }, { name: '平台' }, { name: '暂估结算(含税)' }, { name: '税率6%' }, { name: '不含税金额' }, { name: '增值税金额' }, { name: '技术服务费' }, { name: '备注' }]
         ],
         cpsremMonth: [
-            [{name: '序号'}, {name: '平台'}, {name: '账户'}, {name: '结算代理人酬金'}, {name: '维权订单酬金'}, {name: '维权失败订单酬金'}, {name: '维权失败订单酬金'}, {name: '备注'}]
+            [{ name: '序号' }, { name: '平台' }, { name: '账户' }, { name: '结算代理人酬金' }, { name: '维权订单酬金' }, { name: '维权失败订单酬金' }, { name: '维权失败订单酬金' }, { name: '备注' }]
         ],
         cpsremMonthAll: [
-            [{name: '公司'}, {name: '平台'}, {name: '结算代理人酬金'}, {name: '维权订单酬金'}, {name: '维权失败订单酬金'}, {name: '应付代理人酬金'}, {name: '备注'}]
+            [{ name: '公司' }, { name: '平台' }, { name: '结算代理人酬金' }, { name: '维权订单酬金' }, { name: '维权失败订单酬金' }, { name: '应付代理人酬金' }, { name: '备注' }]
         ],
         cpsremYear: [
-            [{name: '序号'}, {name: '平台'}, {name: '账户'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}, {name: '备注'}]
+            [{ name: '序号' }, { name: '平台' }, { name: '账户' }, { name: '1月' }, { name: '2月' }, { name: '3月' }, { name: '4月' }, { name: '5月' }, { name: '6月' }, { name: '7月' }, { name: '8月' }, { name: '9月' }, { name: '10月' }, { name: '11月' }, { name: '12月' }, { name: '合计' }, { name: '备注' }]
         ],
         cpsremYearAll: [
-            [{name: '公司'}, {name: '平台'}, {name: '1月'}, {name: '2月'}, {name: '3月'}, {name: '4月'}, {name: '5月'}, {name: '6月'}, {name: '7月'}, {name: '8月'}, {name: '9月'}, {name: '10月'}, {name: '11月'}, {name: '12月'}, {name: '合计'}, {name: '上年数'}]
+            [{ name: '公司' }, { name: '平台' }, { name: '1月' }, { name: '2月' }, { name: '3月' }, { name: '4月' }, { name: '5月' }, { name: '6月' }, { name: '7月' }, { name: '8月' }, { name: '9月' }, { name: '10月' }, { name: '11月' }, { name: '12月' }, { name: '合计' }, { name: '上年数' }]
         ],
         cpsgenYear: [
-            [{name: '序号'}, {name: '月份'}, {name: '推新奖励'}, {name: '签到奖励'}, {name: '首单奖励'}, {name: '免单金额'}, {name: '合计'}, {name: '备注'}]
+            [{ name: '序号' }, { name: '月份' }, { name: '推新奖励' }, { name: '签到奖励' }, { name: '首单奖励' }, { name: '免单金额' }, { name: '合计' }, { name: '备注' }]
         ],
         cpsgenMonth: [
-            [{name: '序号'}, {name: '日期'}, {name: '推新奖励'}, {name: '签到奖励'}, {name: '首单奖励'}, {name: '免单金额'}, {name: '合计'}, {name: '备注'}]
+            [{ name: '序号' }, { name: '日期' }, { name: '推新奖励' }, { name: '签到奖励' }, { name: '首单奖励' }, { name: '免单金额' }, { name: '合计' }, { name: '备注' }]
         ]
     },
     views: {

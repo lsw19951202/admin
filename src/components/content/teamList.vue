@@ -17,6 +17,7 @@
                 </div>
                 <selector class="search-group" :value="rank" :selectParams="rankSelectParams" @selectOptsClicked="rankSelectOptsClicked"></selector>
                 <selector class="search-group" :value="isDirect" :selectParams="isDirectSelectParams" @selectOptsClicked="isDirectSelectOptsClicked"></selector>
+                <selector class="search-group" :value="sortType" :selectParams="sortTypeSelectParams" @selectOptsClicked="sortTypeSelectOptsClicked"></selector>
                 <div class="search-group">
                     <label>日期筛选:</label>
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeBegin" placeholder="起始时间"></flat-picker>
@@ -97,13 +98,27 @@ export default {
                 label: '是否直邀',
                 options:[{
                     value: 0,
-                    text: '全部'
+                    text: '直属团队'
                 }, {
                     value: 1,
                     text: '直邀'
                 }, {
                     value: 2,
                     text: '间邀'
+                }]
+            },
+            sortType: 'total_profit',
+            sortTypeSelectParams: {
+                label: '排序',
+                options: [{
+                    value: 'total_profit',
+                    text: '总返利'
+                }, {
+                    value: 'profit_amount',
+                    text: '个人返利'
+                }, {
+                    value: 'team_profit_amount',
+                    text: '团队返利'
                 }]
             }
         }
@@ -133,7 +148,8 @@ export default {
                     createTimeBegin: this.createTimeBegin,
                     createTimeEnd: this.createTimeEnd,
                     rank: this.rank,
-                    'is_direct': this.isDirect
+                    'is_direct': this.isDirect,
+                    'sort_type': this.sortType
                 }
             }).then((resp) => {
                 if(resp.status == 200){
@@ -173,7 +189,7 @@ export default {
             })
             this.cardData = Object.assign([], [cardData]) 
             const tbData = []
-            const fields = ['userId', 'rank', 'avatar', 'nickName', 'wechat', 'mobile', 'gender', 'payOrderAmount', 'payOrderNumber', 'availableAmount', 'withdrawAmount', 'teamTotalNumber', 'directNumber', 'otherNumber', 'createTime', 'lastLoginTime']
+            const fields = ['userId', 'rank', 'avatar', 'nickName', 'wechat', 'mobile', 'gender', 'payOrderAmount', 'payOrderNumber', 'availableAmount', 'withdrawAmount', 'teamTotalNumber', 'directNumber', 'otherNumber', 'total_profit', 'profit_amount', 'team_profit_amount', 'createTime', 'lastLoginTime']
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
                 const item = dt.data[idx]
@@ -188,10 +204,15 @@ export default {
         },
         isDirectSelectOptsClicked: function(dt){
             this.isDirect = dt
+        },
+        sortTypeSelectOptsClicked: function(dt){
+            this.sortType = dt
         }
     }
 }
 </script>
 <style scoped>
 .team-list { flex: 1; height: 0; box-sizing: border-box; display: flex; flex-direction: column; }
+.search-header { display: block; }
+.search-group { margin-bottom: .5rem; }
 </style>

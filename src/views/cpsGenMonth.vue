@@ -41,7 +41,7 @@ export default {
         'flat-picker': flatPicker,
         'locked-table': LockedTable
     },
-    data: () =>{
+    data: () => {
         const now = new Date()
         let nStr = ''
         nStr += now.getFullYear() + '-'
