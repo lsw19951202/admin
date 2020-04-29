@@ -27,6 +27,7 @@
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeEnd" placeholder="结束时间"></flat-picker>
                 </div>
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
+                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" download="团队列表.xlsx">导出</a>
             </header>
             <div class="table-container hideScrollBar">
                 <detail-table :tbType="tbType" :tbData="tbData" :tableHeader="tableHeader"></detail-table>
@@ -132,6 +133,14 @@ export default {
     },
     created: function(){
         this.loadTBData()
+    },
+    computed: {
+        downloadUrl: function(){
+            return setting.baseUrl + setting.urls.teamAll + '?page=' + (this.pageData.page || 1) + '&id=' + this.id + '&teamId=' + this.teamId
+                + '&nickName=' + this.nickName + '&phone=' + this.phone + '&createTimeBegin=' + this.createTimeBegin
+                + '&createTimeEnd=' + this.createTimeEnd + '&rank=' + this.rank + '&is_direct=' + this.isDirect
+                + '&sort_type=' + this.sortType + '&is_excel=1&skey=' + this.$cookies.get('skey')
+        }
     },
     methods: {
         loadTBData: function(pageNum){
