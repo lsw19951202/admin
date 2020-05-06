@@ -1,6 +1,6 @@
 <template>
-    <div class="table-container" @scroll.prevent.stop="tableScroll($event)">
-        <table cellspacing="0" :style="'width: ' + tbStyle.width + ';' + 'position: relative;'" ref="table">
+    <div class="table-container" @scroll.prevent.stop="tableScroll($event)" :style="'margin-top: ' + (tbStyle.marginTop || 0) + ';'">
+        <table cellspacing="0" :style="'width: ' + tbStyle.width + '; position: relative;'" ref="table">
             <thead :style="'z-index: 53; left: ' + scrollPos.left + 'px; top: ' + scrollPos.top + 'px; position: absolute; border-right: 1px solid #E2E2E2; border-bottom: 1px solid #E2E2E2;'" v-show="showFixedHeadCol" ref="fixedHeadCol">
                 <tr v-for="(row, index) in getFixedHeadCol" :key="index">
                     <td v-for="(col, idx) in row" :key="idx" :colspan="col.colspan || 1" :rowspan="col.rowspan || 1">
@@ -23,7 +23,7 @@
                 </tr>
             </tbody>
             <tbody style="z-index: 50; background-color: white;" ref="tbody">
-                <tr v-for="(row, index) in tbData.tbData" :key="index" style="background-color: white;">
+                <tr v-for="(row, index) in tbData.tbData" :key="index" style="background-color: white;" @click.prevent.stop="rowClicked(row)">
                     <td v-for="(col, idx) in row" :key="idx" :colspan="col.colspan || 1" :rowspan="col.rowspan || 1">
                         {{col.text}}
                     </td>
@@ -88,6 +88,10 @@ export default {
         }
     },
     methods: {
+        // 行点击事件
+        rowClicked: function(dt){
+            this.$emit('rowClicked', dt)
+        },
         resizeFixedHead: function(){
             this.showFixedHeadCol = false
             // 设置表格顶部padding

@@ -198,7 +198,7 @@ export default {
             })
             this.cardData = Object.assign([], [cardData]) 
             const tbData = []
-            const fields = ['userId', 'rank', 'avatar', 'nickName', 'wechat', 'mobile', 'gender', 'payOrderAmount', 'payOrderNumber', 'availableAmount', 'withdrawAmount', 'teamTotalNumber', 'directNumber', 'otherNumber', 'total_profit', 'profit_amount', 'team_profit_amount', 'createTime', 'lastLoginTime']
+            const fields = ['userId', 'rank', 'avatar', 'nickName', 'wechat', 'mobile', 'parent_id', 'leader_id', 'director_id', 'gender', 'payOrderAmount', 'payOrderNumber', 'availableAmount', 'withdrawAmount', 'teamTotalNumber', 'directNumber', 'otherNumber', 'total_profit', 'profit_amount', 'team_profit_amount', 'createTime', 'lastLoginTime']
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
                 const item = dt.data[idx]

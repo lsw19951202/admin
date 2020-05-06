@@ -22,10 +22,13 @@
                 <selector class="search-group" :value="sortType" :selectParams="sortTypeSelectParams" @selectOptsClicked="sortTypeSelectOptsClicked"></selector>
                 <button class="action-btn" @click="loadTBData(1)">搜索</button>
             </header>
-            <div class="table-container hideScrollBar">
-                <detail-table :tbType="tbType" :tbData="tbData" :tableHeader="tableHeader"></detail-table>
+            <locked-table v-show="!showOrderList" :tbData="tbData" :tbStyle="tbStyle" @rowClicked="rowClicked"></locked-table>
+            <div class="table-container hideScrollBar" v-show="showOrderList">
+                <detail-table style="width: 100rem;" :tbType="tbType" :tbData="orderListTBData" :tableHeader="tableHeader"></detail-table>
+                <!-- <locked-table :tbData="orderListTBData" :tbStyle="orderListTBStyle"></locked-table> -->
             </div>
-            <page :pageData="pageData" @loadList="loadTBData"></page>
+            <page v-show="!showOrderList" :pageData="pageData" @loadList="loadTBData"></page>
+            <page v-show="showOrderList" :pageData="orderListPageData" @loadList="loadOrderListTBData"></page>
         </div>
     </div>
 </template>
@@ -33,6 +36,7 @@
 import Selector from '@/components/common/select.vue'
 import request from '@/axios'
 import DetailTable from '@/components/content/table.vue'
+import LockedTable from '@/components/content/LockedTable.vue'
 import setting from '@/setting'
 import page from '@/components/content/page.vue'
 
@@ -41,19 +45,41 @@ export default {
     components: {
         'selector': Selector,
         'detail-table': DetailTable,
+        'locked-table': LockedTable,
         'page': page
     },
     data: () => {
         return {
+            showOrderList: false,
             id: '',
             nickName: '',
             'parent_id': '',
             phone: '',
             rank: '',
             sortType: '',
-            tbType: 'common',
-            tbData: [],
-            tableHeader: [],
+            tbType: 'orderList',
+            orderListTBData: [],
+            tbData: {
+                tableHeader: [],
+                tbData: [],
+                lockedRow: 1,
+                lockedCol: 0
+            },
+            // orderListTBData: {
+            //     tableHeader: setting.tableHeader.orderList,
+            //     tbData: [],
+            //     lockedRow: 1,
+            //     lockedCol: 0
+            // },
+            tbStyle: {
+                width: '90rem',
+                marginTop: '0.5rem'
+            },
+            // orderListTBStyle: {
+            //     width: '100rem',
+            //     marginTop: '0.5rem'
+            // },
+            tableHeader: setting.tableHeader.orderList,
             rankSelectParams: {
                 label: '职级',
                 placeholder: '请选择',
@@ -80,7 +106,13 @@ export default {
                 total: 0,
                 page: 1,
                 'total_page': 0
-            }
+            },
+            orderListPageData: {
+                total: 0,
+                page: 1,
+                'total_page': 0
+            },
+            userId: ''
         }
     },
     created: function(){
@@ -92,6 +124,52 @@ export default {
             })
     },
     methods: {
+        loadOrderListTBData: function(pageNum){
+            this.showLoading()
+            request({
+                url: setting.urls.appOrderList,
+                method: 'get',
+                params: {
+                    page: pageNum || 1,
+                    'user_id': this.userId
+                }
+            }).then(resp => {
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        const orderData = resp.data.data
+
+                        this.orderListPageData.total = orderData.total
+                        this.orderListPageData.page = orderData.page
+                        this.orderListPageData['total_page'] = orderData.total_page || orderData.pageCount || 0
+
+                        const fields = ['platOrderNo', 'goodsTitle', 'buyerName', 'buyerAvatar', 'orderAmount', 'platCommissionAmount', 'buyerCommissionAmount', 'orderStatus', 'tbType', 'oneProfit', 'twoProfit', 'leaderProfit', 'directorProfit', 'platCreateTime', 'lastUpdateTime', 'subOrderNo', 'goodsNum', 'goodsPrice', 'payAmount', 'platCommissionRate', 'commissionAmount', 'subsidyRate', 'subsidyAmount', 'subSideRate', 'technicalServiceRate', 'technicalServiceFee', 'paymentEstimateFee', 'settleEstimateFee', 'depositTime', 'tbDepositTime', 'depositAmount']
+                        const tbData = []
+
+                        for(let idx = 0; idx < orderData.data.length; idx++){
+                            tbData.push([])
+                            const item = orderData.data[idx]
+                            for(let idxx = 0; idxx < fields.length; idxx++){
+                                tbData[idx].push(item[fields[idxx]] || (item[fields[idxx]] === 0 ? item[fields[idxx]] : '--'))
+                            }
+                        }
+                        this.orderListTBData = Object.assign([], tbData)
+                        this.showOrderList = true
+                    }else{
+                        this.alert(resp.data.message || '加载订单列表失败')
+                    }
+                }else{
+                    this.alert('加载订单列表失败')
+                }
+            }).catch(e => {
+                this.alert('加载订单列表失败')
+            }).then(() => {
+                this.hideLoading()
+            })
+        },
+        rowClicked: function(dt){
+            this.userId = dt[0].text
+            this.loadOrderListTBData(1)
+        },
         loadTBData: function(pageNum){
             this.showLoading()
             request({
@@ -110,6 +188,7 @@ export default {
                 if(resp.status == 200){
                     if(resp.data.code == 200){
                         this.createTBData(resp.data.data)
+                        this.showOrderList = false
                     }else{
                         this.alert(resp.data.message || '加载用户排行列表失败')
                     }
@@ -132,10 +211,18 @@ export default {
                 tbData.push([])
                 const item = dt.data[idx]
                 for(let idxx = 0; idxx < this.fields.length; idxx++){
-                    tbData[idx].push(item[this.fields[idxx]] || (item[this.fields[idxx]] === 0 ? item[this.fields[idxx]] : '--'))
+                    tbData[idx].push({text: item[this.fields[idxx]] || (item[this.fields[idxx]] === 0 ? item[this.fields[idxx]] : '--')})
                 }
             }
-            this.tbData = Object.assign([], tbData)
+            // this.tbData = Object.assign([], tbData)
+            // this.tbData.tbData = tbData
+            this.tbData = {
+                tbData: tbData,
+                tableHeader: this.tbData.tableHeader,
+                lockedRow: this.tbData.lockedRow,
+                lockedCol: this.tbData.lockedCol
+            }
+            console.log(this.tbData)
         },
         loadTableHeaderAndSortData: function(){
             this.showLoading()
@@ -176,8 +263,15 @@ export default {
                 tableHeader.push({name: dt[idx]['name']})
                 fields.push(dt[idx]['field'])
             }
-            this.tableHeader = Object.assign([], [tableHeader])
+            // this.tableHeader = Object.assign([], [tableHeader])
             this.fields = Object.assign([], fields)
+            this.tbData = {
+                tbData: this.tbData.tbData,
+                tableHeader: [tableHeader],
+                lockedRow: this.tbData.lockedRow,
+                lockedCol: this.tbData.lockedCol
+            }
+            console.log(this.tbData)
         },
         createSortData: function(dt){
             const sortOptions = [{
