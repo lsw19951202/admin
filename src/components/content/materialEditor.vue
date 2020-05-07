@@ -73,8 +73,9 @@ export default {
                     strikethrough: true,
                     underline: true,
                     emoji: true,
-                    image: false,
-                    link: false
+                    image: true,
+                    link: false,
+                    video: true
                 }
             },
             imageConfig: {

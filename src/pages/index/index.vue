@@ -87,10 +87,18 @@ export default {
             createPageData: this.createPageData,
             loadTBData: this.loadTBData,
             numToStr: this.numToStr,
-            strToNum: this.strToNum
+            strToNum: this.strToNum,
+            showCover: this.showCover,
+            hideCover: this.hideCover
         }
     },
     methods: {
+        showCover: function(){
+            this.isShowCover = true
+        },
+        hideCover: function(){
+            this.isShowCover = false
+        },
         // 数字加千分符
         numToStr: function(num){
             num = num + ''

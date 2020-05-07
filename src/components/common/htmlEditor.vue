@@ -14,19 +14,30 @@
                 <span class="editor-btn emoji" @click="changeEmojiStatu" v-if="!config || !config.actions || config.actions.emoji || config.actions.emoji == undefined"></span>
                 <span class="editor-btn image" @click="changeImageStatu" v-if="!config || !config.actions || config.actions.image || config.actions.image == undefined"></span>
                 <span class="editor-btn link" @click="changeLinkStatu" v-if="!config || !config.actions || config.actions.link || config.actions.link == undefined"></span>
+                <span class="editor-btn video" @click="changeVideoStatu" v-if="!config || !config.actions || config.actions.video || config.actions.video == undefined"></span>
             </div>
         </div>
-        <div class="html-editor-body" ref="editorBody" v-if="showEmojiContainer || showImageContainer || showLinkContainer">
+        <div class="html-editor-body" ref="editorBody" v-if="showEmojiContainer || showImageContainer || showLinkContainer || showVideoContainer">
             <div class="emoji-container" ref="emojiContainer" v-if="showEmojiContainer">
                 <div v-html="initEmoji" @click="emojiItemClicked"></div>
             </div>
-            <div class="image-container" ref="imageContainer" v-if="showImageContainer">
-                <div>
-                    <label>选中本地图片:</label>
-                    <input type="file" accept=".jpeg, .jpg, .png, .gif">
-                </div>
+            <div class="image-container" ref="imageContainer" v-if="showImageContainer" style="width: 100%; height: 100%; padding-top: 2rem; box-sizing: border-box;">
+                <!-- <div> -->
+                    <span class="upload-btn" @click="selectImage">点击上传本地图片</span>
+                    <form enctype="multipart/form-data" style="display: none;" ref="imageForm">
+                        <input type="file" ref="imageIpt" @change="uploadImage" accept=".jpeg, .jpg, .png, .gif" name="files">
+                    </form>
+                <!-- </div> -->
             </div>
-            <div class="link-container" ref="linkContainer" v-if="showLinkContainer">
+            <div class="video-container" ref="videoContainer" v-if="showVideoContainer" style="width: 100%; height: 100%; padding-top: 2rem; box-sizing: border-box;">
+                <!-- <div> -->
+                    <span class="upload-btn" @click="selectVideo">点击上传视频</span>
+                    <form enctype="multipart/form-data" style="display: none;" ref="videoForm">
+                        <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .webm" name="files">
+                    </form>
+                <!-- </div> -->
+            </div>
+            <div class="link-container" ref="linkContainer" v-if="showLinkContainer" style="width: 100%; height: 100%;">
                 <div>
                     <label>超链接地址:</label>
                     <input type="text" v-model="linkUrl" placeholder="超链接地址">
@@ -48,15 +59,19 @@
 </template>
 <script>
 import 'font-awesome/css/font-awesome.min.css'
+import request from '@/axios'
+import setting from '@/setting'
 
 export default {
+    inject: ['showLoading', 'hideLoading', 'alert'],
     props: ['config', 'htmlText'],
     data: () => {
         return {
-            // 控制emoji,image,link的编辑界面的显示
+            // 控制emoji,image,link,video的编辑界面的显示
             showEmojiContainer: false,
             showImageContainer: false,
             showLinkContainer: false,
+            showVideoContainer: false,
             // 控制或者显示文字粗体，斜体，对齐方式，下划线等按钮的选中效果
             contentBold: false,
             contentItalic: false,
@@ -284,6 +299,7 @@ export default {
             if(!this.showLinkContainer){
                 this.showImageContainer = false
                 this.showEmojiContainer = false
+                this.showVideoContainer = false
             }
             this.showLinkContainer = !this.showLinkContainer
         },
@@ -294,14 +310,44 @@ export default {
             if(!this.showImageContainer){
                 this.showEmojiContainer = false
                 this.showLinkContainer = false
+                this.showVideoContainer = false
             }
             this.showImageContainer = !this.showImageContainer
             this.showImageContainer&&this.$nextTick(function(){
                 if(this.$refs.editorBody){
-                    // let editorBodyHeight = 0
+                    let editorBodyHeight = 0
                     const baseFontSize = document.documentElement.style.fontSize.replace('px', '')
-                    // const editorContentHeight = window.getComputedStyle(this.$refs.editorContent).height.replace('px', '')
-                    // console.log(evt)
+                    const editorContentHeight = window.getComputedStyle(this.$refs.editorContent).height.replace('px', '')
+                    if(editorContentHeight > baseFontSize * 5){
+                        editorBodyHeight = '5rem'
+                    }else{
+                        editorBodyHeight = editorContentHeight + 'px'
+                    }
+                    this.$refs.editorBody.style.height = editorBodyHeight
+                }
+            })
+        },
+        /**
+         * 显示或者隐藏视频编辑区域
+         */
+        changeVideoStatu: function(evt){
+            if(!this.showVideoContainer){
+                this.showEmojiContainer = false
+                this.showLinkContainer = false
+                this.showImageContainer = false
+            }
+            this.showVideoContainer = !this.showVideoContainer
+            this.showVideoContainer&&this.$nextTick(function(){
+                if(this.$refs.editorBody){
+                    let editorBodyHeight = 0
+                    const baseFontSize = document.documentElement.style.fontSize.replace('px', '')
+                    const editorContentHeight = window.getComputedStyle(this.$refs.editorContent).height.replace('px', '')
+                    if(editorContentHeight > baseFontSize * 5){
+                        editorBodyHeight = '5rem'
+                    }else{
+                        editorBodyHeight = editorContentHeight + 'px'
+                    }
+                    this.$refs.editorBody.style.height = editorBodyHeight
                 }
             })
         },
@@ -312,6 +358,7 @@ export default {
             if(!this.showEmojiContainer){
                 this.showImageContainer = false
                 this.showLinkContainer = false
+                this.showVideoContainer = false
             }
             this.showEmojiContainer = !this.showEmojiContainer
             this.showEmojiContainer&&this.$nextTick(function(){
@@ -325,7 +372,7 @@ export default {
                         editorBodyHeight = editorContentHeight + 'px'
                     }
                     this.$refs.editorBody.style.height = editorBodyHeight
-                }  
+                }
             })
         },
         /**
@@ -334,15 +381,19 @@ export default {
          * emoji，image，link
          */
         editorFocus: function(){
-            this.hideEditorBody()
+            // this.hideEditorBody()
+            this.showEmojiContainer = false
+            this.showImageContainer = false
+            this.showLinkContainer = false
+            this.showVideoContainer = false
         },
         /**
          * 隐藏编辑界面
          */
         hideEditorBody: function(){
             this.showEmojiContainer = false
-            this.showImageContainer = false
-            this.showLinkContainer = false
+            // this.showImageContainer = false
+            // this.showLinkContainer = false
         },
         /**
          * 获取编辑器内容
@@ -350,6 +401,77 @@ export default {
          */
         getContent: function(){
             return this.$refs.editor.innerHTML
+        },
+        selectImage: function(){
+            this.$refs.imageIpt.click()
+        },
+        uploadImage: function(){
+            console.log(this.$refs.imageIpt.files)
+            this.showLoading()
+            const formData = new FormData()
+            request({
+                url: setting.urls.uploadImage,
+                method: 'post',
+                data: formData,
+                headers: {
+                    'Content-type': 'multipart/form-data'
+                }
+            }).then(resp => {
+                console.log(resp)
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        const imgUrl = resp.data.data.prxUrl + resp.data.data.fileName
+                        // TODO
+                        this.insertHTML('<img src="' + imgUrl + '"/>');
+                    }else{
+                        this.alert(resp.data.message || '上传图片失败')
+                    }
+                }else{
+                    this.alert('上传图片失败')
+                }
+            }).catch(e => {
+                console.log(e)
+                this.alert('上传图片失败')
+            }).then(() => {
+                this.hideLoading()
+                this.$refs.imageIpt.value = ''
+                this.showImageContainer = false
+            })
+        },
+        selectVideo: function(){
+            this.$refs.videoIpt.click()
+        },
+        uploadVideo: function(){
+            this.showLoading()
+            console.log(this.$refs.videoIpt.files)
+            const formData = new FormData(this.$refs.videoForm)
+            request({
+                url: setting.urls.uploadImage,
+                method: 'post',
+                data:formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(resp => {
+                console.log(resp)
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        const videoUrl = resp.data.data.prxUrl + resp.data.data.fileName
+                        this.insertHTML('<video src="' + videoUrl + '"></video>');
+                    }else{
+                        this.alert(resp.data.message || '上传视频失败')
+                    }
+                }else{
+                    this.alert('上传视频失败')
+                }
+            }).catch(e => {
+                this.alert('上传视频失败')
+                console.log(e)
+            }).then(() => {
+                this.hideLoading()
+                this.$refs.videoIpt.value = ''
+                this.showVideoContainer = false
+            })
         }
     },
     computed: {
@@ -415,10 +537,12 @@ export default {
 .editor-btn.emoji::before { content: '\f118'; }
 .editor-btn.image::before { content: '\f1c5'; }
 .editor-btn.link::before { content: '\f0c1'; }
+.editor-btn.video::before { content: '\f030'; }
 .html-editor-content { width: 100%; height: 0; flex: 1; box-sizing: border-box; border: 1px solid #d9d9d9; border-top: none; padding: 0.2rem; }
 .html-editor-content>div { width: 100%; height: 100%; overflow-y: scroll; overflow-wrap: break-word; box-sizing: border-box; outline: none; word-break: break-all; line-height: 1rem; }
 .html-editor-body { width: 14.2rem; background-color: #efecec; position: absolute; left: 0; top: 1rem; border: 1px solid #d9d9d9; box-sizing: border-box; overflow: hidden; overflow-y: scroll; }
 .emoji-container { width: 100%; }
+.upload-btn { height: .75rem; cursor: pointer; line-height: .75rem; display: block; margin: auto; width: 4.5rem; text-align: center; padding: 0rem 0.5rem; background-color: #1414dc; color: white; border-radius: .125rem; }
 </style>
 <style>
 .emoji-item { width: .7rem; height: .7rem; display: block; float: left; box-sizing: border-box; line-height: .7rem; text-align: center; margin-left: .3rem; margin-top: .3rem; cursor: pointer; }

@@ -151,7 +151,9 @@ export default {
         // cps推广月汇总
         cpsgenMonth: '/finance/cpsgen/month',
         // cps推广年汇总
-        cpsgenYear: '/finance/cpsgen/year'
+        cpsgenYear: '/finance/cpsgen/year',
+        // cps资金管理导入提现日志
+        cpsImportTx: '/wx/import'
     },
     // 图片地址
     images: {

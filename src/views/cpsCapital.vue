@@ -11,6 +11,12 @@
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="end_time" placeholder="结束时间"></flat-picker>
                 </div>
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
+                <div style="flex: 1; text-align: right;">
+                    <button class="action-btn" @click="selectExcel">提现日志导入</button>
+                    <form enctype="multipart/form-data" style="display: none;" ref="fileForm">
+                        <input type="file" ref="excelIpt" @change="uploadExcel" accept=".csv, .xlsx" name="file">
+                    </form>
+                </div>
             </header>
             <div class="table-container hideScrollBar">
                 <detail-table v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" v-bind:tbType="tbType" @loadCapitalDetail="loadCapitalDetail"></detail-table>
@@ -80,6 +86,36 @@ export default {
             })
     },
     methods: {
+        selectExcel: function(){
+            this.$refs.excelIpt.click()
+        },
+        uploadExcel: function(){
+            this.showLoading()
+            const formData = new FormData(this.$refs.fileForm)
+            request({
+                url: setting.urls.cpsImportTx,
+                method: 'post',
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(resp => {
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        // do nothing
+                    }else{
+                        this.alert(resp.data.message || '上传提现日志失败')
+                    }
+                }else{
+                    this.alert('上传提现日志失败')
+                }
+            }).catch(e => {
+                this.alert('上传提现日志失败')
+            }).then(() => {
+                this.hideLoading()
+                this.$refs.excelIpt.value = ''
+            })
+        },
         loadCapitalDetail: function(capital){
             console.log(capital)
             this.showLoading()
