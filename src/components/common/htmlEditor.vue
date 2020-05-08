@@ -6,6 +6,21 @@
             <div class="html-editor-act-btns">
                 <span :class="'editor-btn bold ' + (contentBold?'dark':'')" @click="changeTextWeight" v-if="!config || !config.actions || config.actions.bold || config.actions.bold == undefined"></span>
                 <span :class="'editor-btn italic ' + (contentItalic?'dark':'')" @click="changeTextItalic" v-if="!config || !config.actions || config.actions.italic || config.actions.italic == undefined"></span>
+                <span class="editor-btn fontSize" @click="changeFontSizeStatu" v-if="!config || !config.actions || config.actions.fontSize || config.actions.fontSize == undefined">
+                    <div @click.stop="changeFontSize($event)" style="position: absolute; background-color: white; border: 1px solid #cccccc; z-index: 5000;" v-show="showFontSizeContainer">
+                        <div>字号</div>
+                        <hr>
+                        <ul style="cursor: pointer;">
+                            <li data-size='1' style="font-size: 12px;">12px</li>
+                            <li data-size='2' style="font-size: 14px;">14px</li>
+                            <li data-size='3' style="font-size: 16px;">16px</li>
+                            <li data-size='4' style="font-size: 18px;">18px</li>
+                            <li data-size='5' style="font-size: 24px;">24px</li>
+                            <li data-size='6' style="font-size: 32px;">32px</li>
+                            <li data-size='7' style="font-size: 48px;">48px</li>
+                        </ul>
+                    </div>
+                </span>
                 <span :class="'editor-btn alignLeft ' + (contentAlignLeft?'dark':'')" @click="changeTextAlign('left')" v-if="!config || !config.actions || config.actions.alignLeft || config.actions.alignLeft == undefined"></span>
                 <span :class="'editor-btn alignCenter ' + (contentAlignCenter?'dark':'')" @click="changeTextAlign('center')" v-if="!config || !config.actions || config.actions.alignCenter || config.actions.alignCenter == undefined"></span>
                 <span :class="'editor-btn alignRight ' + (contentAlignRight?'dark':'')" @click="changeTextAlign('right')" v-if="!config || !config.actions || config.actions.alignRight || config.actions.alignRight == undefined"></span>
@@ -72,6 +87,8 @@ export default {
             showImageContainer: false,
             showLinkContainer: false,
             showVideoContainer: false,
+            // 字体大小控制按钮
+            showFontSizeContainer: false,
             // 控制或者显示文字粗体，斜体，对齐方式，下划线等按钮的选中效果
             contentBold: false,
             contentItalic: false,
@@ -111,6 +128,25 @@ export default {
         }
     },
     methods: {
+        /**
+         * 修改字体大小
+         */
+        changeFontSize: function(evt){
+            const tar = evt.target
+            console.log(tar)
+            console.log(tar.dataset)
+            if(tar.dataset.size){
+                if(window.getSelection){
+                    // 是否新创建的range -- 是否是光标第一次进入编辑器
+                    const isNewRange = this.setRange()
+                    document.execCommand('fontSize', false, tar.dataset.size)
+                    this.showFontSizeContainer = false
+                    // this.scrollToTarget(isNewRange)
+                }else{
+                    return
+                }
+            }
+        },
         /**
          * emoji表情点击事件
          * 添加表情到光标位置
@@ -159,6 +195,19 @@ export default {
                 // 是否新创建的range -- 是否是光标第一次进入编辑器
                 const isNewRange = this.setRange()
                 document.execCommand('insertHTML', false, html)
+                this.scrollToTarget(isNewRange)
+            }else{
+                return
+            }
+        },
+        /**
+         * 换行
+         */
+        insertParagraph: function(){
+            if(window.getSelection){
+                // 是否新创建的range -- 是否是光标第一次进入编辑器
+                const isNewRange = this.setRange()
+                document.execCommand('InsertParagraph', false, null)
                 this.scrollToTarget(isNewRange)
             }else{
                 return
@@ -300,6 +349,7 @@ export default {
                 this.showImageContainer = false
                 this.showEmojiContainer = false
                 this.showVideoContainer = false
+                this.showFontSizeContainer = false
             }
             this.showLinkContainer = !this.showLinkContainer
         },
@@ -311,6 +361,7 @@ export default {
                 this.showEmojiContainer = false
                 this.showLinkContainer = false
                 this.showVideoContainer = false
+                this.showFontSizeContainer = false
             }
             this.showImageContainer = !this.showImageContainer
             this.showImageContainer&&this.$nextTick(function(){
@@ -335,6 +386,7 @@ export default {
                 this.showEmojiContainer = false
                 this.showLinkContainer = false
                 this.showImageContainer = false
+                this.showFontSizeContainer = false
             }
             this.showVideoContainer = !this.showVideoContainer
             this.showVideoContainer&&this.$nextTick(function(){
@@ -359,6 +411,7 @@ export default {
                 this.showImageContainer = false
                 this.showLinkContainer = false
                 this.showVideoContainer = false
+                this.showFontSizeContainer = false
             }
             this.showEmojiContainer = !this.showEmojiContainer
             this.showEmojiContainer&&this.$nextTick(function(){
@@ -374,6 +427,18 @@ export default {
                     this.$refs.editorBody.style.height = editorBodyHeight
                 }
             })
+        },
+        /**
+         * 显示或者隐藏字号设置
+         */
+        changeFontSizeStatu: function(evt){
+            if(!this.showFontSizeContainer){
+                this.showEmojiContainer = false
+                this.showImageContainer = false
+                this.showLinkContainer = false
+                this.showVideoContainer = false
+            }
+            this.showFontSizeContainer = !this.showFontSizeContainer
         },
         /**
          * 编辑器获得焦点事件
@@ -394,6 +459,7 @@ export default {
             this.showEmojiContainer = false
             // this.showImageContainer = false
             // this.showLinkContainer = false
+            this.showFontSizeContainer = false
         },
         /**
          * 获取编辑器内容
@@ -422,7 +488,9 @@ export default {
                     if(resp.data.code == 200){
                         const imgUrl = resp.data.data.prxUrl + resp.data.data.fileName
                         // TODO
+                        this.insertParagraph()
                         this.insertHTML('<img src="' + imgUrl + '"/>');
+                        this.insertParagraph()
                     }else{
                         this.alert(resp.data.message || '上传图片失败')
                     }
@@ -538,8 +606,9 @@ export default {
 .editor-btn.image::before { content: '\f1c5'; }
 .editor-btn.link::before { content: '\f0c1'; }
 .editor-btn.video::before { content: '\f030'; }
+.editor-btn.fontSize::before { content: '\f034'; }
 .html-editor-content { width: 100%; height: 0; flex: 1; box-sizing: border-box; border: 1px solid #d9d9d9; border-top: none; padding: 0.2rem; }
-.html-editor-content>div { width: 100%; height: 100%; overflow-y: scroll; overflow-wrap: break-word; box-sizing: border-box; outline: none; word-break: break-all; line-height: 1rem; }
+.html-editor-content>div { width: 100%; height: 100%; overflow-y: scroll; overflow-wrap: break-word; box-sizing: border-box; outline: none; word-break: break-all; }
 .html-editor-body { width: 14.2rem; background-color: #efecec; position: absolute; left: 0; top: 1rem; border: 1px solid #d9d9d9; box-sizing: border-box; overflow: hidden; overflow-y: scroll; }
 .emoji-container { width: 100%; }
 .upload-btn { height: .75rem; cursor: pointer; line-height: .75rem; display: block; margin: auto; width: 4.5rem; text-align: center; padding: 0rem 0.5rem; background-color: #1414dc; color: white; border-radius: .125rem; }

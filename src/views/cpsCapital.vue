@@ -103,6 +103,7 @@ export default {
                 if(resp.status == 200){
                     if(resp.data.code == 200){
                         // do nothing
+                        this.alert('提现日志上传成功')
                     }else{
                         this.alert(resp.data.message || '上传提现日志失败')
                     }

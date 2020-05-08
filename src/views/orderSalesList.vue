@@ -141,7 +141,20 @@ export default {
             this.pageData.page = dt.page
             this.pageData['total_page'] = dt.total_page || dt.pageCount || 0
 
-            const plats = {'jd': '京东', 'pdd': '拼多多', 'tb': '淘宝', 'elm': '饿了么', 'mt': '美团'}
+            // const plats = {'jd': '京东', 'pdd': '拼多多', 'tb': '淘宝', 'elm': '饿了么', 'mt': '美团'}
+            const plats = {}
+            const options = [{
+                    value: '',
+                    text: '请选择'
+                }]
+            for(let idx = 0; idx < dt.platArr.length; idx++){
+                plats[dt.platArr[idx]['plat']] = dt.platArr[idx]['plat_name']
+                options.push({
+                    value: dt.platArr[idx]['plat'],
+                    text: dt.platArr[idx]['plat_name']
+                })
+            }
+            this.selectParams.options = Object.assign([], options)
             const fields = ['goods_id', 'goods_title', 'goods_price', 'sale_num', 'platform', 'plat_commission_amount', 'order_amount']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){

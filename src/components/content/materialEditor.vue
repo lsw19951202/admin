@@ -75,7 +75,8 @@ export default {
                     emoji: true,
                     image: true,
                     link: false,
-                    video: true
+                    video: true,
+                    fontSize: true
                 }
             },
             imageConfig: {
