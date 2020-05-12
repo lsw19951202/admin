@@ -89,10 +89,16 @@ export default {
             numToStr: this.numToStr,
             strToNum: this.strToNum,
             showCover: this.showCover,
-            hideCover: this.hideCover
+            hideCover: this.hideCover,
+            caculFloat: this.caculFloat
         }
     },
     methods: {
+        caculFloat: function(num1, num2){
+            num1 = parseInt(num1 * 100 + 0.5, 10)
+            num2 = parseInt(num2 * 100 + 0.5, 10)
+            return (num1 + num2) / 100
+        },
         showCover: function(){
             this.isShowCover = true
         },
@@ -101,6 +107,9 @@ export default {
         },
         // 数字加千分符
         numToStr: function(num){
+            if(num == 0){
+                return '0.00'
+            }
             num = num + ''
             let str = ''
             const numArr = num.split('.')
@@ -109,12 +118,16 @@ export default {
                 str = (lastNum < 10 ? ('00' + lastNum) : (lastNum < 100 ? ('0' + lastNum) : lastNum)) + ',' + str
                 numArr[0] = Math.floor(numArr[0]/1000)
             }
-            if(str.startsWith('00')){
-                str = str.substr(2, str.length - 3)
-            }else if(str.startsWith('0')){
-                str = str.substr(1, str.length - 2)
+            if(str == 0){
+                str = '0'
             }else{
-                str = str.substr(0, str.length - 1)
+                if(str.startsWith('00')){
+                    str = str.substr(2, str.length - 3)
+                }else if(str.startsWith('0')){
+                    str = str.substr(1, str.length - 2)
+                }else{
+                    str = str.substr(0, str.length - 1)
+                }
             }
             return str + (numArr[1] ? ('.' + numArr[1]) : '')
         },

@@ -22,7 +22,7 @@
                 <selector class="search-group" :value="sortType" :selectParams="sortTypeSelectParams" @selectOptsClicked="sortTypeSelectOptsClicked"></selector>
                 <button class="action-btn" @click="loadTBData(1)">搜索</button>
             </header>
-            <locked-table v-show="!showOrderList" :tbData="tbData" :tbStyle="tbStyle" @rowClicked="rowClicked"></locked-table>
+            <locked-table v-show="!showOrderList" :tbData="tbData" :tbType="lockedTBType" :tbStyle="tbStyle" @rowClicked="rowClicked"></locked-table>
             <div class="table-container hideScrollBar" v-show="showOrderList">
                 <detail-table style="width: 100rem;" :tbType="tbType" :tbData="orderListTBData" :tableHeader="tableHeader"></detail-table>
                 <!-- <locked-table :tbData="orderListTBData" :tbStyle="orderListTBStyle"></locked-table> -->
@@ -63,22 +63,13 @@ export default {
                 tableHeader: [],
                 tbData: [],
                 lockedRow: 1,
-                lockedCol: 0
+                lockedCol: 5
             },
-            // orderListTBData: {
-            //     tableHeader: setting.tableHeader.orderList,
-            //     tbData: [],
-            //     lockedRow: 1,
-            //     lockedCol: 0
-            // },
+            lockedTBType: 'userRankList',
             tbStyle: {
-                width: '90rem',
+                width: '110rem',
                 marginTop: '0.5rem'
             },
-            // orderListTBStyle: {
-            //     width: '100rem',
-            //     marginTop: '0.5rem'
-            // },
             tableHeader: setting.tableHeader.orderList,
             rankSelectParams: {
                 label: '职级',

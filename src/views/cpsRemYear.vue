@@ -51,7 +51,7 @@ import setting from '@/setting'
 import LockedTable from '@/components/content/LockedTable.vue'
 
 export default {
-    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'loadTBData', 'strToNum', 'numToStr'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'loadTBData', 'strToNum', 'numToStr', 'caculFloat'],
     components: {
         'flat-picker': flatPicker,
         'locked-table': LockedTable
@@ -158,11 +158,6 @@ export default {
         })
     },
     methods: {
-        caculFloat: function(num1, num2){
-            num1 = parseInt(num1 * 100 + 0.5, 10)
-            num2 = parseInt(num2 * 100 + 0.5, 10)
-            return (num1 + num2) / 100
-        },
         tabClicked: function(companyId){
             this.$data['company_id'] = companyId
         },

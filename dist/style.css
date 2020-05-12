@@ -72,7 +72,7 @@ input[type="text"], input[type="password"], input[type="num"] {
 .cover { width: 100%; height: 100%; position: fixed; left: 0; top: 0; background: #000000; opacity: .5; z-index: 9999; }
 
 /* ====== 左侧sidebar样式 ====== */
-.sidebar-wrapper { height: 100%; width: 10.42%; background: #212943; display: flex; flex-direction: column; overflow-y: scroll; position: relative; }
+.sidebar-wrapper { height: 100%; width: 13%; background: #212943; display: flex; flex-direction: column; overflow-y: scroll; position: relative; }
 .sidebar-logo { width: 100%; padding: 1.25em; box-sizing: border-box; }
 .sidebar-logo img { width: 100%; display: block; }
 

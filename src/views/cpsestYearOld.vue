@@ -40,7 +40,7 @@ import setting from '@/setting'
 import DetailTable from '@/components/content/table.vue'
 
 export default {
-    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadTBData', 'strToNum', 'numToStr'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadTBData', 'strToNum', 'numToStr', 'caculFloat'],
     components: {
         'flat-picker': flatPicker,
         'detail-table': DetailTable
@@ -107,11 +107,6 @@ export default {
         },
         exportData: function(){
             console.log('导出' + this.start_time + '数据')
-        },
-        caculFloat: function(num1, num2){
-            num1 = parseInt(num1 * 100 + 0.5, 10)
-            num2 = parseInt(num2 * 100 + 0.5, 10)
-            return (num1 + num2) / 100
         },
         createTBData: function(dt){
             const tbData = []

@@ -9,8 +9,8 @@ export default {
         userRankTableHeader: '/app/field',
         // 用户管理-用户排行-列表
         userRankList: '/user/ranking',
-        // 上传图片
-        uploadImage: '/file/upload',
+        // 上传图片,视频
+        uploadImage: '/upload',
         // 编辑素材
         editMaterial: '/material/edit',
         // 手工数据详情
@@ -153,7 +153,13 @@ export default {
         // cps推广年汇总
         cpsgenYear: '/finance/cpsgen/year',
         // cps资金管理导入提现日志
-        cpsImportTx: '/wx/import'
+        cpsImportTx: '/wx/import',
+        // cps代理人酬金账户-用户余额表-个人
+        cpsamountPersonal: '/finance/cpsamount/person',
+        // cps提现月提现
+        cpswithdrawMonth: '/finance/cpswithdraw/month',
+        // cps提现年提现
+        cpswithdrawYear: '/finance/cpswithdraw/year'
     },
     // 图片地址
     images: {
@@ -207,6 +213,14 @@ export default {
                 require('@/assets/menu_cps_normal.png')
             ],
             CPS推广费用: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            CPS代理人酬金账户: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            CPS提现: [
                 require('@/assets/menu_cps_selected.png'),
                 require('@/assets/menu_cps_normal.png')
             ]
@@ -323,6 +337,21 @@ export default {
         ],
         cpsgenMonth: [
             [{ name: '序号' }, { name: '日期' }, { name: '推新奖励' }, { name: '签到奖励' }, { name: '首单奖励' }, { name: '免单金额' }, { name: '合计' }, { name: '备注' }]
+        ],
+        cpsamountPersonal: [
+            [{ name: '序号', rowspan: 3 }, { name: '用户名称', rowspan: 3 }, { name: '姓名', rowspan: 3 }, { name: '期初余额', colspan: 6 }, { name: '本期暂估增加', colspan: 8 }, { name: '本期提现', colspan: 3 }, { name: '期末已提未付金额', rowspan: 3 }, { name: '暂估提现余额', colspan: 3 }, { name: '可提现余额', rowspan: 3 }, { name: '应付余额', rowspan: 3 }, { name: '备注', rowspan: 3 }],
+            [{ name: '已提未付', rowspan: 2 }, { name: '暂估提现余额', colspan: 3 }, { name: '可提现余额', rowspan: 2 }, { name: '应付提现余额', rowspan: 2 }, { name: '四川云瞻', colspan: 6 }, { name: '成都云瞻' }, { name: '本期暂估合计', rowspan: 2 }, { name: '申请提现', rowspan: 2 }, { name: '已提已付', rowspan: 2 }, { name: '已提未付', rowspan: 2 }, { name: '四川云瞻', rowspan: 2 }, { name: '成都云瞻', rowspan: 2 }, { name: '暂估提现合计', rowspan: 2 }],
+            [{ name: '四川云瞻' }, { name: '成都云瞻' }, { name: '暂估提现合计' }, { name: '推新奖励' }, { name: '签到奖励' }, { name: '首单奖励' }, { name: '推广费合计' }, { name: '代理人酬金' }, { name: '四川云瞻小计' }, { name: '代理人酬金' }]
+        ],
+        cpswithdrawMonth: [
+            [{ name: '序号', rowspan: 3 }, { name: '日期', rowspan: 3 }, { name: '本期暂估增加', colspan: 8 }, { name: '本期提现', colspan: 3 }, { name: '期末已提未付金额', rowspan: 3 }, { name: '暂估提现余额', colspan: 3 }, { name: '可提现余额', rowspan: 3 }, { name: '应付余额', rowspan: 3 }, { name: '备注', rowspan: 3 }],
+            [{ name: '四川云瞻', colspan: 6 }, { name: '成都云瞻' }, { name: '本期暂估合计', rowspan: 2 }, { name: '申请提现', rowspan: 2 }, { name: '已提已付', rowspan: 2 }, { name: '已提未付', rowspan: 2 }, { name: '四川云瞻', rowspan: 2 }, { name: '成都云瞻', rowspan: 2 }, { name: '暂估提现合计', rowspan: 2 }],
+            [{ name: '推新奖励' }, { name: '签到奖励' }, { name: '首单奖励' }, { name: '推广费合计' }, { name: '代理人酬金' }, { name: '四川云瞻小计' }, { name: '代理人酬金' }]
+        ],
+        cpswithdrawYear: [
+            [{ name: '序号', rowspan: 3 }, { name: '日期', rowspan: 3 }, { name: '本期暂估增加', colspan: 8 }, { name: '本期提现', colspan: 3 }, { name: '期末已提未付金额', rowspan: 3 }, { name: '暂估提现余额', colspan: 3 }, { name: '可提现余额', rowspan: 3 }, { name: '应付余额', rowspan: 3 }, { name: '备注', rowspan: 3 }],
+            [{ name: '四川云瞻', colspan: 6 }, { name: '成都云瞻' }, { name: '本期暂估合计', rowspan: 2 }, { name: '申请提现', rowspan: 2 }, { name: '已提已付', rowspan: 2 }, { name: '已提未付', rowspan: 2 }, { name: '四川云瞻', rowspan: 2 }, { name: '成都云瞻', rowspan: 2 }, { name: '暂估提现合计', rowspan: 2 }],
+            [{ name: '推新奖励' }, { name: '签到奖励' }, { name: '首单奖励' }, { name: '推广费合计' }, { name: '代理人酬金' }, { name: '四川云瞻小计' }, { name: '代理人酬金' }]
         ]
     },
     views: {
@@ -495,6 +524,21 @@ export default {
             name: 'cpsgen-year',
             title: 'CPS推广费用',
             subTitle1: '年度推广费用'
+        },
+        '/cpsamount/personal': {
+            name: 'cpsamount-personal',
+            title: 'CPS代理人酬金账户',
+            subTitle1: '个人账户'
+        },
+        '/cpswithdraw/month': {
+            name: 'cpswithdraw-month',
+            title: 'CPS提现',
+            subTitle1: '月度提现统计'
+        },
+        '/cpswithdraw/year': {
+            name: 'cpswithdraw-year',
+            title: 'CPS提现',
+            subTitle1: '年度提现统计'
         }
     }
 }

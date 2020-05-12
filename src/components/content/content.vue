@@ -42,6 +42,9 @@ import cpsRemMonthVue from '../../views/cpsRemMonth.vue'
 import cpsRemYearVue from '../../views/cpsRemYear.vue'
 import cpsGenMonthVue from '../../views/cpsGenMonth.vue'
 import cpsGenYearVue from '../../views/cpsGenYear.vue'
+import cpsAmountPersonalVue from '../../views/cpsAmountPersonal.vue'
+import cpsWithdrawMonthVue from '../../views/cpsWithdrawMonth.vue'
+import cpsWithdrawYearVue from '../../views/cpsWithdrawYear.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -91,7 +94,10 @@ export default {
         'cpsrem-month': cpsRemMonthVue,
         'cpsrem-year': cpsRemYearVue,
         'cpsgen-month': cpsGenMonthVue,
-        'cpsgen-year': cpsGenYearVue
+        'cpsgen-year': cpsGenYearVue,
+        'cpsamount-personal': cpsAmountPersonalVue,
+        'cpswithdraw-month': cpsWithdrawMonthVue,
+        'cpswithdraw-year': cpsWithdrawYearVue
     }
 }
 </script>

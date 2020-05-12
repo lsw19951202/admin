@@ -13,9 +13,12 @@
                     <td v-for="(col, idx) in row" :key="idx" :colspan="col.colspan || 1" :rowspan="col.rowspan || 1">
                         {{col.name}}
                     </td>
+                    <td v-if="tbType == 'userRankList'">
+                        操作
+                    </td>
                 </tr>
             </thead>
-            <tbody :style="'z-index: 51; left: ' + scrollPos.left + 'px; top: 1.5rem; position: absolute; background-color: white; border-right: 1px solid #E2E2E2;'" v-show="showFixedHeadCol" ref="fixedCol">
+            <tbody :style="'z-index: 51; left: ' + scrollPos.left + 'px; top: ' + (1.5 * tbData.lockedRow) + 'rem; position: absolute; background-color: white; border-right: 1px solid #E2E2E2;'" v-show="showFixedHeadCol" ref="fixedCol">
                 <tr v-for="(row, index) in getFixedCol" :key="index" style="background-color: white;">
                     <td v-for="(col, idx) in row" :key="idx" :colspan="col.colspan || 1" :rowspan="col.rowspan || 1">
                         {{col.text}}
@@ -23,9 +26,12 @@
                 </tr>
             </tbody>
             <tbody style="z-index: 50; background-color: white;" ref="tbody">
-                <tr v-for="(row, index) in tbData.tbData" :key="index" style="background-color: white;" @click.prevent.stop="rowClicked(row)">
+                <tr v-for="(row, index) in tbData.tbData" :key="index" style="background-color: white;">
                     <td v-for="(col, idx) in row" :key="idx" :colspan="col.colspan || 1" :rowspan="col.rowspan || 1">
                         {{col.text}}
+                    </td>
+                    <td v-if="tbType == 'userRankList'">
+                        <a href="javascript: void(0);" @click.prevent.stop="rowClicked(row)">查看订单</a>
                     </td>
                 </tr>
             </tbody>
@@ -34,7 +40,7 @@
 </template>
 <script>
 export default {
-    props: ['tbData', 'tbStyle'],
+    props: ['tbData', 'tbStyle', 'tbType'],
     data: () => {
         return {
             showFixedHeadCol: false,
@@ -47,34 +53,72 @@ export default {
     computed: {
         getFixedHeadCol: function() {
             const fixedHeadCol = []
-            for(let row = 0; row < this.tbData.lockedRow; row++){
-                fixedHeadCol.push([])
-                for(let col = 0; col < this.tbData.lockedCol; col++){
-                    fixedHeadCol[row].push(this.tbData.tableHeader[row][col])
+            if(this.tbData.tableHeader.length > 0){
+                for(let row = 0; row < this.tbData.lockedRow; row++){
+                    fixedHeadCol.push([])
+                }
+                for(let row = 0; row < this.tbData.lockedRow; row++){
+                    for(let col = 0; col < this.tbData.lockedCol; col++){
+                        if(fixedHeadCol[row].length >= this.tbData.lockedCol){
+                            break
+                        }
+                        fixedHeadCol[row].push(this.tbData.tableHeader[row][col])
+                        if((this.tbData.tableHeader[row][col].colspan || 1) > 1){
+                            for(let idx = 1; idx < (this.tbData.tableHeader[row][col].colspan || 1); idx++){
+                                fixedHeadCol[row].push({ text: 'needDel' })
+                            }
+                        }
+                        if((this.tbData.tableHeader[row][col].rowspan || 1) > 1){
+                            for(let idx = 1; idx < this.tbData.tableHeader[row][col].rowspan; idx++){
+                                for(let idxx = 0; idxx < (this.tbData.tableHeader[row][col].colspan || 1); idxx++){
+                                    fixedHeadCol[row + idx].push({ text: 'needDel' })
+                                }
+                            }
+                        }
+                    }
+                }
+                for(let row = 0; row < fixedHeadCol.length; row++){
+                    for(let col = 0; col < fixedHeadCol[row].length; col++){
+                        if(fixedHeadCol[row][col]['text'] == 'needDel'){
+                            fixedHeadCol[row].splice(col, 1)
+                            col--
+                        }
+                    }
+                    if(fixedHeadCol[row].length == 0){
+                        fixedHeadCol.splice(row, 1)
+                        row--
+                    }
                 }
             }
             return fixedHeadCol
         },
         getFixedCol: function() {
             const fixedCol = []
-            let idx = 0, rowspan = 1, maxCol = this.tbData.lockedCol
             for(let row = 0; row < this.tbData.tbData.length; row++){
                 fixedCol.push([])
-                if(idx == 0 || idx == rowspan){
-                    rowspan = 1
-                    for(let ii = 0; ii < this.tbData.lockedCol; ii++){
-                        rowspan = Math.max(this.tbData.tbData[row][ii]['rowspan'] || 1, rowspan);
+            }
+            for(let row = 0; row < this.tbData.tbData.length; row++){
+                for(let col = 0; col < this.tbData.lockedCol; col++){
+                    if(fixedCol[row].length >= this.tbData.lockedCol){
+                        break
                     }
-                    idx = 0
+                    for(let idx = 0; idx < (this.tbData.tbData[row][col].rowspan || 1); idx++){
+                        for(let idxx = 0; idxx < (this.tbData.tbData[row][col].colspan || 1); idxx++){
+                            fixedCol[row + idx].push((idx == 0 && idxx == 0) ? this.tbData.tbData[row][col] : { text: 'needDel' })
+                        }
+                    }
                 }
-                if(idx == 0){
-                    maxCol = this.tbData.lockedCol
-                }else{
-                    maxCol = this.tbData.lockedCol - 1
+            }
+            for(let row = 0; row < fixedCol.length; row++){
+                for(let col = 0; col < fixedCol[row].length; col++){
+                    if(fixedCol[row][col]['text'] == 'needDel'){
+                        fixedCol[row].splice(col, 1)
+                        col--
+                    }
                 }
-                idx++
-                for(let col = 0; col < maxCol; col++){
-                    fixedCol[row].push(this.tbData.tbData[row][col])
+                if(fixedCol[row].length == 0){
+                    fixedCol.splice(row, 1)
+                    row--
                 }
             }
             return fixedCol
@@ -115,6 +159,7 @@ export default {
                     td.style.width = theadSize[idx][idxx] + 'px'
                     td.style.maxWidth = theadSize[idx][idxx] + 'px'
                     td.style.minWidth = theadSize[idx][idxx] + 'px'
+                    td.style.height = fixedHead.children[idx].children[idxx].offsetHeight + 'px'
                 }
             }
             // 设置表头大小
