@@ -158,7 +158,7 @@ export default {
             })
         },
         rowClicked: function(dt){
-            this.userId = dt[0].text
+            this.userId = dt[1].text
             this.loadOrderListTBData(1)
         },
         loadTBData: function(pageNum){
