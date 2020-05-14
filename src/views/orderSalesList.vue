@@ -19,13 +19,21 @@
                     </div>
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeEnd" placeholder="结束时间"></flat-picker>
                 </div>
-                <button class="action-btn" @click="loadTBData(1)">搜索</button>
-                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="createTimeBegin + '.xlsx'">导出</a>
+                <button class="action-btn" @click="clearCheckedGoodsAndLoadData">搜索</button>
+                <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="createTimeBegin + '.xlsx'">导出全部</a>
             </header>
             <div class="table-container hideScrollBar">
-                <detail-table :tbData="tbData" :tbType="tbType" :tableHeader="tableHeader"></detail-table>
+                <detail-table :tbData="tbData" :checkedArray="checkedGoods" :tbType="tbType" :tableHeader="tableHeader" @changeCheckStatus="changeCheckStatus"></detail-table>
             </div>
-            <page :pageData="pageData" @loadList="loadTBData"></page>
+            <div class="page-footer" style="display: flex;">
+                <div style="margin-top: .3rem; height: .875rem; line-height: .875rem;">
+                    <input @click="changeAllGoodsCheckStatu($event)" type="checkbox" :checked="allGoodsChecked" style="margin-left: 1rem;" id="checkAllGoods">
+                    <label for="checkAllGoods" style="font-size: .375rem; color: #666666; display: inline-block; height: 100%; line-height: 1rem; margin-left: .3125rem; vertical-align: top;">全选</label>
+                    <button class="action-btn" @click="exportCheckedGoods">导出</button>
+                    <a class="action-btn" style="display: none;" ref="exportXlsx">导出</a>
+                </div>
+                <page style="width: 0; flex: 1;" :pageData="pageData" @loadList="loadTBData"></page>
+            </div>
         </div>
     </div>
 </template>
@@ -62,7 +70,7 @@ export default {
             goodsTitle: '',
             platform: '',
             goodsId: '',
-            tbType: 'common',
+            tbType: 'orderSalesList',
             tbData: [],
             pageData: {
                 total: 0,
@@ -93,7 +101,9 @@ export default {
             },
             createTimeBegin: nStr,
             createTimeEnd: nStr,
-            tableHeader: setting.tableHeader.orderSalesList
+            tableHeader: setting.tableHeader.orderSalesList,
+            // 所有被选中的商品的ID
+            checkedGoods: []
         }
     },
     created: function(){
@@ -104,9 +114,60 @@ export default {
             return setting.baseUrl + setting.urls.appSaleRank + '?goodsTitle=' + this.goodsTitle + '&goodsId=' + this.goodsId + '&platform=' + this.platform
                 + '&page=' + this.pageData.page + '&createTimeBegin=' + this.createTimeBegin + '&is_excel=1&skey=' + this.$cookies.get('skey')
                 + '&createTimeEnd=' + this.createTimeEnd
+        },
+        allGoodsChecked: function(){
+            let flag = true
+            for(let idx = 0; idx < this.tbData.length; idx++){
+                if(this.tbData[idx][0] != '--' && this.checkedGoods.indexOf(this.tbData[idx][0]) == -1){
+                    flag = false
+                    break
+                }
+            }
+            return flag
         }
     },
     methods: {
+        exportCheckedGoods: function(){
+            if(this.checkedGoods.length == 0){
+                this.alert('请先选择要导出的商品')
+                return
+            }
+            this.showLoading()
+            request({
+                url: setting.urls.appSaleRank,
+                method: 'get',
+                responseType: 'blob',
+                params: {
+                    goodsTitle: this.goodsTitle,
+                    goodsId: this.goodsId,
+                    platform: this.platform,
+                    page: 1,
+                    createTimeBegin: this.createTimeBegin,
+                    createTimeEnd: this.createTimeEnd,
+                    'is_excel': 1,
+                    'goods_arr': this.checkedGoods.join(',')
+                }
+            }).then(rst => {
+                if(rst.status == 200){
+                    const url = window.URL.createObjectURL(new Blob([rst.data]))
+                    const link = this.$refs.exportXlsx
+                    link.href = url
+                    link.setAttribute('download', '商品列表.xlsx')
+                    link.click()
+                    this.checkedGoods = Object.assign([])
+                }else{
+                    this.alert('导出商品列表失败')
+                }
+            }).catch(e => {
+                this.alert('导出商品列表失败')
+            }).then(() => {
+                this.hideLoading()
+            })
+        },
+        clearCheckedGoodsAndLoadData: function(){
+            this.checkedGoods = Object.assign([])
+            this.loadTBData(1)
+        },
         loadTBData: function(pageNum){
             this.showLoading()
             request({
@@ -172,10 +233,38 @@ export default {
         },
         selectOptsClicked: function(dt){
             this.platform = dt
+        },
+        changeAllGoodsCheckStatu: function(e){
+            const checked = e.target.checked
+            for(let idx = 0; idx < this.tbData.length; idx++){
+                if(this.tbData[idx][0] != '--'){
+                    if(checked){
+                        if(this.checkedGoods.indexOf(this.tbData[idx][0]) == -1){
+                            this.checkedGoods.push(this.tbData[idx][0])
+                        }
+                    }else{
+                        if(this.checkedGoods.indexOf(this.tbData[idx][0]) >= 0){
+                            this.checkedGoods.splice(this.checkedGoods.indexOf(this.tbData[idx][0]), 1)
+                        }
+                    }
+                }
+            }
+        },
+        changeCheckStatus: function(idx){
+            if(this.tbData[idx][0] != '--'){
+                if(this.checkedGoods.indexOf(this.tbData[idx][0]) >= 0){
+                    this.checkedGoods.splice(this.checkedGoods.indexOf(this.tbData[idx][0]), 1)
+                }else{
+                    this.checkedGoods.push(this.tbData[idx][0])
+                }
+            }
         }
     }
 }
 </script>
 <style scoped>
 .detail-container { background-color: #f2f2f2; padding: 0; margin: 0; overflow-y: scroll; }
+input[type="checkbox"] { position: relative; width: 0.625rem; height: .625rem; }
+input[type="checkbox"]::after { background-color: #fff; background-image: url(../assets/check.png); position: absolute; content: ' '; background-repeat: no-repeat; background-position: center center; background-size: 100% 100%; width: 0.625rem; height: 0.625rem; }
+input[type="checkbox"]:checked::after { background-image: url(../assets/checked.png); }
 </style>

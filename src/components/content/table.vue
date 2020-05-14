@@ -71,6 +71,14 @@
                 </td>
             </tr>
         </tbody>
+        <tbody v-if="tbType == 'orderSalesList'" ref="tbody">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td style="width: 2.5625rem; text-align: center;">
+                    <input type="checkbox" @click="changeCheckStatus($event, index)" :checked="tbRow[0] != '--' && checkedArray.indexOf(tbRow[0]) >= 0">
+                </td>
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">{{tbCol}}</td>
+            </tr>
+        </tbody>
         <tbody v-if="tbType == 'userList'" ref="tbody" class="user-list">
             <tr v-for="(tbRow, index) in tbData" v-bind:key="index">
                 <td style="width: 2.5625rem; text-align: center;">
@@ -140,7 +148,7 @@
 import switchProgress from '@/components/common/switch.vue'
 
 export default {
-    props: ['tableHeader', 'tbData', 'tbType', 'tableHeaderFixed', 'tableBodyClick', 'reduceData', 'selectUserList'],
+    props: ['tableHeader', 'tbData', 'tbType', 'tableHeaderFixed', 'tableBodyClick', 'reduceData', 'selectUserList', 'checkedArray'],
     data: () => {
         return {
             'sortType': ''
@@ -181,7 +189,7 @@ export default {
             // e.target.focus()
         },
         changeCheckStatus: function(e, idx){
-            this.$emit('checkUser', idx)
+            this.$emit('changeCheckStatus', idx)
         },
         changeUserRank: function(user, idx){
             this.$emit('changeUserRank', {user: user, idx: idx})

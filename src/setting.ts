@@ -283,7 +283,7 @@ export default {
             [{ name: '序号', colspan: 1 }, { name: '类别', colspan: 1 }, { name: '关键字', colspan: 1 }, { name: '标题', colspan: 1 }, { name: '状态', colspan: 1 }, { name: '内容', colspan: 1 }, { name: '图片', colspan: 1 }, { name: '创建人', colspan: 1 }, { name: '修改人', colspan: 1 }, { name: '创建时间', colspan: 1 }, { name: '修改时间', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         orderSalesList: [
-            [{ name: '商品ID' }, { name: '商品名称' }, { name: '商品价格' }, { name: '销售数量' }, { name: '平台' }, { name: '付款预估收入' }, { name: '付款金额' }]
+            [{ name: '' }, { name: '商品ID' }, { name: '商品名称' }, { name: '商品价格' }, { name: '销售数量' }, { name: '平台' }, { name: '付款预估收入' }, { name: '付款金额' }]
         ],
         teamSortList: [
             [{ name: '用户ID' }, { name: '级别' }, { name: '手机号' }, { name: '昵称' }, { name: '微信号' }, { name: '数量|金额' }, { name: '统计时间' }, { name: '上级ID' }, { name: '上级昵称' }]

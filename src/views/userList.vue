@@ -30,7 +30,7 @@
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
             </header>
             <div class="table-container hideScrollBar">
-                <detail-table v-bind:tbType="tbType" v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" @showMyTeam="loadTeamList" @changeUserRank="changeUserRank" @checkUser="changeUserCheckStatu" v-bind:selectUserList="selectedUserList"></detail-table>
+                <detail-table v-bind:tbType="tbType" v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" @showMyTeam="loadTeamList" @changeUserRank="changeUserRank" @changeCheckStatus="changeUserCheckStatu" v-bind:selectUserList="selectedUserList"></detail-table>
             </div>
             <div class="page-footer" style="display: flex;">
                 <div style="margin-top: .3rem; height: .875rem; line-height: .875rem;">
