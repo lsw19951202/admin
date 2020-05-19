@@ -45,6 +45,7 @@ import cpsGenYearVue from '../../views/cpsGenYear.vue'
 import cpsAmountPersonalVue from '../../views/cpsAmountPersonal.vue'
 import cpsWithdrawMonthVue from '../../views/cpsWithdrawMonth.vue'
 import cpsWithdrawYearVue from '../../views/cpsWithdrawYear.vue'
+import activityPrizepoollistVue from '../../views/activityPrizepoollist.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -97,7 +98,8 @@ export default {
         'cpsgen-year': cpsGenYearVue,
         'cpsamount-personal': cpsAmountPersonalVue,
         'cpswithdraw-month': cpsWithdrawMonthVue,
-        'cpswithdraw-year': cpsWithdrawYearVue
+        'cpswithdraw-year': cpsWithdrawYearVue,
+        'activity-prizepoollist': activityPrizepoollistVue
     }
 }
 </script>

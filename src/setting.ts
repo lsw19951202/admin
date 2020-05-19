@@ -7,6 +7,8 @@ export default {
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
+        // appFields
+        appFields: '/app/field',
         // 用户管理-用户排行-列表
         userRankList: '/user/ranking',
         // 上传图片,视频
@@ -159,7 +161,11 @@ export default {
         // cps提现月提现
         cpswithdrawMonth: '/finance/cpswithdraw/month',
         // cps提现年提现
-        cpswithdrawYear: '/finance/cpswithdraw/year'
+        cpswithdrawYear: '/finance/cpswithdraw/year',
+        // 奖金池活动列表
+        prizepoollist: '/ypj/prizepoollist',
+        // 奖金池活动详情
+        prizepoolinfo: '/ypj/prizepoolinfo'
     },
     // 图片地址
     images: {
@@ -223,6 +229,10 @@ export default {
             CPS提现: [
                 require('@/assets/menu_cps_selected.png'),
                 require('@/assets/menu_cps_normal.png')
+            ],
+            活动统计: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
             ]
         },
         logo: {
@@ -275,6 +285,9 @@ export default {
         ],
         orderList: [
             [{ name: '订单编号', colspan: 1 }, { name: '订单标题', colspan: 1 }, { name: '下单用户', colspan: 1 }, { name: '下单用户头像', colspan: 1 }, { name: '订单金额', colspan: 1 }, { name: '平台佣金', colspan: 1 }, { name: '用户佣金', colspan: 1 }, { name: '订单状态', colspan: 1 }, { name: '订单平台', colspan: 1 }, { name: '用户直接返佣', colspan: 1 }, { name: '用户间接返佣', colspan: 1 }, { name: '团长返佣', colspan: 1 }, { name: '总监返佣', colspan: 1 }, { name: '订单创建时间', colspan: 1 }, { name: '订单更新时间', colspan: 1 }, { name: '淘宝子订单号', colspan: 1 }, { name: '商品数量', colspan: 1 }, { name: '商品单价', colspan: 1 }, { name: '付款金额', colspan: 1 }, { name: '佣金比例', colspan: 1 }, { name: '佣金金额', colspan: 1 }, { name: '补贴比例', colspan: 1 }, { name: '补贴金额', colspan: 1 }, { name: '提成比例', colspan: 1 }, { name: '技术服务费比例', colspan: 1 }, { name: '技术服务费', colspan: 1 }, { name: '付款预估收益', colspan: 1 }, { name: '结算预估收益', colspan: 1 }, { name: '付定金时间', colspan: 1 }, { name: '定金淘客付款时间', colspan: 1 }, { name: '定金付款金额', colspan: 1 }]
+        ],
+        orderList1: [
+            [{ name: '订单编号', colspan: 1 }, { name: '订单标题', colspan: 1 }, { name: '下单用户', colspan: 1 }, { name: '订单金额', colspan: 1 }, { name: '平台佣金', colspan: 1 }, { name: '用户佣金', colspan: 1 }, { name: '订单状态', colspan: 1 }, { name: '订单平台', colspan: 1 }, { name: '用户直接返佣', colspan: 1 }, { name: '用户间接返佣', colspan: 1 }, { name: '团长返佣', colspan: 1 }, { name: '总监返佣', colspan: 1 }, { name: '订单创建时间', colspan: 1 }, { name: '订单更新时间', colspan: 1 }, { name: '淘宝子订单号', colspan: 1 }, { name: '商品数量', colspan: 1 }, { name: '商品单价', colspan: 1 }, { name: '付款金额', colspan: 1 }, { name: '佣金比例', colspan: 1 }, { name: '佣金金额', colspan: 1 }, { name: '补贴比例', colspan: 1 }, { name: '补贴金额', colspan: 1 }, { name: '提成比例', colspan: 1 }, { name: '技术服务费比例', colspan: 1 }, { name: '技术服务费', colspan: 1 }, { name: '付款预估收益', colspan: 1 }, { name: '结算预估收益', colspan: 1 }, { name: '付定金时间', colspan: 1 }, { name: '定金淘客付款时间', colspan: 1 }, { name: '定金付款金额', colspan: 1 }]
         ],
         withdrawList: [
             [{ name: '序号', colspan: 1 }, { name: '提现用户', colspan: 1 }, { name: '提现金额', colspan: 1 }, { name: '提现状态', colspan: 1 }, { name: '提现平台', colspan: 1 }, { name: '提现创建时间', colspan: 1 }, { name: '提现变动时间', colspan: 1 }, { name: '操作', colspan: 1 }]
@@ -539,6 +552,11 @@ export default {
             name: 'cpswithdraw-year',
             title: 'CPS提现',
             subTitle1: '年度提现统计'
+        },
+        '/activity/prizepoollist': {
+            name: 'activity-prizepoollist',
+            title: '活动统计',
+            subTitle1: '奖金池统计'
         }
     }
 }

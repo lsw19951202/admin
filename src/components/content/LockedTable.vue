@@ -33,6 +33,10 @@
                     <td v-if="tbType == 'userRankList'">
                         <a href="javascript: void(0);" @click.prevent.stop="rowClicked(row)">查看订单</a>
                     </td>
+                    <td v-if="tbType == 'poolList'">
+                        <a href="javascript: void(0);" @click.prevent.stop="rowClicked(row, 'prize')">奖励详情</a>
+                        <a style="margin-left: .5rem;" href="javascript: void(0);" @click.prevent.stop="rowClicked(row, 'order')">订单详情</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -133,8 +137,12 @@ export default {
     },
     methods: {
         // 行点击事件
-        rowClicked: function(dt){
-            this.$emit('rowClicked', dt)
+        rowClicked: function(dt, tp){
+            if(tp){
+                this.$emit('rowClicked', {tp: tp, data: dt})
+            }else{
+                this.$emit('rowClicked', dt)
+            }
         },
         resizeFixedHead: function(){
             this.showFixedHeadCol = false
