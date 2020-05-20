@@ -3,6 +3,22 @@
         <div class="detail-data-box" v-show="showPoolList">
             <header class="search-header">
                 <selector class="search-group" :value="is_new" :selectParams="selectParams" @selectOptsClicked="selectOptsClicked"></selector>
+                <div class="search-group">
+                    <label>用户ID:</label>
+                    <input type="text" placeholder="请输入" v-model="user_id">
+                </div>
+                <div class="search-group">
+                    <label>用户昵称:</label>
+                    <input type="text" placeholder="请输入" v-model="nick_name">
+                </div>
+                <div class="search-group">
+                    <label>电话号码:</label>
+                    <input type="text" placeholder="请输入" v-model="mobile">
+                </div>
+                <div class="search-group">
+                    <label>上级ID:</label>
+                    <input type="text" placeholder="请输入" v-model="parent_id">
+                </div>
                 <button class="action-btn" @click="loadPoolList(1)">搜索</button>
                 <a class="action-btn" style="display: inline-block;" download="奖金池活动列表.xlsx" :href="downloadUrl">导出</a>
             </header>
@@ -142,7 +158,11 @@ export default {
                 total: 0,
                 page: 1,
                 'total_page': 0
-            }
+            },
+            'user_id': '',
+            'nick_name': '',
+            'mobile': '',
+            'parent_id': ''
         }
     },
     computed: {
@@ -155,7 +175,7 @@ export default {
         return Promise.all([
             this.loadFields(setting.urls.appFields, {'field_type': 'prizePoolList'}),
             this.loadFields(setting.urls.appFields, {'field_type': 'prizePoolInfo'}),
-            this.loadTBData(setting.urls.prizepoollist, {'is_new': this.is_new, page: 1}, 'get')
+            this.loadTBData(setting.urls.prizepoollist, {'is_new': this.is_new, page: 1, 'user_id': this.user_id, 'nick_name': this.nick_name, mobile: this.mobile, 'parent_id': this.parent_id}, 'get')
         ]).then(rst => {
             this.poolListFields = rst[0].fields
             this.poolDetailFields = rst[1].fields
@@ -183,6 +203,10 @@ export default {
                 type: 'poolList',
                 search: {
                     'is_new': this.is_new,
+                    'user_id': this.user_id,
+                    'nick_name': this.nick_name,
+                    'mobile': this.mobile,
+                    'parent_id': this.parent_id,
                     page: this.pageData.page
                 },
                 pageData: this.pageData,
@@ -232,6 +256,10 @@ export default {
                 this.pageData = tmpData.pageData
                 this.poolListData = tmpData.data
                 this.$data['is_new'] = tmpData.search['is_new']
+                this.$data['user_id'] = tmpData.search['user_id']
+                this.$data['nick_name'] = tmpData.search['nick_name']
+                this.$data['mobile'] = tmpData.search['mobile']
+                this.$data['parent_id'] = tmpData.search['parent_id']
                 this.showPoolDetail = false
                 this.showOrderList = false
                 this.showPoolList = true
@@ -245,7 +273,7 @@ export default {
         },
         loadPoolList: function(pageNum){
             this.showLoading()
-            return this.loadTBData(setting.urls.prizepoollist, {'is_new': this.is_new, 'page': pageNum || 1})
+            return this.loadTBData(setting.urls.prizepoollist, {'is_new': this.is_new, 'page': pageNum || 1, 'user_id': this.user_id, 'nick_name': this.nick_name, mobile: this.mobile, 'parent_id': this.parent_id})
                 .then(rst => {
                     this.poolListData = {
                         tableHeader: this.poolListData.tableHeader,
@@ -255,6 +283,10 @@ export default {
                     }
 
                     this.uperList[0].search.page = pageNum || 1
+                    this.uperList[0].search['user_id'] = this.user_id
+                    this.uperList[0].search['nick_name'] = this.nick_name
+                    this.uperList[0].search['mobile'] = this.mobile
+                    this.uperList[0].search['parent_id'] = this.parent_id
                     this.uperList[0].pageData = this.pageData
                     this.uperList[0].data = this.poolListData
                 }).catch(e => {
