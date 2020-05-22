@@ -142,7 +142,7 @@ export default {
             poolListFields: [],
             poolDetailFields: [],
             orderListFields: ['platOrderNo', 'goodsTitle', 'buyerName', 'goods_id', 'orderAmount', 'platCommissionAmount', 'buyerCommissionAmount', 'orderStatus', 'tbType', 'oneProfit', 'twoProfit', 'leaderProfit', 'directorProfit', 'platCreateTime', 'lastUpdateTime', 'subOrderNo', 'goodsNum', 'goodsPrice', 'payAmount', 'platCommissionRate', 'commissionAmount', 'subsidyRate', 'subsidyAmount', 'subSideRate', 'technicalServiceRate', 'technicalServiceFee', 'paymentEstimateFee', 'settleEstimateFee', 'depositTime', 'tbDepositTime', 'depositAmount'],
-            prizeListFields: ['desc'],
+            prizeListFields: [],
             'reward_amount': 0,
             'total_amount': 0,
             'valid_invite_num': 0,
@@ -183,7 +183,7 @@ export default {
             'mobile': '',
             'parent_id': '',
             prizeListData: {
-                tableHeader: setting.tableHeader.prizeList,
+                tableHeader: [],
                 tbData: [],
                 lockedRow: 1,
                 lockedCol: 1
@@ -200,15 +200,19 @@ export default {
         return Promise.all([
             this.loadFields(setting.urls.appFields, {'field_type': 'prizePoolList'}),
             this.loadFields(setting.urls.appFields, {'field_type': 'prizePoolInfo'}),
-            this.loadTBData(setting.urls.prizepoollist, {'is_new': this.is_new, page: 1, 'user_id': this.user_id, 'nick_name': this.nick_name, mobile: this.mobile, 'parent_id': this.parent_id}, 'get')
+            this.loadTBData(setting.urls.prizepoollist, {'is_new': this.is_new, page: 1, 'user_id': this.user_id, 'nick_name': this.nick_name, mobile: this.mobile, 'parent_id': this.parent_id}, 'get'),
+            this.loadFields(setting.urls.appFields, {'field_type': 'prizePoolLog'})
         ]).then(rst => {
             this.poolListFields = rst[0].fields
             this.poolDetailFields = rst[1].fields
+            this.prizeListFields = rst[3].fields
 
             const poolListTableHeader = rst[0].tableHeader
             poolListTableHeader[0].push({name: '操作'})
             const poolDetailTableHeader = rst[1].tableHeader
             poolDetailTableHeader[0].push({name: '操作'})
+            const prizeListTableHeader = rst[3].tableHeader
+            prizeListTableHeader[0].unshift({name: '序号'})
 
             this.poolListData = {
                 tableHeader: poolListTableHeader,
@@ -222,6 +226,13 @@ export default {
                 tbData: [],
                 lockedRow: this.poolDetailData.lockedRow,
                 lockedCol: this.poolDetailData.lockedCol
+            }
+
+            this.prizeListData = {
+                tableHeader: prizeListTableHeader,
+                tbData: [],
+                lockedRow: this.prizeListData.lockedRow,
+                lockedCol: this.prizeListData.lockedCol
             }
 
             this.uperList.push({
