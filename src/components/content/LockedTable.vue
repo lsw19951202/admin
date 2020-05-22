@@ -36,6 +36,7 @@
                     <td v-if="tbType == 'poolList'">
                         <a href="javascript: void(0);" @click.prevent.stop="rowClicked(row, 'prize')">奖励详情</a>
                         <a style="margin-left: .5rem;" href="javascript: void(0);" @click.prevent.stop="rowClicked(row, 'order')">订单详情</a>
+                        <a style="margin-left: .5rem;" href="javascript: void(0);" @click.prevent.stop="rowClicked(row, 'prizeList')">奖金列表</a>
                     </td>
                 </tr>
             </tbody>

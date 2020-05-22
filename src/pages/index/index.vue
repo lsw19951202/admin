@@ -90,7 +90,8 @@ export default {
             strToNum: this.strToNum,
             showCover: this.showCover,
             hideCover: this.hideCover,
-            caculFloat: this.caculFloat
+            caculFloat: this.caculFloat,
+            loadContentByUrl: this.loadContentByUrl
         }
     },
     methods: {
@@ -318,6 +319,17 @@ export default {
             this.itemIdx = data.itemIdx
             let url = this.menuData[data.itemIdx]['auth_detail'][data.subItemIdx].url;
             url = url.indexOf('/') == 0 ? url : ('/' + url)
+            // if(this.currentView == setting.views[url].name){
+            //     this.$children[4].reload()
+            // }else{
+            //     this.currentView = setting.views[url].name
+            //     this.title = setting.views[url].title
+            //     this.subTitle1 = setting.views[url].subTitle1
+            // }
+            // this.$children[4].subTitle2 = ''
+            this.loadContentByUrl(url)
+        },
+        loadContentByUrl: function(url){
             if(this.currentView == setting.views[url].name){
                 this.$children[4].reload()
             }else{

@@ -165,7 +165,9 @@ export default {
         // 奖金池活动列表
         prizepoollist: '/ypj/prizepoollist',
         // 奖金池活动详情
-        prizepoolinfo: '/ypj/prizepoolinfo'
+        prizepoolinfo: '/ypj/prizepoolinfo',
+        // 奖金池活动奖金列表
+        prizeList: '/ypj/prizepoollog'
     },
     // 图片地址
     images: {
@@ -365,6 +367,15 @@ export default {
             [{ name: '序号', rowspan: 3 }, { name: '日期', rowspan: 3 }, { name: '本期暂估增加', colspan: 8 }, { name: '本期提现', colspan: 3 }, { name: '期末已提未付金额', rowspan: 3 }, { name: '暂估提现余额', colspan: 3 }, { name: '可提现余额', rowspan: 3 }, { name: '应付余额', rowspan: 3 }, { name: '备注', rowspan: 3 }],
             [{ name: '四川云瞻', colspan: 6 }, { name: '成都云瞻' }, { name: '本期暂估合计', rowspan: 2 }, { name: '申请提现', rowspan: 2 }, { name: '已提已付', rowspan: 2 }, { name: '已提未付', rowspan: 2 }, { name: '四川云瞻', rowspan: 2 }, { name: '成都云瞻', rowspan: 2 }, { name: '暂估提现合计', rowspan: 2 }],
             [{ name: '推新奖励' }, { name: '签到奖励' }, { name: '首单奖励' }, { name: '推广费合计' }, { name: '代理人酬金' }, { name: '四川云瞻小计' }, { name: '代理人酬金' }]
+        ],
+        sxyTag: [
+            [{ name: '标签名称' }, { name: '类型' }, { name: '排序' }, { name: '创建人' }, { name: '创建时间' }, { name: '修改时间' }, { name: '操作' }]
+        ],
+        sxyArticle: [
+            [{ name: '序号' }, { name: '文章标题' }, { name: '封面图' }, { name: '状态' }, { name: '类型' }, { name: '标签' }, { name: '创建时间' }, { name: '修改时间' }, { name: '操作人' }, { name: '操作' }]
+        ],
+        prizeList: [
+            [{ name: '序号' }, { name: '奖励详情' }]
         ]
     },
     views: {
@@ -557,6 +568,16 @@ export default {
             name: 'activity-prizepoollist',
             title: '活动统计',
             subTitle1: '奖金池统计'
+        },
+        '/sxy/tag': {
+            name: 'sxy-tag',
+            title: '素材管理',
+            subTitle1: '标签'
+        },
+        '/sxy/article': {
+            name: 'sxy-article',
+            title: '素材管理',
+            subTitle1: '文章'
         }
     }
 }

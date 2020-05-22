@@ -474,7 +474,7 @@ export default {
         uploadImage: function(){
             console.log(this.$refs.imageIpt.files)
             this.showLoading()
-            const formData = new FormData()
+            const formData = new FormData(this.$refs.imageIpt)
             request({
                 url: setting.urls.uploadImage,
                 method: 'post',

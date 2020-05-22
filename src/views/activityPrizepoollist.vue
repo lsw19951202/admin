@@ -71,6 +71,15 @@
                 <page style="width: 0; flex: 1;" :pageData="orderListPageData" @loadList="loadOrderList"></page>
             </div>
         </div>
+        <div class="detail-data-box" v-show="showPrizeList">
+            <locked-table :tbData="prizeListData" :tbStyle="prizeListStyle"></locked-table>
+            <div class="page-footer" style="display: flex;">
+                <div style="margin-top: .3rem; height: .875rem; line-height: .875rem;">
+                    <button class="action-btn" @click="loadUper">返回上级</button>
+                </div>
+                <page style="width: 0; flex: 1;" :pageData="prizeListPageData" @loadList="loadPrizeList"></page>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -92,6 +101,7 @@ export default {
             showPoolList: true,
             showPoolDetail: false,
             showOrderList: false,
+            showPrizeList: false,
             'is_new': 0,
             selectParams: {
                 label: '是否新人',
@@ -119,6 +129,9 @@ export default {
             orderListStyle: {
                 width: '100rem'
             },
+            prizeListStyle: {
+                width: '100%'
+            },
             tbType: 'poolList',
             pageData: {
                 'total': 0,
@@ -129,6 +142,7 @@ export default {
             poolListFields: [],
             poolDetailFields: [],
             orderListFields: ['platOrderNo', 'goodsTitle', 'buyerName', 'goods_id', 'orderAmount', 'platCommissionAmount', 'buyerCommissionAmount', 'orderStatus', 'tbType', 'oneProfit', 'twoProfit', 'leaderProfit', 'directorProfit', 'platCreateTime', 'lastUpdateTime', 'subOrderNo', 'goodsNum', 'goodsPrice', 'payAmount', 'platCommissionRate', 'commissionAmount', 'subsidyRate', 'subsidyAmount', 'subSideRate', 'technicalServiceRate', 'technicalServiceFee', 'paymentEstimateFee', 'settleEstimateFee', 'depositTime', 'tbDepositTime', 'depositAmount'],
+            prizeListFields: ['desc'],
             'reward_amount': 0,
             'total_amount': 0,
             'valid_invite_num': 0,
@@ -148,6 +162,11 @@ export default {
                 total: 0,
                 'total_page': 0
             },
+            prizeListPageData: {
+                page: 1,
+                total: 0,
+                'total_page': 0
+            },
             orderListData: {
                 tableHeader: setting.tableHeader.orderList1,
                 tbData: [],
@@ -162,7 +181,13 @@ export default {
             'user_id': '',
             'nick_name': '',
             'mobile': '',
-            'parent_id': ''
+            'parent_id': '',
+            prizeListData: {
+                tableHeader: setting.tableHeader.prizeList,
+                tbData: [],
+                lockedRow: 1,
+                lockedCol: 1
+            }
         }
     },
     computed: {
@@ -232,6 +257,7 @@ export default {
                     this.showPoolList = false
                     this.showOrderList = false
                     this.showPoolDetail = true
+                    this.showPrizeList = false
                 })
             }else if(dt.tp == 'order'){
                 this.uperList.push({
@@ -245,6 +271,21 @@ export default {
                     this.showPoolDetail = false
                     this.showPoolList = false
                     this.showOrderList = true
+                    this.showPrizeList = false
+                })
+            }else if(dt.tp == 'prizeList'){
+                this.uperList.push({
+                    type: 'prizeList',
+                    search: {
+                        'user_id': this.uperList.length == 1 ? dt.data[1].text : dt.data[0].text,
+                        page: 1
+                    }
+                })
+                this.loadPrizeList(1).then(() => {
+                    this.showPoolList = false
+                    this.showPoolDetail = false
+                    this.showOrderList = false
+                    this.showPrizeList = true
                 })
             }
         },
@@ -262,12 +303,14 @@ export default {
                 this.$data['parent_id'] = tmpData.search['parent_id']
                 this.showPoolDetail = false
                 this.showOrderList = false
+                this.showPrizeList = false
                 this.showPoolList = true
             }else if(tmpData.type == 'poolDetail'){
                 this.poolDetailPageData = tmpData.pageData
                 this.poolDetailData = tmpData.data
                 this.showOrderList = false
                 this.showPoolList = false
+                this.showPrizeList = false
                 this.showPoolDetail = true
             }
         },
@@ -358,9 +401,14 @@ export default {
             pageData['total_page'] = dt.total_page || dt.pageCount || 0
 
             const tbData = []
-            const fields = tp == 0 ? this.poolListFields : (tp == 1 ? this.poolDetailFields : this.orderListFields)
+            const fields = tp == 0 ? this.poolListFields : (tp == 1 ? this.poolDetailFields : (tp == 2 ? this.orderListFields : (tp == 3 ? this.prizeListFields : [])))
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
+                if(tp == 3){
+                    tbData[idx].push({
+                        text: idx + 1
+                    })
+                }
                 const item = dt.data[idx]
                 for(let idxx = 0; idxx < fields.length; idxx++){
                     tbData[idx].push({
@@ -380,10 +428,32 @@ export default {
                 this.$data['hatch_num'] = dt['hatch_num'] || 0
                 this.$data['hatch_amount'] = dt['hatch_amount'] || 0
                 this.$data['new_amount'] = dt['new_amount'] || 0
-            }else{
+            }else if(tp == 2){
                 this.orderListPageData = pageData
+            }else if(tp == 3){
+                this.prizeListPageData = pageData
             }
             return tbData
+        },
+        loadPrizeList: function(pageNum){
+            this.showLoading()
+            return this.loadTBData(setting.urls.prizeList, {page: pageNum || 1, 'user_id': this.uperList[this.uperList.length - 1].search['user_id']})
+                .then(rst => {
+                    this.prizeListData = {
+                        tableHeader: this.prizeListData.tableHeader,
+                        tbData: this.createTBData(rst, 3),
+                        lockedRow: this.prizeListData.lockedRow,
+                        lockedCol: this.prizeListData.lockedCol
+                    }
+
+                    this.uperList[this.uperList.length - 1].search.page = pageNum || 1
+                    this.uperList[this.uperList.length - 1].pageData = this.prizeListPageData
+                    this.uperList[this.uperList.length - 1].data = this.prizeListData
+                }).catch(e => {
+                    this.alert(e.message || '加载奖金列表失败')
+                }).then(() => {
+                    this.hideLoading()
+                })
         }
     },
     watch: {
@@ -405,6 +475,13 @@ export default {
             if(nVal && !oVal){
                 this.$nextTick(() => {
                     this.$children[5].resizeFixedHead()
+                })
+            }
+        },
+        'showPrizeList': function(nVal, oVal){
+            if(nVal && !oVal){
+                this.$nextTick(() => {
+                    this.$children[7].resizeFixedHead()
                 })
             }
         }
