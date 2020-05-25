@@ -1,6 +1,6 @@
 <template>
     <div class="detail-container">
-        <div class="detail-data-box" v-show="!showArticleEditor">
+        <div class="detail-data-box" v-show="!showArticleEditor && !showPreview">
             <header class="search-header">
                 <div class="search-group">
                     <label>关键词</label>
@@ -17,7 +17,8 @@
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <article-editor v-if="showArticleEditor" :article="article" @saveArticle="saveArticle" @cancelEditArticle="cancelEditArticle"></article-editor>
+        <article-editor v-if="showArticleEditor" :article="article" @saveArticle="saveArticle" @cancelEditArticle="cancelEditArticle" @showPreview="showPreview"></article-editor>
+        <preview v-if="showPreview" :article="article" @hidePreview="hidePreview"></preview>
     </div>
 </template>
 <script>
@@ -25,11 +26,15 @@ import setting from '@/setting'
 import request from '@/axios'
 import qs from 'qs'
 import DetailTable from '@/components/content/table.vue'
+import articleEditorVue from '../components/content/articleEditor.vue'
+import previewVue from '../components/content/preview.vue'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadContentByUrl'],
     components: {
-        'detail-table': DetailTable
+        'detail-table': DetailTable,
+        'article-editor': articleEditorVue,
+        'preview': previewVue
     },
     data(){
         return {
@@ -47,7 +52,8 @@ export default {
             status: '',
             tag: '',
             keyWord: '',
-            tags: []
+            tags: [],
+            showPreview: false
         }
     },
     created(){
@@ -203,6 +209,14 @@ export default {
         },
         setImage(dt){
             this.article.img = dt.imgUrl
+        },
+        showPreview(){
+            this.showArticleEditor = false
+            this.showPreview = true
+        },
+        hidePreview(){
+            this.showPreview = false
+            this.showArticleEditor = true
         }
     }
 }

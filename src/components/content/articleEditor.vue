@@ -33,7 +33,7 @@
                 <div>
                     <div class="video-ck-btn" v-if="!article.video"></div>
                     <form enctype="multipart/form-data" style="display: none;" ref="videoForm">
-                        <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .mpeg, .3gp" name="files">
+                        <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .mpeg, .3gp, .rm, .rmvb" name="files">
                     </form>
                     <video :src="article.video" v-if="article.video"></video>
                 </div>
@@ -100,13 +100,7 @@ export default {
             this.$emit('cancelEditArticle')
         },
         previewArticle(){
-            console.log('preview')
-            const screenWidth = window.screen.width, screenHeight = window.screen.height
-            if(this.article.tag.type == 1){
-                window.open('http://static.yunzhanxinxi.com/video.html?title=', null, 'height=568, width=320, top=' + ((screenHeight - 568) / 2) + ', left=' + ((screenWidth - 320) / 2) + ', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
-            }else if(this.article.tag.type == 2){
-                window.open('http://static.yunzhanxinxi.com/article.html?title=', null, 'height=568, width=320, top=' + ((screenHeight - 568) / 2) + ', left=' + ((screenWidth - 320) / 2) + ', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
-            }
+            this.$emit('showPreview')
         },
         selectArticle(){
             console.log('selectArticle')

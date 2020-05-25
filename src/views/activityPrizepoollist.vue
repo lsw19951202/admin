@@ -63,6 +63,10 @@
             </div>
         </div>
         <div class="detail-data-box" v-show="showOrderList">
+            <header class="search-header">
+                <selector class="search-group" :value="orderStatus" :selectParams="statuSelectParams" @selectOptsClicked="statuSelectOptsClicked"></selector>
+                <button class="action-btn" @click="loadOrderList">搜索</button>
+            </header>
             <locked-table :tbData="orderListData" :tbStyle="orderListStyle"></locked-table>
             <div class="page-footer" style="display: flex;">
                 <div style="margin-top: .3rem; height: .875rem; line-height: .875rem;">
@@ -187,6 +191,33 @@ export default {
                 tbData: [],
                 lockedRow: 1,
                 lockedCol: 1
+            },
+            orderStatus: '',
+            statuSelectParams: {
+                label: '订单状态',
+                placeholder: '请选择',
+                options: [{
+                    value: '',
+                    text: '请选择'
+                }, {
+                    value: 10,
+                    text: '待收货'
+                }, {
+                    value: 20,
+                    text: '已收货'
+                }, {
+                    value: 30,
+                    text: '已冻结(待结算)'
+                }, {
+                    value: 40,
+                    text: '已结算'
+                }, {
+                    value: 90,
+                    text: '已失效'
+                }, {
+                    value: 91,
+                    text: '已退款(维权退款单)'
+                }]
             }
         }
     },
@@ -255,6 +286,10 @@ export default {
         })
     },
     methods: {
+        statuSelectOptsClicked: function(status){
+            this.orderStatus = status
+            this.uperList[this.uperList.length - 1].search['orderStatus'] = status
+        },
         rowClicked: function(dt){
             if(dt.tp == 'prize'){
                 this.uperList.push({
@@ -275,7 +310,8 @@ export default {
                     type: 'orderList',
                     search: {
                         'user_id': this.uperList.length == 1 ? dt.data[1].text : dt.data[0].text,
-                        page: 1
+                        page: 1,
+                        orderStatus: this.orderStatus
                     }
                 })
                 this.loadOrderList(1).then(() => {
@@ -316,6 +352,7 @@ export default {
                 this.showOrderList = false
                 this.showPrizeList = false
                 this.showPoolList = true
+                this.orderStatus = ''
             }else if(tmpData.type == 'poolDetail'){
                 this.poolDetailPageData = tmpData.pageData
                 this.poolDetailData = tmpData.data
@@ -323,6 +360,7 @@ export default {
                 this.showPoolList = false
                 this.showPrizeList = false
                 this.showPoolDetail = true
+                this.orderStatus = ''
             }
         },
         loadPoolList: function(pageNum){
@@ -383,7 +421,7 @@ export default {
         },
         loadOrderList: function(pageNum){
             this.showLoading()
-            return this.loadTBData(setting.urls.appOrderList, {page: pageNum || 1, 'user_id': this.uperList[this.uperList.length - 1].search['user_id']})
+            return this.loadTBData(setting.urls.appOrderList, {page: pageNum || 1, 'user_id': this.uperList[this.uperList.length - 1].search['user_id'], 'orderStatus': this.orderStatus})
                 .then(rst => {
                     this.orderListData = {
                         tableHeader: this.orderListData.tableHeader,
@@ -485,14 +523,14 @@ export default {
         'showOrderList': function(nVal, oVal){
             if(nVal && !oVal){
                 this.$nextTick(() => {
-                    this.$children[5].resizeFixedHead()
+                    this.$children[6].resizeFixedHead()
                 })
             }
         },
         'showPrizeList': function(nVal, oVal){
             if(nVal && !oVal){
                 this.$nextTick(() => {
-                    this.$children[7].resizeFixedHead()
+                    this.$children[8].resizeFixedHead()
                 })
             }
         }
