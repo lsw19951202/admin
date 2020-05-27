@@ -167,7 +167,9 @@ export default {
         // 奖金池活动详情
         prizepoolinfo: '/ypj/prizepoolinfo',
         // 奖金池活动奖金列表
-        prizeList: '/ypj/prizepoollog'
+        prizeList: '/ypj/prizepoollog',
+        // 标签列表
+        collegeLabellist: '/college/labellist'
     },
     // 图片地址
     images: {

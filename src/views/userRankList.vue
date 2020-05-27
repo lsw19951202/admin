@@ -21,6 +21,7 @@
                 <selector class="search-group" :value="rank" :selectParams="rankSelectParams" @selectOptsClicked="rankSelectOptsClicked"></selector>
                 <selector class="search-group" :value="sortType" :selectParams="sortTypeSelectParams" @selectOptsClicked="sortTypeSelectOptsClicked"></selector>
                 <button class="action-btn" @click="loadTBData(1)">搜索</button>
+                <a class="action-btn" download="用户排行.xlsx" :href="downloadUrl">导出</a>
             </header>
             <locked-table v-show="!showOrderList" :tbData="tbData" :tbType="lockedTBType" :tbStyle="tbStyle" @rowClicked="rowClicked"></locked-table>
             <div class="table-container hideScrollBar" v-show="showOrderList">
@@ -113,6 +114,14 @@ export default {
             }).catch((e) => {
                 console.log(e)
             })
+    },
+    computed: {
+        downloadUrl(){
+            return setting.baseUrl + setting.urls.userRankList + '?id=' + this.id + '&nickName='
+                + this.nickName + '&parent_id=' + this.parent_id + '&phone=' + this.phone + '&rank='
+                + this.rank + '&sort_type=' + this.sortType + '&page=' + this.pageData.page
+                + '&is_excel=1&skey=' + this.$cookies.get('skey')
+        }
     },
     methods: {
         loadOrderListTBData: function(pageNum){

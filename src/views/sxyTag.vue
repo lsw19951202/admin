@@ -19,7 +19,7 @@ import setting from '@/setting'
 import TagEditor from '@/components/content/tagEditor.vue'
 
 export default {
-    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'loadTBData'],
     components: {
         'detail-table': DetailTable,
         'tag-editor': TagEditor
@@ -31,11 +31,23 @@ export default {
             tbData: [],
             tableHeader: setting.tableHeader.sxyTag,
             tags: [],
-            tag: {id: null, type: null, sort: 1, adderId: null, createTime: null, updateTime: null}
+            tag: {'dic_id': null, 'enum_item_name': null, 'enum_item_value': null, sort: null, status: null, 'dictionary_type': null, 'create_user_id': null, 'create_time': null, 'updater_user_id': null, 'update_time': null, 'dictionary_name': null, 'update_user_name': null, 'create_user_name': null, 'dictionary_status': null, 'label_edit': null, 'label_status': null, 'label_open_status': null, 'label_close_status': null},
+            fields: []
         }
     },
     created: function(){
-        this.loadTBData()
+        return Promise.all([
+            this.loadFields(setting.urls.appFields, { 'field_type': 'labelList' }),
+            this.loadTBData(setting.urls.collegeLabellist, {}, 'get')
+        ]).then(rst => {
+            const tableHeader = rst[0].tableHeader
+            tableHeader.push({name: '操作'})
+
+            this.tableHeader = rst[0].tableHeader
+            this.fields = rst[0].fields
+
+            this.tbData = Object.assign([], this.createTBData(rst[1]))
+        })
     },
     methods: {
         /**
@@ -65,32 +77,9 @@ export default {
                 this.hideLoading()
             })
         },
-        loadTBData: function(){
-            this.showLoading()
-            request({
-                url: '',
-                method: 'get',
-                params: {}
-            }).then(rst => {
-                if(rst.status == 200){
-                    if(rst.data.code == 200){
-                        this.createTBData(rst.data.data)
-                    }else{
-                        this.alert(rst.data.message || '加载标签列表失败')
-                    }
-                }else{
-                    this.alert('加载标签列表失败')
-                }
-            }).catch(e => {
-                this.alert('加载标签列表失败')
-            }).then(() => {
-                this.hideLoading()
-            })
-        },
         createTBData: function(dt){
             this.tags = dt.data || []
             const tbData = []
-            const fields = ['tagName', 'type', 'sort', 'adderId', 'createTime', 'updateTime']
             for(let dix = 0; idx < dt.data.length; idx++){
                 const item = dt.data[idx]
                 tbData.push([])
