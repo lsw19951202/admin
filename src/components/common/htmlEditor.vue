@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="html-editor-content" ref="editorContent">
-            <div contenteditable="" v-html="htmlText" @input.prevent="editorInput" @focus="editorFocus" @blur="editorBlur" ref="editor"></div>
+            <div :contenteditable="editable" v-html="htmlText" @input.prevent="editorInput" @focus="editorFocus" @blur="editorBlur" ref="editor"></div>
         </div>
     </div>
 </template>
@@ -79,7 +79,7 @@ import setting from '@/setting'
 
 export default {
     inject: ['showLoading', 'hideLoading', 'alert'],
-    props: ['config', 'htmlText'],
+    props: ['config', 'htmlText', 'editable'],
     data: () => {
         return {
             // 控制emoji,image,link,video的编辑界面的显示

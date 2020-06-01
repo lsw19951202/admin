@@ -1,8 +1,8 @@
 <template>
     <div class="image-editor">
-        <span @click="imageItemClick(idx)" class="image-item" v-for="(image, idx) in (config&&config.maxImageNum ? (config.maxImageNum > 9 ? 9 : config.maxImageNum) : 9)" :key="idx" :style="'background-image: url(' + (images[idx] ? (images[idx].indexOf('http') >= 0 ? images[idx] : ('http://' + images[idx])) : require('@/assets/icon_upload.png')) + ');' + (images[idx] ? ('background-size: cover;'): '')">
+        <span @click="imageItemClick(idx)" class="image-item" v-for="(image, idx) in (config&&config.maxImageNum ? (config.maxImageNum > 9 ? 9 : config.maxImageNum) : 9)" :key="idx" :style="('background-image: url(' + (images[idx] ? (images[idx].indexOf('http') >= 0 ? images[idx] : ('http://' + images[idx])) : require('@/assets/icon_upload.png')) + ');' + (images[idx] ? ('background-size: cover;'): '')) + (editable ? '' : 'cursor: default;')">
             <span v-if="!images[idx]">图片{{sortNum[idx]}}</span>
-            <div class="close-btn" v-if="images[idx]" @click.stop="removeImage(idx)"></div>
+            <div class="close-btn" v-if="images[idx] && editable" @click.stop="removeImage(idx)"></div>
         </span>
         <form enctype="multipart/form-data" style="display: none;" ref="fileForm">
             <input type="file" accept=".jpg, .jpeg, .png, .gif" style="display: none;" name="file" ref="files" @change="uploadImage">
@@ -15,7 +15,7 @@ import setting from '@/setting'
 
 export default {
     inject: ['showLoading', 'hideLoading', 'alert', 'removeCurrImage', 'setImage'],
-    props: ['images', 'maxImageNum', 'config'],
+    props: ['images', 'maxImageNum', 'config', 'editable'],
     data: () => {
         return {
             sortNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九'],
@@ -30,10 +30,12 @@ export default {
          * 选择图片
          */
         imageItemClick: function(idx){
-            console.log('上传第' + (idx + 1) + '张图片')
-            this.uploadIdx = idx
-            console.log(this.$refs.files)
-            this.$refs.files.click()
+            if(this.editable){
+                // console.log('上传第' + (idx + 1) + '张图片')
+                this.uploadIdx = idx
+                // console.log(this.$refs.files)
+                this.$refs.files.click()
+            }
         },
         removeImage: function(idx){
             console.log('删除第' + (idx + 1) + '张图片')

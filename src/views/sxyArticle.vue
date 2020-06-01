@@ -13,11 +13,11 @@
                 <button class="action-btn" v-if="showAddArticleBtn" @click="addArticle">新建文章</button>
             </header>
             <div class="table-container hideScrollBar">
-                <detail-table :tbType="tbType" :tbData="tbData" :tableHeader="tableHeader" @pubArticleClicked="changeArticleStatus" @editArticleClicked="editArticle" @delArticleClicked="changeArticleStatus"></detail-table>
+                <detail-table :tbType="tbType" :tbData="tbData" :tableHeader="tableHeader" @pubArticleClicked="changeArticleStatus" @editArticleClicked="editArticle" @delArticleClicked="changeArticleStatus" @detailBtnClicked="showArticleDetailView"></detail-table>
             </div>
             <page :pageData="pageData" @loadList="loadTBData"></page>
         </div>
-        <article-editor v-if="showArticleEditor" :article="article" :tags="tags" @saveArticle="saveArticle" @cancelEditArticle="cancelEditArticle" @showPreview="showPreviewPane"></article-editor>
+        <article-editor :editable="!showArticleDetail" v-if="showArticleEditor" :article="article" :tags="tags" @saveArticle="saveArticle" @cancelEditArticle="cancelEditArticle" @showPreview="showPreviewPane"></article-editor>
         <preview v-if="showPreview" :article="article" @hidePreview="hidePreview"></preview>
         <confirm @confirmClicked="confirmClicked" :isShow="showConfirm" :confirmParams="confirmParams"></confirm>
     </div>
@@ -48,6 +48,7 @@ export default {
             tbType: 'articleList',
             showConfirm: false,
             showAddArticleBtn: false,
+            showArticleDetail: false,
             tbData: [],
             tableHeader: setting.tableHeader.sxyArticle,
             pageData: {
@@ -121,6 +122,10 @@ export default {
         }
     },
     methods: {
+        showArticleDetailView(idx){
+            this.showArticleDetail = true
+            this.editArticle(idx)
+        },
         loadArticle(id){
             this.showLoading()
             request({
@@ -146,7 +151,7 @@ export default {
                         }
                         this.showArticleEditor = true
                         this.showPreview = false
-                        this.$parent.subTitle2 = '编辑文章'
+                        this.$parent.subTitle2 = this.showArticleDetail ? '文章详情' : '编辑文章'
                     }else{
                         this.alert(rst.data.message || '加载文章详情失败')
                     }
@@ -357,6 +362,7 @@ export default {
         cancelEditArticle(){
             this.$parent.subTitle2 = ''
             this.showArticleEditor = false
+            this.showArticleDetail = false
         },
         removeImage(){
             this.article['con_img'] = null

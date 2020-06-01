@@ -42,7 +42,7 @@
                 </div>
             </div>
             </div>
-            <input type="button" class="login-btn" @click="login" value="登  陆" />
+            <input type="button" class="login-btn" @click="login" value="登  录" />
         </div>
         </div>
         <alert v-bind:isShow="showAlert" v-bind:alertParams="alertParams" @alertOkClicked="alertOkClicked"></alert>

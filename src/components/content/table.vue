@@ -163,6 +163,7 @@
                         <button v-if="tbCol.article_edit == 'T'" class="action-btn edit-btn" @click="editBtnClicked(index)">编辑</button>
                         <button v-if="tbCol.article_open == 'T'" class="action-btn modify-btn" @click="pubBtnClicked(index)">发布</button>
                         <button v-if="tbCol.article_close == 'T'" class="action-btn del-btn" @click="delBtnClicked(index)">下架</button>
+                        <button class="action-btn" style="padding: 1px .15rem;" @click="detailBtnClicked(index)">详情</button>
                     </slot>
                     <slot v-else-if="idx == 2 && tbCol !== '无' && tbCol.indexOf('http') >= 0">
                         <img :src="tbCol">
@@ -245,6 +246,11 @@ export default {
         },
         getRowClass: function(idx){
             return this.reduceData&&this.reduceData[idx]['special_reduce_show'] == 'T' ? 'special_reduce' : ''
+        },
+        detailBtnClicked(idx){
+            if(this.tbType == 'articleList'){
+                this.$emit('detailBtnClicked', idx)
+            }
         },
         editBtnClicked: function(idx){
             if(this.tbType == 'user'){

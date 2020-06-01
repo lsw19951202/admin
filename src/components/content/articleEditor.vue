@@ -5,7 +5,7 @@
             <div class="editor-groups">
                 <label>所属标签</label>
                 <div>
-                    <select v-model="article.dic_id">
+                    <select v-model="article.dic_id" :disabled="!editable">
                         <option v-for="(tag, idx) in tags" :key="idx" :value="tag.dic_id">{{tag.enum_item_name}}</option>
                     </select>
                 </div>
@@ -13,19 +13,19 @@
             <div class="editor-groups">
                 <label>标题</label>
                 <div>
-                    <input type="text" placeholder="请输入文章标题" v-model="article.con_title">
+                    <input type="text" placeholder="请输入文章标题" v-model="article.con_title" :disabled="!editable">
                 </div>
             </div>
             <div class="editor-groups" v-if="article.dictionary_type == 1">
                 <label>概述</label>
                 <div>
-                    <input type="text" placeholder="四十个字以内，多出的用省略号..." v-model="article.con_prefix">
+                    <input type="text" placeholder="四十个字以内，多出的用省略号..." v-model="article.con_prefix" :disabled="!editable">
                 </div>
             </div>
             <div class="editor-groups" style="flex: 1; height: 0;" v-if="article.dictionary_type == 1">
                 <label>正文编辑</label>
                 <div>
-                    <html-editor :htmlText="article.con_detail" :config="htmlEditorConfig"></html-editor>
+                    <html-editor :htmlText="article.con_detail" :config="htmlEditorConfig" :editable="editable"></html-editor>
                 </div>
             </div>
             <div class="editor-groups" style="height: 5.21875rem;" v-if="article.dictionary_type == 2">
@@ -43,13 +43,13 @@
             <div class="editor-groups" style="height: 5.21875rem;">
                 <label>封面图片</label>
                 <div>
-                    <image-editor :config="imageConfig" :images="[article.con_img]"></image-editor>
+                    <image-editor :config="imageConfig" :images="[article.con_img]" :editable="editable"></image-editor>
                 </div>
             </div>
             <div class="editor-groups">
                 <label></label>
                 <div>
-                    <button class="action-btn" @click="saveArticle">保存</button>
+                    <button class="action-btn" @click="saveArticle" v-if="editable">保存</button>
                     <button class="action-btn" @click="previewArticle">预览</button>
                     <button class="action-btn" @click="cancelEdit">取消</button>
                 </div>
@@ -64,7 +64,7 @@ import request from '@/axios'
 import setting from '../../setting'
 
 export default {
-    props: ['article', 'tags'],
+    props: ['article', 'tags', 'editable'],
     inject: ['showLoading', 'hideLoading', 'alert'],
     components: {
         'html-editor': htmlEditor,
