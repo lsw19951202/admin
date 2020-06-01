@@ -11,7 +11,7 @@
                 </td>
             </tr>
         </thead>
-        <tbody v-if="tbType=='user'" ref="tbody">
+        <tbody v-if="tbType == 'user'" ref="tbody">
             <tr v-for="(tbRow, index) in tbData" v-bind:key="index">
                 <td>{{tbRow.user_name}}</td>
                 <td>{{tbRow.user_real_name}}</td>
@@ -25,7 +25,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody v-if="tbType=='role'" ref="tbody">
+        <tbody v-if="tbType == 'role'" ref="tbody">
             <tr v-for="(tbRow, index) in tbData" v-bind:key="index">
                 <td>{{tbRow.name}}</td>
                 <td>{{tbRow.create_time}}</td>
@@ -142,6 +142,40 @@
                 </td>
             </tr>
         </tbody>
+        <tbody v-if="tbType == 'tagList'" ref="tbody" class="tagList">
+            <tr v-for="(tbRow, idx) in tbData" :key="idx">
+                <td v-for="(tbCol, index) in tbRow" :key="index">
+                    <slot v-if="index == tbRow.length - 1">
+                        <button v-if="tbCol.label_edit == 'T'" @click="editBtnClicked(idx)" class="action-btn edit-btn">编辑</button>
+                        <button v-if="tbCol.label_status == 'T' && tbCol.label_open_status == 'T'" @click="delBtnClicked(idx)" class="action-btn del-btn">启用</button>
+                        <button v-if="tbCol.label_status == 'T' && tbCol.label_close_status == 'T'" @click="pubBtnClicked(idx)" class="action-btn modify-btn">隐藏</button>
+                    </slot>
+                    <slot v-else>
+                        {{tbCol}}
+                    </slot>
+                </td>
+            </tr>
+        </tbody>
+        <tbody v-if="tbType == 'articleList'" ref="tbody" class="articleList">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <slot v-if="idx == tbRow.length - 1">
+                        <button v-if="tbCol.article_edit == 'T'" class="action-btn edit-btn" @click="editBtnClicked(index)">编辑</button>
+                        <button v-if="tbCol.article_open == 'T'" class="action-btn modify-btn" @click="pubBtnClicked(index)">发布</button>
+                        <button v-if="tbCol.article_close == 'T'" class="action-btn del-btn" @click="delBtnClicked(index)">下架</button>
+                    </slot>
+                    <slot v-else-if="idx == 2 && tbCol !== '无' && tbCol.indexOf('http') >= 0">
+                        <img :src="tbCol">
+                    </slot>
+                    <slot v-else-if="idx == 2">
+                        --
+                    </slot>
+                    <slot v-else>
+                        {{tbCol}}
+                    </slot>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 <script>
@@ -217,6 +251,10 @@ export default {
                 this.$emit('editUserClicked', idx);
             }else if(this.tbType == 'role'){
                 this.$emit('editRoleClicked', idx)
+            }else if(this.tbType == 'tagList'){
+                this.$emit('editTagClicked', idx)
+            }else if(this.tbType == 'articleList'){
+                this.$emit('editArticleClicked', idx)
             }
         },
         modifyBtnClicked: function(idx){
@@ -229,6 +267,17 @@ export default {
                 this.$emit('deleteRoleClicked', idx)
             }else if(this.tbType == 'permission'){
                 this.$emit('deletePermissionClicked', idx)
+            }else if(this.tbType == 'tagList'){
+                this.$emit('delTagClicked', idx)
+            }else if(this.tbType == 'articleList'){
+                this.$emit('delArticleClicked', idx)
+            }
+        },
+        pubBtnClicked: function(idx){
+            if(this.tbType == 'articleList'){
+                this.$emit('pubArticleClicked', idx)
+            }else if(this.tbType == 'tagList'){
+                this.$emit('pubTagClicked', idx)
             }
         },
         sortTBData: function(tp, sortBy){
@@ -292,6 +341,9 @@ tbody.scrollable tr { display: table; width: 100%; table-layout: fixed; }
 .material-list>tr>td:nth-child(6) { padding: 0 .3rem; width: 15rem; min-width: 15rem; max-width: 15rem; overflow-y: scroll; text-align: left; }
 .material-list>tr>td:nth-child(7) { width: 9rem; min-width: 9rem; max-width: 9rem; text-align: center; }
 .material-list>tr>td:nth-child(10),.material-list>tr>td:nth-child(11) { width: 3.5rem; min-width: 3.5rem; max-width: 3.5rem; }
+.articleList>tr>td:nth-child(2) { width: 6rem; min-width: 6rem; max-width: 6rem; overflow-x: scroll; }
+.articleList>tr>td:nth-child(3) { width: 9rem; max-width: 9rem; min-width: 9rem; }
+.articleList>tr>td:nth-child(3)>img { width: 100%; }
 .material-list img { width: 1.875rem; height: 1.875rem; margin-left: .5rem; }
 .material-list img:first-child { margin-left: 0; }
 input[type="checkbox"] { position: relative; width: 0.625rem; height: .625rem; vertical-align: sub; }

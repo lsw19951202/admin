@@ -5,43 +5,45 @@
             <div class="editor-groups">
                 <label>所属标签</label>
                 <div>
-                    <select v-model="article.tag">
-                        <option v-for="(tag, idx) in tags" :key="idx" :value="tag">{{tag.tagName}}</option>
+                    <select v-model="article.dic_id">
+                        <option v-for="(tag, idx) in tags" :key="idx" :value="tag.dic_id">{{tag.enum_item_name}}</option>
                     </select>
                 </div>
             </div>
             <div class="editor-groups">
                 <label>标题</label>
                 <div>
-                    <input type="text" placeholder="请输入文章标题" v-model="article.title">
+                    <input type="text" placeholder="请输入文章标题" v-model="article.con_title">
                 </div>
             </div>
-            <div class="editor-groups" v-if="article.tag.type">
+            <div class="editor-groups" v-if="article.dictionary_type == 1">
                 <label>概述</label>
                 <div>
-                    <input type="text" placeholder="四十个字以内，多出的用省略号...">
+                    <input type="text" placeholder="四十个字以内，多出的用省略号..." v-model="article.con_prefix">
                 </div>
             </div>
-            <div class="editor-groups" v-if="article.tag.type">
+            <div class="editor-groups" style="flex: 1; height: 0;" v-if="article.dictionary_type == 1">
                 <label>正文编辑</label>
                 <div>
-                    <html-editor :htmlText="article.content" :config="htmlEditorConfig"></html-editor>
+                    <html-editor :htmlText="article.con_detail" :config="htmlEditorConfig"></html-editor>
                 </div>
             </div>
-            <div class="editor-groups" v-if="article.tag.type">
+            <div class="editor-groups" style="height: 5.21875rem;" v-if="article.dictionary_type == 2">
                 <label>视频</label>
                 <div>
-                    <div class="video-ck-btn" v-if="!article.video"></div>
+                    <div class="video-ck-btn" v-if="!article.video_url" @click="selectVideo"></div>
                     <form enctype="multipart/form-data" style="display: none;" ref="videoForm">
-                        <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .mpeg, .3gp, .rm, .rmvb" name="files">
+                        <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .mpeg, .3gp, .rm, .rmvb" name="file">
                     </form>
-                    <video :src="article.video" v-if="article.video"></video>
+                    <video v-if="article.video_url" controls autoplay>
+                        <source :src="article.video_url" :type="'video/' + article.video_url.split('.')[article.video_url.split('.').length - 1]">
+                    </video>
                 </div>
             </div>
-            <div class="editor-groups" v-if="article.tag.type">
+            <div class="editor-groups" style="height: 5.21875rem;">
                 <label>封面图片</label>
                 <div>
-                    <image-editor :config="imageConfig" :images="[article.img]"></image-editor>
+                    <image-editor :config="imageConfig" :images="[article.con_img]"></image-editor>
                 </div>
             </div>
             <div class="editor-groups">
@@ -93,21 +95,26 @@ export default {
     },
     methods: {
         saveArticle(){
-            this.$parent.article.content = this.$children[0].getContent()
+            if(this.article['dictionary_type'] == 1){
+                this.article['con_detail'] = (this.$children[0].getContent&&this.$children[0].getContent()) || (this.$children[1].getContent&&this.$children[1].getContent())
+            }
             this.$emit('saveArticle')
         },
         cancelEdit(){
             this.$emit('cancelEditArticle')
         },
         previewArticle(){
+            if(this.article['dictionary_type'] == 1){
+                this.article['con_detail'] = (this.$children[0].getContent&&this.$children[0].getContent()) || (this.$children[1].getContent&&this.$children[1].getContent())
+            }
             this.$emit('showPreview')
         },
-        selectArticle(){
-            console.log('selectArticle')
+        selectVideo(){
+            console.log('selectVideo')
             this.$refs.videoIpt.click()
         },
-        uploadArticle(){
-            console.log('uploadArticle')
+        uploadVideo(){
+            console.log('uploadVideo')
             this.showLoading()
             const formData = new FormData(this.$refs.videoForm)
             request({
@@ -120,8 +127,8 @@ export default {
             }).then(rst => {
                 if(rst.status == 200){
                     if(rst.data.code == 200){
-                        const videoUrl = rst.data.data.prxUrl + rst.data.data.fileName
-                        this.article.video = videoUrl
+                        const videoUrl = (rst.data.data.url.indexOf('http://') == -1 ? 'http://' : '') + rst.data.data.url
+                        this.article['video_url'] = videoUrl
                     }else{
                         this.alert(rst.data.message || '上传视频失败')
                     }
@@ -134,6 +141,18 @@ export default {
                 this.hideLoading()
                 this.$refs.videoIpt.value = ''
             })
+        }
+    },
+    watch: {
+        'article.dic_id': function(nVal){
+            let tag = null
+            for(let idx = 0; idx < this.tags.length; idx++){
+                if(this.tags[idx]['dic_id'] == nVal){
+                    tag = this.tags[idx]
+                    break
+                }
+            }
+            this.article['dictionary_type'] = tag.dictionary_type
         }
     }
 }
@@ -148,4 +167,6 @@ export default {
 .editor-groups>div { flex: 1; height: 100%; width: 0; }
 .editor-groups input,.editor-groups select { font-size: .4375rem; width: 15.9375rem; height: 100%; line-height: 1.25rem; border: 1px solid #d9d9d9; border-radius: .125rem; padding: .3125rem; box-sizing: border-box; }
 .editor-groups select { -webkit-appearance: menulist; }
+.video-ck-btn { box-sizing: border-box; border: 1px solid #d9d9d9; border-radius: .125rem; background-repeat: no-repeat; background-size: auto; background-position: center center; width: 4.1875rem; height: 4.1875rem; position: relative; cursor: pointer; background-image: url(../../assets/icon_upload.png); }
+video { height: 100%; }
 </style>

@@ -169,7 +169,21 @@ export default {
         // 奖金池活动奖金列表
         prizeList: '/ypj/prizepoollog',
         // 标签列表
-        collegeLabellist: '/college/labellist'
+        collegeLabellist: '/college/labellist',
+        // 新建标签
+        collegeLabelAdd: '/college/labeladd',
+        // 修改标签
+        collegeLabelEdit: '/college/labeledit',
+        // 修改标签状态
+        collegeLabelStatus: '/college/labelstatus',
+        // 文章列表
+        collegeArticle: '/college/article',
+        // 修改文章上架状态
+        collegeArticleStatus: '/college/articlestatus',
+        // 添加/修改文章
+        collegeArticleModify: '/college/articlemodify',
+        // 文章详情
+        collegeArticleDetail: '/college/articledetail'
     },
     // 图片地址
     images: {
@@ -571,12 +585,12 @@ export default {
             title: '活动统计',
             subTitle1: '奖金池统计'
         },
-        '/sxy/tag': {
+        '/college/label': {
             name: 'sxy-tag',
             title: '素材管理',
             subTitle1: '标签'
         },
-        '/sxy/article': {
+        '/college/article': {
             name: 'sxy-article',
             title: '素材管理',
             subTitle1: '文章'

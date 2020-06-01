@@ -40,7 +40,7 @@
                 <!-- <div> -->
                     <span class="upload-btn" @click="selectImage">点击上传本地图片</span>
                     <form enctype="multipart/form-data" style="display: none;" ref="imageForm">
-                        <input type="file" ref="imageIpt" @change="uploadImage" accept=".jpeg, .jpg, .png, .gif" name="files">
+                        <input type="file" ref="imageIpt" @change="uploadImage" accept=".jpeg, .jpg, .png, .gif" name="file">
                     </form>
                 <!-- </div> -->
             </div>
@@ -48,7 +48,7 @@
                 <!-- <div> -->
                     <span class="upload-btn" @click="selectVideo">点击上传视频</span>
                     <form enctype="multipart/form-data" style="display: none;" ref="videoForm">
-                        <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .webm" name="files">
+                        <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .webm" name="file">
                     </form>
                 <!-- </div> -->
             </div>
@@ -474,7 +474,7 @@ export default {
         uploadImage: function(){
             console.log(this.$refs.imageIpt.files)
             this.showLoading()
-            const formData = new FormData(this.$refs.imageIpt)
+            const formData = new FormData(this.$refs.imageForm)
             request({
                 url: setting.urls.uploadImage,
                 method: 'post',
@@ -486,11 +486,16 @@ export default {
                 console.log(resp)
                 if(resp.status == 200){
                     if(resp.data.code == 200){
-                        const imgUrl = resp.data.data.prxUrl + resp.data.data.fileName
-                        // TODO
-                        this.insertParagraph()
-                        this.insertHTML('<img src="' + imgUrl + '"/>');
-                        this.insertParagraph()
+                        const imgUrl = (resp.data.data.url.indexOf('http://') == -1 ? 'http://' : '') + resp.data.data.url
+                        const imgDom = document.createElement('img')
+                        imgDom.onload = () => {
+                            const rat = imgDom.height/imgDom.width
+                            // TODO
+                            // this.insertParagraph()
+                            this.insertHTML('<img data-size="' + rat + '" src="' + imgUrl + '"/>');
+                            // this.insertParagraph()
+                        }
+                        imgDom.src = imgUrl
                     }else{
                         this.alert(resp.data.message || '上传图片失败')
                     }
@@ -524,7 +529,7 @@ export default {
                 console.log(resp)
                 if(resp.status == 200){
                     if(resp.data.code == 200){
-                        const videoUrl = resp.data.data.prxUrl + resp.data.data.fileName
+                        const videoUrl = (resp.data.data.url.indexOf('http://') == -1 ? 'http://' : '') + resp.data.data.url
                         this.insertHTML('<video src="' + videoUrl + '"></video>');
                     }else{
                         this.alert(resp.data.message || '上传视频失败')
@@ -582,6 +587,16 @@ export default {
             }
             return str
         }
+    },
+    mounted(){
+        // 默认插入一行
+        // 否则会造成第一行如果时文本，不会被div包裹，造成显示的结果不正确
+        // 当执行InsertParagraph操作时会插入2个空行
+        // 所以插入之后再删除第二行
+        const isNewRange = this.setRange()
+        document.execCommand('InsertParagraph', false, null)
+        document.execCommand('Delete', false, null)
+        this.scrollToTarget(isNewRange)
     }
 }
 </script>

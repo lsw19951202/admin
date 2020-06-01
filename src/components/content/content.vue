@@ -46,6 +46,8 @@ import cpsAmountPersonalVue from '../../views/cpsAmountPersonal.vue'
 import cpsWithdrawMonthVue from '../../views/cpsWithdrawMonth.vue'
 import cpsWithdrawYearVue from '../../views/cpsWithdrawYear.vue'
 import activityPrizepoollistVue from '../../views/activityPrizepoollist.vue'
+import sxyArticleVue from '../../views/sxyArticle.vue'
+import sxyTagVue from '../../views/sxyTag.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -99,7 +101,9 @@ export default {
         'cpsamount-personal': cpsAmountPersonalVue,
         'cpswithdraw-month': cpsWithdrawMonthVue,
         'cpswithdraw-year': cpsWithdrawYearVue,
-        'activity-prizepoollist': activityPrizepoollistVue
+        'activity-prizepoollist': activityPrizepoollistVue,
+        'sxy-tag': sxyTagVue,
+        'sxy-article': sxyArticleVue
     }
 }
 </script>

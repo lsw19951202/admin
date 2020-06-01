@@ -5,31 +5,31 @@
             <div class="editor-groups">
                 <label>标签名称</label>
                 <div>
-                    <input type="text" v-model="tag.tagName">
+                    <input type="text" v-model="tag.enum_item_name" :disabled="tag.dic_id != null">
                 </div>
             </div>
-            <div class="editor-groups" v-if="tag.id != null">
+            <div class="editor-groups" v-if="tag.dic_id != null">
                 <label>标签新名称</label>
                 <div>
                     <input type="text" v-model="newTagName">
                 </div>
             </div>
-            <div class="editor-groups" v-if="tag.id == null">
+            <div class="editor-groups" v-if="tag.dic_id == null">
                 <label>标签类型</label>
                 <div>
-                    <select v-model="tag.type">
-                        <option value="0">文本</option>
-                        <option value="1">视频</option>
+                    <select v-model="tag.dictionary_type">
+                        <option value="1">文本</option>
+                        <option value="2">视频</option>
                     </select>
                 </div>
             </div>
             <div class="editor-groups">
                 <label>标签排序</label>
                 <div>
-                    <input type="text" v-model="tag.sort">
+                    <input type="text" v-model="tag.sort" :disabled="tag.dic_id != null">
                 </div>
             </div>
-            <div class="editor-groups" v-if="tag.id != null">
+            <div class="editor-groups" v-if="tag.dic_id != null">
                 <label>新排序</label>
                 <div>
                     <input type="text" v-model="newSort">
@@ -48,6 +48,7 @@
 <script>
 export default {
     props: ['tag'],
+    inject: ['alert'],
     data: () => {
         return {
             newTagName: '',
@@ -56,11 +57,15 @@ export default {
     },
     methods: {
         saveTag: function(){
-            if(this.tag.id != null){
-                this.tag.newTagName = this.newTagName
-                this.tag.newSort = this.newSort
+            if(this.tag.dic_id != null){
+                this.$emit('saveTag', {tagName: this.newTagName || this.tag.enum_item_name, sort: this.newSort || this.tag.sort || 1})
+            }else{
+                if(!this.tag.enum_item_name || !this.tag.sort || ! this.tag.dictionary_type){
+                    this.alert('标签名称、标签排序和标签类型必填')
+                    return
+                }
+                this.$emit('saveTag')
             }
-            this.$emit('saveTag')
         },
         cancelEdit: function(){
             this.$emit('cancelEditTag')

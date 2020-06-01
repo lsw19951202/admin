@@ -29,6 +29,9 @@
                 <div v-if="confirmParams.type == 'del'" class="confirm-body">
                     <div class="confirm-form-line">确定删除?</div>
                 </div>
+                <div v-if="confirmParams.type == 'modifyStatus'" class="confirm-body">
+                    <div class="confirm-form-line">{{confirmParams.text}}</div>
+                </div>
                 <div class="confirm-footer">
                     <button @click="confirm(1)" class="confirm-ok">确认</button>
                     <button @click="confirm(0)" class="confirm-cancel">取消</button>
@@ -54,9 +57,13 @@ export default {
                 switch(this.confirmParams.type){
                     case 'modifyPwd': this.confirmModifyPwd(); break;
                     case 'del': this.confirmDel(); break;
+                    case 'modifyStatus': this.confirmModifyStatus(); break;
                     default: return
                 }
             }
+        },
+        confirmModifyStatus: function(){
+            this.$emit('confirmClicked', this.confirmParams)
         },
         confirmDel: function(){
             this.$emit('confirmClicked', this.confirmParams)

@@ -1,11 +1,11 @@
 <template>
     <div class="image-editor">
-        <span @click="imageItemClick(idx)" class="image-item" v-for="(image, idx) in (config&&config.maxImageNum ? (config.maxImageNum > 9 ? 9 : config.maxImageNum) : 9)" :key="idx" :style="'background-image: url(' + (images[idx] ? ('http://' + images[idx]) : require('@/assets/icon_upload.png')) + ');' + (images[idx] ? ('background-size: cover;'): '')">
+        <span @click="imageItemClick(idx)" class="image-item" v-for="(image, idx) in (config&&config.maxImageNum ? (config.maxImageNum > 9 ? 9 : config.maxImageNum) : 9)" :key="idx" :style="'background-image: url(' + (images[idx] ? (images[idx].indexOf('http') >= 0 ? images[idx] : ('http://' + images[idx])) : require('@/assets/icon_upload.png')) + ');' + (images[idx] ? ('background-size: cover;'): '')">
             <span v-if="!images[idx]">图片{{sortNum[idx]}}</span>
             <div class="close-btn" v-if="images[idx]" @click.stop="removeImage(idx)"></div>
         </span>
         <form enctype="multipart/form-data" style="display: none;" ref="fileForm">
-            <input type="file" accept=".jpg, .jpeg, .png, .gif" style="display: none;" name="files" ref="files" @change="uploadImage">
+            <input type="file" accept=".jpg, .jpeg, .png, .gif" style="display: none;" name="file" ref="files" @change="uploadImage">
         </form>
     </div>
 </template>
@@ -57,7 +57,7 @@ export default {
                 console.log(resp)
                 if(resp.status == 200){
                     if(resp.data.code == 200){
-                        const imgUrl = resp.data.data.prxUrl + resp.data.data.fileName
+                        const imgUrl = (resp.data.data.url.indexOf('http://') == -1 ? 'http://' : '') + resp.data.data.url
                         // this.$emit('', {imgUrl: imgUrl, idx: this.uploadIdx})
                         this.setImage({imgUrl: imgUrl, idx: this.uploadIdx})
                     }else{
