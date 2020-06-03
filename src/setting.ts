@@ -183,7 +183,9 @@ export default {
         // 添加/修改文章
         collegeArticleModify: '/college/articlemodify',
         // 文章详情
-        collegeArticleDetail: '/college/articledetail'
+        collegeArticleDetail: '/college/articledetail',
+        // 提现
+        cashCheck: '/cash/check'
     },
     // 图片地址
     images: {

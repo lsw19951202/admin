@@ -119,10 +119,12 @@
         </tbody>
         <tbody v-if="tbType == 'withdrawList'" ref="tbody" class="withdraw-list">
             <tr v-for="(tbRow, index) in tbData" :key="index">
-                <td v-for="(tbCol, idx) in tbRow" :key="idx">{{tbCol}}</td>
-                <td>
-                    <a v-if="tbRow[3] == '等待审核'" @click="checkWithdraw(tbRow, index)">提现审核</a>
-                    <slot v-else>--</slot>
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <slot v-if="idx == tbRow.length - 1">
+                        <a v-if="tbCol.auditStatus == '等待审核' && tbCol['cash_check'] == 'T'" @click="checkWithdraw(tbRow, index)">提现审核</a>
+                        <slot v-else>--</slot>
+                    </slot>
+                    <slot v-else>{{tbCol}}</slot>
                 </td>
             </tr>
         </tbody>

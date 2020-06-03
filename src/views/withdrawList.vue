@@ -16,12 +16,12 @@
                     </div>
                     <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeEnd" placeholder="结束时间"></flat-picker>
                 </div>
-                <button class="search-btn" @click="loadTBData(1)">搜索</button>
+                <button class="search-btn" @click="loadData(1)">搜索</button>
             </header>
             <div class="table-container hideScrollBar">
                 <detail-table :tbData="tbData" :tbType="tbType" :tableHeader="tableHeader" @checkWithdraw="checkWithdraw"></detail-table>
             </div>
-            <page :pageData="pageData" @loadList="loadTBData"></page>
+            <page :pageData="pageData" @loadList="loadData"></page>
         </div>
         <pop-ups :isShow="showPopUps" :popParams="popParams" @popSave="saveWithdraw" @popCancel="cancelWithdraw" @popReject="rejectWithdraw"></pop-ups>
     </div>
@@ -38,7 +38,7 @@ import page from '@/components/content/page.vue'
 import popUpsVue from '../components/common/popUps.vue'
 
 export default {
-    inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
+    inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'loadTBData'],
     components: {
         'flat-picker': flatPicker,
         'selector': Selector,
@@ -75,7 +75,7 @@ export default {
             createTimeEnd: '',
             tbData: [],
             tbType: 'withdrawList',
-            tableHeader: setting.tableHeader.withdrawList,
+            tableHeader: [],
             pageData: {
                 'total': 0,
                 'page': 1,
@@ -112,75 +112,102 @@ export default {
                     value: 1,
                     text: '支付宝提现'
                 }]
-            }
+            },
+            fields: []
         }
     },
     created: function(){
-        this.loadTBData()
+        this.showLoading()
+        Promise.all([
+            this.loadFields(setting.urls.appFields, { 'field_type': 'cashList' }, 'get'),
+            this.loadTBData(setting.urls.withdrawList, { page: 1, username: this.username, checkStatus: this.checkStatus, plat: this.plat, createTimeBegin: this.createTimeBegin, createTimeEnd: this.createTimeEnd }, 'get')
+        ]).then(rst => {
+            this.fields = rst[0].fields
+            const tableHeader = rst[0].tableHeader
+            tableHeader[0].unshift({name: '序号'})
+            tableHeader[0].push({name: '操作'})
+            this.tableHeader = tableHeader
+            this.createTBData(rst[1])
+        }).catch(e => {
+            this.alert('加载数据失败')
+        }).then(() => {
+            this.hideLoading()
+        })
     },
     methods: {
         saveWithdraw: function(){
             console.log(this.popParams)
             this.showPopUps = false
             // TODO
+            let queryParams = null
             if(this.popParams.reject){
                 console.log('拒绝提现,原因是:' + this.popParams.rejectReason)
+                queryParams = {
+                    id: this.popParams.data.applyId,
+                    'audit_status': 90,
+                    remark: this.popParams.rejectReason || ''
+                }
             }else{
                 console.log('同意提现')
+                queryParams = {
+                    id: this.popParams.data.applyId,
+                    'audit_status': 0
+                }
             }
+            this.showLoading()
+            request({
+                url: setting.urls.cashCheck,
+                method: 'get',
+                params: queryParams
+            }).then((rst) => {
+                if(rst.status == 200){
+                    if(rst.data.code == 200){
+                        this.loadData(this.pageData.page || 1)
+                    }else{
+                        this.alert(rst.data.message || '提现审核失败')
+                    }
+                }else{
+                    this.alert('提现审核失败')
+                }
+            }).catch(e => {
+                this.alert('提现审核失败')
+            }).then(() => {
+                this.hideLoading()
+            })
         },
         cancelWithdraw: function(){
-            console.log('cancel')
             this.showPopUps = false
-            console.log('取消提现')
         },
         rejectWithdraw: function(){
             this.popParams.reject = true
         },
-        loadTBData: function(pageNum){
+        loadData(pageNum){
             this.showLoading()
-            request({
-                url: setting.urls.withdrawList,
-                method: 'get',
-                params: {
-                    page: pageNum || 1,
-                    username: this.username,
-                    checkStatus: this.checkStatus,
-                    plat: this.plat,
-                    createTimeBegin: this.createTimeBegin,
-                    createTimeEnd: this.createTimeEnd
-                }
-            }).then((resp) => {
-                if(resp.status == 200){
-                    if(resp.data.code == 200){
-                        this.createTBData(resp.data.data)
-                    }else{
-                        this.alert(resp.data.message || '加载提现列表失败')
-                    }
-                }else{
+            this.loadTBData(setting.urls.withdrawList, { page: pageNum || 1, username: this.username, checkStatus: this.checkStatus, plat: this.plat, createTimeBegin: this.createTimeBegin, createTimeEnd: this.createTimeEnd }, 'get')
+                .then(rst => {
+                    this.createTBData(rst || [])
+                }).catch(e => {
                     this.alert('加载提现列表失败')
-                }
-            }).catch((error) => {
-                this.alert('加载提现列表失败')
-            }).then(() => {
-                this.hideLoading()
-            })
+                }).then(() => {
+                    this.hideLoading()
+                })
         },
         createTBData: function(dt){
             this.pageData.total = dt.total
             this.pageData.page = dt.page
             this.pageData['total_page'] = dt.total_page || dt.pageCount || 0
 
-            const fields = ['username', 'applyAmount', 'auditStatus', 'applyPlat', 'createTime', 'dealTime']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
                 const item = dt.data[idx]
                 tbData[idx].push((idx < 9 ? '0' : '') + (idx + 1))
-                for(let idxx = 0; idxx < fields.length; idxx++){
-                    tbData[idx].push(item[fields[idxx]] || (item[fields[idxx]] == 0 ? item[fields[idxx]] : '--'))
+                for(let idxx = 0; idxx < this.fields.length; idxx++){
+                    tbData[idx].push(item[this.fields[idxx]] || (item[this.fields[idxx]] == 0 ? item[this.fields[idxx]] : '--'))
                 }
+                tbData[idx].push({auditStatus: item['auditStatus'] || '--', 'cash_check': item['cash_check'] || 'F'})
             }
+            this.withdrawList = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 const item = dt.data[idx]
                 if(item.applyPlat == '微信'){
@@ -199,7 +226,6 @@ export default {
             this.plat = dt
         },
         checkWithdraw: function(dt){
-            console.log(dt)
             this.popParams.data = this.withdrawList[dt.idx]
             this.popParams.reject = false
             this.popParams.rejectReason = ''

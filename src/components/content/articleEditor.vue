@@ -22,7 +22,7 @@
                     <input type="text" placeholder="四十个字以内，多出的用省略号..." v-model="article.con_prefix" :disabled="!editable">
                 </div>
             </div>
-            <div class="editor-groups" style="flex: 1; height: 0;" v-if="article.dictionary_type == 1">
+            <div class="editor-groups" style="height: 20rem;" v-if="article.dictionary_type == 1">
                 <label>正文编辑</label>
                 <div>
                     <html-editor :htmlText="article.con_detail" :config="htmlEditorConfig" :editable="editable"></html-editor>
