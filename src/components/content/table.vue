@@ -350,7 +350,7 @@ tbody.scrollable tr { display: table; width: 100%; table-layout: fixed; }
 .material-list>tr>td:nth-child(7) { width: 9rem; min-width: 9rem; max-width: 9rem; text-align: center; }
 .material-list>tr>td:nth-child(10),.material-list>tr>td:nth-child(11) { width: 3.5rem; min-width: 3.5rem; max-width: 3.5rem; }
 .articleList>tr>td:nth-child(2) { width: 6rem; min-width: 6rem; max-width: 6rem; overflow-x: scroll; }
-.articleList>tr>td:nth-child(3) { width: 9rem; max-width: 9rem; min-width: 9rem; }
+.articleList>tr>td:nth-child(3) { width: 4.5rem; max-width: 4.5rem; min-width: 4.5rem; }
 .articleList>tr>td:nth-child(3)>img { width: 100%; }
 .material-list img { width: 1.875rem; height: 1.875rem; margin-left: .5rem; }
 .material-list img:first-child { margin-left: 0; }
