@@ -108,6 +108,12 @@ export default {
         },
         // 数字加千分符
         numToStr: function(num){
+            // 是否负数
+            let isFushu = false
+            if(num < 0){
+                isFushu = true
+                num = 0 - num
+            }
             if(num == 0){
                 return '0.00'
             }
@@ -130,7 +136,7 @@ export default {
                     str = str.substr(0, str.length - 1)
                 }
             }
-            return str + (numArr[1] ? ('.' + numArr[1]) : '')
+            return (isFushu ? '-' : '') + str + (numArr[1] ? ('.' + numArr[1]) : '')
         },
         // 加千分符的字符串去掉逗号
         strToNum: function(str){
