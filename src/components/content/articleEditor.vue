@@ -35,9 +35,12 @@
                     <form enctype="multipart/form-data" style="display: none;" ref="videoForm">
                         <input type="file" ref="videoIpt" @change="uploadVideo" accept=".mp4, .ogg, .mpeg, .3gp, .rm, .rmvb" name="file">
                     </form>
-                    <video v-if="article.video_url" controls autoplay>
-                        <source :src="article.video_url" :type="'video/' + article.video_url.split('.')[article.video_url.split('.').length - 1]">
-                    </video>
+                    <div style="height: 100%; position: relative; width: fit-content;">
+                        <video v-if="article.video_url" controls autoplay>
+                            <source :src="article.video_url" :type="'video/' + article.video_url.split('.')[article.video_url.split('.').length - 1]">
+                        </video>
+                        <div class="close-btn" v-if="article.video_url && editable" @click.stop="removeVideo()"></div>
+                    </div>
                 </div>
             </div>
             <div class="editor-groups" style="height: 5.21875rem;">
@@ -94,6 +97,9 @@ export default {
         }
     },
     methods: {
+        removeVideo(){
+            this.article['video_url'] = null
+        },
         saveArticle(){
             if(this.article['dictionary_type'] == 1){
                 this.article['con_detail'] = (this.$children[0].getContent&&this.$children[0].getContent()) || (this.$children[1].getContent&&this.$children[1].getContent())
@@ -169,4 +175,5 @@ export default {
 .editor-groups select { -webkit-appearance: menulist; }
 .video-ck-btn { box-sizing: border-box; border: 1px solid #d9d9d9; border-radius: .125rem; background-repeat: no-repeat; background-size: auto; background-position: center center; width: 4.1875rem; height: 4.1875rem; position: relative; cursor: pointer; background-image: url(../../assets/icon_upload.png); }
 video { height: 100%; }
+.close-btn { position: absolute; content: " "; display: block; width: .625rem; height: .625rem; right: .1rem; top: .1rem; background-image: url('../../assets/icon_close.png'); background-size: 100% 100%; background-position: center center; background-repeat: no-repeat; float: none; padding: 0; }
 </style>
