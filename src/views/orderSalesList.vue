@@ -21,6 +21,10 @@
                 </div>
                 <button class="action-btn" @click="clearCheckedGoodsAndLoadData">搜索</button>
                 <a class="action-btn" style="display: inline-block;" :href="downloadUrl" :download="createTimeBegin + '.xlsx'">导出全部</a>
+                <a class="action-btn" style="display: inline-block;" @click.prevent.stop="selectExcel">导入</a>
+                <form enctype="multipart/form-data" style="display: none;" ref="fileForm">
+                    <input type="file" ref="excelIpt" @change="uploadExcel" accept=".xls, .xlsx" name="file">
+                </form>
             </header>
             <div class="table-container hideScrollBar">
                 <detail-table :tbData="tbData" :checkedArray="checkedGoods" :tbType="tbType" :tableHeader="tableHeader" @changeCheckStatus="changeCheckStatus"></detail-table>
@@ -127,6 +131,39 @@ export default {
         }
     },
     methods: {
+        selectExcel(){
+            this.$refs.excelIpt.click()
+        },
+        uploadExcel: function(){
+            this.showLoading()
+            const formData = new FormData(this.$refs.fileForm)
+            request({
+                url: setting.urls.appSaleRank,
+                method: 'post',
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(resp => {
+                if(resp.status == 200){
+                    if(resp.data.code == 200){
+                        // do nothing
+                        // this.alert('提现日志上传成功')
+                        // this.createTBData(resp.data.data)
+                        this.loadTBData(1)
+                    }else{
+                        this.alert(resp.data.message || '上传文件失败')
+                    }
+                }else{
+                    this.alert('上传文件失败')
+                }
+            }).catch(e => {
+                this.alert('上传文件失败')
+            }).then(() => {
+                this.hideLoading()
+                this.$refs.excelIpt.value = ''
+            })
+        },
         exportCheckedGoods: function(){
             if(this.checkedGoods.length == 0){
                 this.alert('请先选择要导出的商品')
