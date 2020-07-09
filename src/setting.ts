@@ -3,7 +3,8 @@
  */
 export default {
     // baseUrl: 'http://tongji.chenlong.com',
-    baseUrl: 'http://dash.yunzhanxinxi.com',
+    // baseUrl: 'http://dash.yunzhanxinxi.com',
+    baseUrl: 'http://test.dash.yunzhanxinxi.com',
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
@@ -197,6 +198,10 @@ export default {
             首页: [
                 require('@/assets/home_selected.png'),
                 require('@/assets/home_selected-1.png')
+            ],
+            数据工作台: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
             ],
             cps管理: [
                 require('@/assets/menu_cps_selected.png'),
@@ -596,6 +601,9 @@ export default {
             name: 'sxy-article',
             title: '素材管理',
             subTitle1: '文章'
+        },
+        '/ypj/workbench/totaluser':{
+            name:''
         }
     }
 }
