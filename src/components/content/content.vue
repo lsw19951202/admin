@@ -48,6 +48,7 @@ import cpsWithdrawYearVue from '../../views/cpsWithdrawYear.vue'
 import activityPrizepoollistVue from '../../views/activityPrizepoollist.vue'
 import sxyArticleVue from '../../views/sxyArticle.vue'
 import sxyTagVue from '../../views/sxyTag.vue'
+import materialLabelVue from '../../views/materialLabel.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -103,7 +104,8 @@ export default {
         'cpswithdraw-year': cpsWithdrawYearVue,
         'activity-prizepoollist': activityPrizepoollistVue,
         'sxy-tag': sxyTagVue,
-        'sxy-article': sxyArticleVue
+        'sxy-article': sxyArticleVue,
+        'material-label': materialLabelVue
     }
 }
 </script>

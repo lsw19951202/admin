@@ -118,7 +118,8 @@ export default {
                 [{text: '淘宝结算毛利', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '饿了么结算毛利', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '淘宝下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '京东下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '拼多多下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '饿了么下单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}],
                 [{text: '淘宝预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '京东预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '拼多多预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '饿了么预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '淘宝结算返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '京东结算返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}],
                 [{text: '拼多多结算返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '饿了么结算返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '淘宝技术服务费', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '美团订单数量', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '美团预估收入', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '美团预估返佣', num: 0, imgSrc: require('@/assets/red_doller.png')}],
-                [{text: '唯品会订单数量', num: 0, imgSrc: require('@/assets/blue_eq.png')}, {text: '唯品会预估收入', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '唯品会预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '团油订单数量', num: 0, imgSrc: require('@/assets/blue_eq.png')}, {text: '团油预估收入', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '团油预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}]
+                [{text: '唯品会订单数量', num: 0, imgSrc: require('@/assets/blue_eq.png')}, {text: '唯品会预估收入', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '唯品会预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '团油订单数量', num: 0, imgSrc: require('@/assets/blue_eq.png')}, {text: '团油预估收入', num: 0, imgSrc: require('@/assets/blue_doller.png')}, {text: '团油预估返佣', num: 0, imgSrc: require('@/assets/blue_doller.png')}],
+                [{text: '美团红包订单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '美团红包付款金额', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '美团红包返利金额', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '肯德基订单数量', num: 0, imgSrc: require('@/assets/red_eq.png')}, {text: '肯德基订单金额', num: 0, imgSrc: require('@/assets/red_doller.png')}, {text: '肯德基返利金额', num: 0, imgSrc: require('@/assets/red_doller.png')}]
             ]
             dt = Object.assign(dt[0], dt[1])
             const fields = [
@@ -130,7 +131,8 @@ export default {
                 "tbSettlementGrossProfit", "elmSettlementGrossProfit", "tbOrderNum", "jdOrderNum", "pddOrderNum", "elmOrderNum",
                 "tbPredictRebateAmount", "jdPredictRebateAmount", "pddPredictRebateAmount", "elmPredictRebateAmount", "tbSettlementRebateAmount", "jdSettlementRebateAmount",
                 "pddSettlementRebateAmount", "elmSettlementRebateAmount", "tbServiceFee", "mtOrderNum", "mtPredictAmount", "mtPredictRebateAmount",
-                "wphOrderNum", "wphPredictRebateAmount", "wphPredictGrossProfit", "jyOrderNum", "jyPredictRebateAmount", "jyPredictGrossProfit"
+                "wphOrderNum", "wphPredictRebateAmount", "wphPredictGrossProfit", "jyOrderNum", "jyPredictRebateAmount", "jyPredictGrossProfit",
+                "mthbOrderNum", "mthbPayAmount", "mthbPredictRebateAmount", "kdjOrderNum", "kdjPayAmount", "kdjPredictRebateAmount"
             ];
             let count = 0
             for(let row = 0;row < cardData.length; row++){

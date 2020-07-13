@@ -14,7 +14,8 @@ export default {
         // 上传图片,视频
         uploadImage: '/upload',
         // 编辑素材
-        editMaterial: '/material/edit',
+        // editMaterial: '/material/edit',
+        editMaterial: '/material/modify',
         // 手工数据详情
         cpsHandDetail: '/api/excel/manualinfo',
         // 新增主菜单
@@ -94,7 +95,8 @@ export default {
         // cps汇总
         cpsAll: '/api/statistics/all',
         // 加载素材列表
-        materialList: '/material/query',
+        // materialList: '/material/query',
+        materialList: '/material/list',
         // app订单列表
         appOrderList: '/order/getAll',
         // app商品销量排行
@@ -185,7 +187,17 @@ export default {
         // 文章详情
         collegeArticleDetail: '/college/articledetail',
         // 提现
-        cashCheck: '/cash/check'
+        cashCheck: '/cash/check',
+        // 修改素材状态
+        changeMaterialStatu: '/material/status',
+        // 素材标签列表
+        materialLabelList: '/material/labellist',
+        // 新建素材标签
+        materialLabelAdd: '/material/labeladd',
+        // 修改素材标签
+        materialLabelEdit: '/material/labeledit',
+        // 修改素材标签状态
+        materialLabelStatu: '/material/labelstatus'
     },
     // 图片地址
     images: {
@@ -501,6 +513,11 @@ export default {
             name: 'material-list',
             title: '素材管理',
             subTitle1: '素材列表'
+        },
+        '/material/label': {
+            name: 'material-label',
+            title: '素材管理',
+            subTitle1: '素材标签列表'
         },
         '/team/list': {
             name: 'team-sort-list',
