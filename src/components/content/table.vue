@@ -131,16 +131,21 @@
         <tbody v-if="tbType == 'materialList'" ref="tbody" class="material-list">
             <tr v-for="(tbRow, index) in tbData" :key="index">
                 <td v-for="(tbCol, idx) in tbRow" :key="idx">
-                    <switch-progress v-if="idx == 4" :statusData="index" :turnOn="tbCol == 1" @changeSwitchStatus="changeSwitchStatus"></switch-progress>
-                    <div v-else-if="idx == 5" v-html="tbCol"></div>
-                    <div v-else-if="idx == 6">
-                        <img v-for="(imgSrc, idxx) in tbCol" :key="idxx" :src="imgSrc.indexOf('http') >= 0 ? imgSrc : ('http://' + imgSrc)">
+                    <slot v-if="idx == tbRow.length - 1">
+                        <button v-if="tbCol.material_close == 'T'" class="action-btn modify-btn" @click="pubBtnClicked(index)">下架</button>
+                        <button v-if="tbCol.material_open == 'T'" class="action-btn modify-btn" @click="pubBtnClicked(index)">发布</button>
+                        <button v-if="tbCol.material_edit == 'T' && tbCol.material_status == 0" class="action-btn edit-btn" @click="editBtnClicked(index)">编辑</button>
+                        <button v-if="tbCol.material_edit == 'F' && tbCol.material_status == 1" class="action-btn preview-btn" @click="previewBtnClicked(index)">查看</button>
+                        <!-- <button v-if="tbCol.material_edit == 'T' && tbCol.material_status == 0" class="action-btn del-btn" @click="delBtnClicked(index)">删除</button> -->
+                    </slot>
+                    <div style="width: 100%; height: auto; box-sizing: border-box; padding: .3rem;" v-else-if="idx == 2" v-html="tbCol">
                     </div>
-                    <slot v-else>{{tbCol}}</slot>
-                </td>
-                <td>
-                    <a @click="modifyMaterial(index)">修改</a>
-                    <a @click="delMaterial(index)">删除</a>
+                    <slot v-else-if="idx == 3">
+                        {{(tbCol || []).length}}
+                    </slot>
+                    <slot v-else>
+                        {{tbCol}}
+                    </slot>
                 </td>
             </tr>
         </tbody>
@@ -196,7 +201,7 @@
     </table>
 </template>
 <script>
-import switchProgress from '@/components/common/switch.vue'
+// import switchProgress from '@/components/common/switch.vue'
 
 export default {
     props: ['tableHeader', 'tbData', 'tbType', 'tableHeaderFixed', 'tableBodyClick', 'reduceData', 'selectUserList', 'checkedArray'],
@@ -206,7 +211,7 @@ export default {
         }
     },
     components: {
-        'switch-progress': switchProgress
+        // 'switch-progress': switchProgress
     },
     methods: {
         changeSwitchStatus: function(dt){
@@ -279,6 +284,8 @@ export default {
                 this.$emit('editArticleClicked', idx)
             }else if(this.tbType == 'materialLabel'){
                 this.$emit('editMaterialLabelClicked', idx)
+            }else if(this.tbType == 'materialList'){
+                this.$emit('editMaterialClicked', idx)
             }
         },
         modifyBtnClicked: function(idx){
@@ -297,6 +304,8 @@ export default {
                 this.$emit('delArticleClicked', idx)
             }else if(this.tbType == 'materialLabel'){
                 this.$emit('delMaterialLabelClicked', idx)
+            }else if(this.tbType == 'materialList'){
+                this.$emit('delMaterialClicked', idx)
             }
         },
         pubBtnClicked: function(idx){
@@ -306,6 +315,13 @@ export default {
                 this.$emit('pubTagClicked', idx)
             }else if(this.tbType == 'materialLabel'){
                 this.$emit('pubMaterialLabelClicked', idx)
+            }else if(this.tbType == 'materialList'){
+                this.$emit('pubMaterialClicked', idx)
+            }
+        },
+        previewBtnClicked(idx){
+            if(this.tbType == 'materialList'){
+                this.$emit('previewBtnClicked', idx)
             }
         },
         sortTBData: function(tp, sortBy){
@@ -365,16 +381,14 @@ tbody.scrollable tr { display: table; width: 100%; table-layout: fixed; }
 .order-list>tr>td:nth-child(1),.order-list>tr>td:nth-child(2) { width: 4rem; max-width: 4rem; min-width: 4rem; white-space: nowrap; overflow-x: scroll; padding: 0 .2rem; }
 .order-list>tr>td:nth-child(14),.order-list>tr>td:nth-child(15) { max-width: 3.5rem; min-width: 3.5rem; width: 3.5rem; }
 .order-list>tr>td:nth-child(3) { width: 3rem; max-width: 3rem; min-width: 3rem; overflow-x: scroll; white-space: nowrap; padding: 0 .2rem; }
-.material-list>tr>td:nth-child(5) { padding: 0 .3rem; }
-.material-list>tr>td:nth-child(6) { padding: 0 .3rem; width: 15rem; min-width: 15rem; max-width: 15rem; overflow-y: scroll; text-align: left; }
-.material-list>tr>td:nth-child(7) { width: 9rem; min-width: 9rem; max-width: 9rem; text-align: center; }
-.material-list>tr>td:nth-child(10),.material-list>tr>td:nth-child(11) { width: 3.5rem; min-width: 3.5rem; max-width: 3.5rem; }
 .articleList>tr>td:nth-child(2) { width: 6rem; min-width: 6rem; max-width: 6rem; overflow-x: scroll; }
 .articleList>tr>td:nth-child(3) { width: 4.5rem; max-width: 4.5rem; min-width: 4.5rem; }
 .articleList>tr>td:nth-child(3)>img { width: 100%; }
+.material-list>tr>td:nth-child(3) { width: 15rem; max-width: 15rem; min-width: 15rem; text-align: left; }
 .material-list img { width: 1.875rem; height: 1.875rem; margin-left: .5rem; }
 .material-list img:first-child { margin-left: 0; }
 input[type="checkbox"] { position: relative; width: 0.625rem; height: .625rem; vertical-align: sub; }
 input[type="checkbox"]::after { background-color: #fff; background-image: url(../../assets/check.png); position: absolute; content: ' '; background-repeat: no-repeat; background-position: center center; background-size: 100% 100%; width: 0.625rem; height: 0.625rem; }
 input[type="checkbox"]:checked::after { background-image: url(../../assets/checked.png); }
+.action-btn.preview-btn { padding: 1px 0.15rem; font-size: 0.375rem; background-color: rgb(111, 111, 243); }
 </style>
