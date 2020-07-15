@@ -3,49 +3,30 @@
         <div class="editor-header">新增/修改素材</div>
         <div class="editor-body hideScrollBar">
             <div class="editor-groups">
-                <label>素材类别</label>
+                <label>所属标签</label>
                 <div>
-                    <input type="text" placeholder="请输入" v-model="material.type">
-                </div>
-            </div>
-            <div class="editor-groups">
-                <label>关键字</label>
-                <div>
-                    <input type="text" placeholder="请输入" v-model="material.keyWord">
-                </div>
-            </div>
-            <div class="editor-groups">
-                <label>素材标题</label>
-                <div>
-                    <input type="text" placeholder="请输入" v-model="material.title">
-                </div>
-            </div>
-            <div class="editor-groups">
-                <label>素材状态</label>
-                <div>
-                    <select v-model="material.status">
-                        <option value="0">停用</option>
-                        <option value="1">启用</option>
+                    <select v-model="material.material_type" :disabled="!editable">
+                        <option :value="label.value" v-for="(label, idx) in materialLabelList" :key="idx">{{label.text}}</option>
                     </select>
                 </div>
             </div>
             <div class="editor-groups" style="flex: 1; height: 0;">
-                <label>素材内容</label>
+                <label>素材详情</label>
                 <div>
-                    <html-editor :htmlText="material.detail" :config="htmlEditorConfig" ></html-editor>
+                    <html-editor :htmlText="material.material_detail" :config="htmlEditorConfig" :editable="editable"></html-editor>
                 </div>
             </div>
             <div class="editor-groups" style="height: 5.21875rem;">
                 <label>图片上传</label>
                 <div>
                     <span>(最多上传9张,点击相应位置上传图片)</span>
-                    <image-editor :config="imageConfig" :images="material.imgs"></image-editor>
+                    <image-editor :config="imageConfig" :images="material.image_list" :editable="editable"></image-editor>
                 </div>
             </div>
             <div class="editor-groups">
                 <label></label>
                 <div>
-                    <button class="action-btn" @click="saveMaterial">确认</button>
+                    <button class="action-btn" v-if="editable" @click="saveMaterial">确认</button>
                     <button class="action-btn" @click="cancelEdit">取消</button>
                 </div>
             </div>
@@ -56,7 +37,7 @@
 import htmlEditorVue from '../common/htmlEditor.vue'
 import imageEditorVue from '../common/imageEditor.vue'
 export default {
-    props: ['material'],
+    props: ['material', 'editable', 'materialLabelList'],
     components: {
         'html-editor': htmlEditorVue,
         'image-editor': imageEditorVue
@@ -75,7 +56,7 @@ export default {
                     emoji: true,
                     image: true,
                     link: false,
-                    video: true,
+                    video: false,
                     fontSize: true
                 }
             },
@@ -87,7 +68,7 @@ export default {
     methods: {
         saveMaterial: function(){
             // console.log(this.$children[0].getContent())
-            this.$parent.material.detail = this.$children[0].getContent()
+            this.$parent.material['material_detail'] = this.$children[0].getContent()
             this.$emit('saveMaterial')
             // console.log(this.material)
         },

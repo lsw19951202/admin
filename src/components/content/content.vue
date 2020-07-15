@@ -50,6 +50,7 @@ import sxyArticleVue from '../../views/sxyArticle.vue'
 import sxyTagVue from '../../views/sxyTag.vue'
 import materialLabelVue from '../../views/materialLabel.vue'
 import totalUserVue from '../../views/dataWorkBench.vue'
+import directedListVue from '../../views/directedList.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -107,7 +108,8 @@ export default {
         'sxy-tag': sxyTagVue,
         'sxy-article': sxyArticleVue,
         'material-label': materialLabelVue,
-        'total-user':totalUserVue
+        'total-user':totalUserVue,
+        'directed-list': directedListVue
     }
 }
 </script>
