@@ -128,6 +128,20 @@
                 </td>
             </tr>
         </tbody>
+        <tbody v-if="tbType == 'directList'" ref="tbody" class="direct-list">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <slot v-if="idx == tbRow.length - 1">
+                        <button v-if="tbCol.directed_operate == 'T' && tbCol.status == '发布中'" class="action-btn modify-btn" @click="pubBtnClicked(index)">下架</button>
+                        <button v-if="tbCol.directed_operate == 'T' && tbCol.status == '待发布'" class="action-btn modify-btn" @click="pubBtnClicked(index)">发布</button>
+                        <button v-if="tbCol.directed_edit == 'T' && (tbCol.status == '待发布' || tbCol.status == '已下架')" class="action-btn edit-btn" @click="editBtnClicked(index)">编辑</button>
+                    </slot>
+                    <slot v-else>
+                        {{tbCol}}
+                    </slot>
+                </td>
+            </tr>
+        </tbody>
         <tbody v-if="tbType == 'materialList'" ref="tbody" class="material-list">
             <tr v-for="(tbRow, index) in tbData" :key="index">
                 <td v-for="(tbCol, idx) in tbRow" :key="idx">
@@ -286,6 +300,8 @@ export default {
                 this.$emit('editMaterialLabelClicked', idx)
             }else if(this.tbType == 'materialList'){
                 this.$emit('editMaterialClicked', idx)
+            }else if(this.tbType == 'directList'){
+                this.$emit('editBtnClicked', idx)
             }
         },
         modifyBtnClicked: function(idx){
@@ -317,6 +333,8 @@ export default {
                 this.$emit('pubMaterialLabelClicked', idx)
             }else if(this.tbType == 'materialList'){
                 this.$emit('pubMaterialClicked', idx)
+            }else if(this.tbType == 'directList'){
+                this.$emit('pubBtnClicked', idx)
             }
         },
         previewBtnClicked(idx){
@@ -391,4 +409,6 @@ input[type="checkbox"] { position: relative; width: 0.625rem; height: .625rem; v
 input[type="checkbox"]::after { background-color: #fff; background-image: url(../../assets/check.png); position: absolute; content: ' '; background-repeat: no-repeat; background-position: center center; background-size: 100% 100%; width: 0.625rem; height: 0.625rem; }
 input[type="checkbox"]:checked::after { background-image: url(../../assets/checked.png); }
 .action-btn.preview-btn { padding: 1px 0.15rem; font-size: 0.375rem; background-color: rgb(111, 111, 243); }
+.direct-list>tr>td:nth-child(2) { width: 5rem; min-width: 5rem; max-width: 5rem; word-break: break-all; }
+.direct-list>tr>td:nth-child(7) { width: 10rem; min-width: 10rem; max-width: 10rem; word-break: break-all; }
 </style>

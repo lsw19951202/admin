@@ -198,7 +198,17 @@ export default {
         // 修改素材标签
         materialLabelEdit: '/material/labeledit',
         // 修改素材标签状态
-        materialLabelStatu: '/material/labelstatus'
+        materialLabelStatu: '/material/labelstatus',
+        // 定向佣金列表
+        directList: '/ypj/directed/list',
+        // 新增或修改定向佣金
+        editDirect: '/ypj/directed/add',
+        // 定向佣金导入
+        importDirect: '/ypj/directed/import',
+        // 修改定向佣金状态
+        directStatu: '/ypj/directed/operate',
+        // 定向佣金商品详情
+        directGoodsInfo: '/ypj/directed/goodsinfo'
     },
     // 图片地址
     images: {
@@ -264,6 +274,10 @@ export default {
                 require('@/assets/menu_cps_normal.png')
             ],
             活动统计: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            招商管理: [
                 require('@/assets/menu_cps_selected.png'),
                 require('@/assets/menu_cps_normal.png')
             ]
@@ -614,6 +628,11 @@ export default {
             name: 'sxy-article',
             title: '素材管理',
             subTitle1: '文章'
+        },
+        '/directed/list': {
+            name: 'directed-list',
+            title: '招商管理',
+            subTitle1: '定向佣金列表'
         }
     }
 }

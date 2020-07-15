@@ -49,6 +49,7 @@ import activityPrizepoollistVue from '../../views/activityPrizepoollist.vue'
 import sxyArticleVue from '../../views/sxyArticle.vue'
 import sxyTagVue from '../../views/sxyTag.vue'
 import materialLabelVue from '../../views/materialLabel.vue'
+import directedListVue from '../../views/directedList.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -105,7 +106,8 @@ export default {
         'activity-prizepoollist': activityPrizepoollistVue,
         'sxy-tag': sxyTagVue,
         'sxy-article': sxyArticleVue,
-        'material-label': materialLabelVue
+        'material-label': materialLabelVue,
+        'directed-list': directedListVue
     }
 }
 </script>
