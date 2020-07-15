@@ -15,7 +15,8 @@ export default {
         // 上传图片,视频
         uploadImage: '/upload',
         // 编辑素材
-        editMaterial: '/material/edit',
+        // editMaterial: '/material/edit',
+        editMaterial: '/material/modify',
         // 手工数据详情
         cpsHandDetail: '/api/excel/manualinfo',
         // 新增主菜单
@@ -95,7 +96,8 @@ export default {
         // cps汇总
         cpsAll: '/api/statistics/all',
         // 加载素材列表
-        materialList: '/material/query',
+        // materialList: '/material/query',
+        materialList: '/material/list',
         // app订单列表
         appOrderList: '/order/getAll',
         // app商品销量排行
@@ -186,7 +188,43 @@ export default {
         // 文章详情
         collegeArticleDetail: '/college/articledetail',
         // 提现
-        cashCheck: '/cash/check'
+        cashCheck: '/cash/check',
+        // 修改素材状态
+        changeMaterialStatu: '/material/status',
+        // 素材标签列表
+        materialLabelList: '/material/labellist',
+        // 新建素材标签
+        materialLabelAdd: '/material/labeladd',
+        // 修改素材标签
+        materialLabelEdit: '/material/labeledit',
+        // 修改素材标签状态
+        materialLabelStatu: '/material/labelstatus',
+        // 平台用户总数
+        totalUser: '/ypj/workbench/totaluser',
+        // 新增用户折线图
+        totalUserChart: '/ypj/workbench/totaluserchart',
+        // 活跃用户统计
+        activeUser:'/ypj/workbench/activeuser',
+        // 活跃用户折线图
+        activeChart:'/ypj/workbench/activechart',
+        // 沉睡用户折线图
+        sleepChart:"/ypj/workbench/sleepuserchart",
+        // 沉睡用户数据
+        sleepUser:"/ypj/workbench/sleepuser",
+        // 下单用户统计数据
+        orderUser:'/ypj/workbench/orderuser',
+        // 下单用户折线图
+        orderUserChart:'/ypj/workbench/orderuserchart',
+        // 商品分享数据
+        goodsShare:'/ypj/workbench/goodsshare',
+        // 商品分享折线图
+        sharEchart:'/ypj/workbench/sharechart',
+        // 沉睡用户列表
+        sleepUserList:'/user/getAll',
+        // 沉睡用户列表表头
+        sleepUserHeader:'/app/field?field_type=userList',
+        // 商品分享列表
+        shareList:'/ypj/workbench/sharelist'
     },
     // 图片地址
     images: {
@@ -507,6 +545,11 @@ export default {
             title: '素材管理',
             subTitle1: '素材列表'
         },
+        '/material/label': {
+            name: 'material-label',
+            title: '素材管理',
+            subTitle1: '素材标签列表'
+        },
         '/team/list': {
             name: 'team-sort-list',
             title: '用户管理',
@@ -602,8 +645,10 @@ export default {
             title: '素材管理',
             subTitle1: '文章'
         },
-        '/ypj/workbench/totaluser':{
-            name:''
+        '/dashbord/operation':{
+            name:'total-user',
+            title:"数据工作台",
+            subTitle1: '运营数据'
         }
     }
 }

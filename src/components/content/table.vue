@@ -144,6 +144,20 @@
                 </td>
             </tr>
         </tbody>
+        <tbody v-if="tbType == 'materialLabel'" ref="tbody" class="material-label">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <slot v-if="idx == tbRow.length - 1">
+                        <button v-if="tbCol.material_label_edit == 'T'" @click="editBtnClicked(index)" class="action-btn edit-btn">编辑</button>
+                        <button v-if="tbCol.material_label_status == 'T' && tbCol.label_open_status == 'T'" @click="pubBtnClicked(index)" class="action-btn del-btn">启用</button>
+                        <button v-if="tbCol.material_label_status == 'T' && tbCol.label_close_status == 'T'" @click="delBtnClicked(index)" class="action-btn modify-btn">隐藏</button>
+                    </slot>
+                    <slot v-else>
+                        {{tbCol}}
+                    </slot>
+                </td>
+            </tr>
+        </tbody>
         <tbody v-if="tbType == 'tagList'" ref="tbody" class="tagList">
             <tr v-for="(tbRow, idx) in tbData" :key="idx">
                 <td v-for="(tbCol, index) in tbRow" :key="index">
@@ -263,6 +277,8 @@ export default {
                 this.$emit('editTagClicked', idx)
             }else if(this.tbType == 'articleList'){
                 this.$emit('editArticleClicked', idx)
+            }else if(this.tbType == 'materialLabel'){
+                this.$emit('editMaterialLabelClicked', idx)
             }
         },
         modifyBtnClicked: function(idx){
@@ -279,6 +295,8 @@ export default {
                 this.$emit('delTagClicked', idx)
             }else if(this.tbType == 'articleList'){
                 this.$emit('delArticleClicked', idx)
+            }else if(this.tbType == 'materialLabel'){
+                this.$emit('delMaterialLabelClicked', idx)
             }
         },
         pubBtnClicked: function(idx){
@@ -286,6 +304,8 @@ export default {
                 this.$emit('pubArticleClicked', idx)
             }else if(this.tbType == 'tagList'){
                 this.$emit('pubTagClicked', idx)
+            }else if(this.tbType == 'materialLabel'){
+                this.$emit('pubMaterialLabelClicked', idx)
             }
         },
         sortTBData: function(tp, sortBy){
