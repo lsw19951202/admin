@@ -298,6 +298,7 @@ export default {
                 .then((response) => {
                     if(response.status == 200){
                         const result = response.data;
+                        console.log(result,"左侧导航菜单")
                         if(result.code == 200){
                             const rst = result.data
                             for(let idx = 0;idx < rst.length;idx++){

@@ -49,6 +49,7 @@ import activityPrizepoollistVue from '../../views/activityPrizepoollist.vue'
 import sxyArticleVue from '../../views/sxyArticle.vue'
 import sxyTagVue from '../../views/sxyTag.vue'
 import materialLabelVue from '../../views/materialLabel.vue'
+import totalUserVue from '../../views/dataWorkBench.vue'
 import directedListVue from '../../views/directedList.vue'
 
 export default {
@@ -107,6 +108,7 @@ export default {
         'sxy-tag': sxyTagVue,
         'sxy-article': sxyArticleVue,
         'material-label': materialLabelVue,
+        'total-user':totalUserVue,
         'directed-list': directedListVue
     }
 }

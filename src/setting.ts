@@ -3,8 +3,8 @@
  */
 export default {
     // baseUrl: 'http://tongji.chenlong.com',
-    baseUrl: 'http://dash.yunzhanxinxi.com',
-    // baseUrl: 'http://test.dash.yunzhanxinxi.com',
+    // baseUrl: 'http://dash.yunzhanxinxi.com',
+    baseUrl: 'http://test.dash.yunzhanxinxi.com',
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
@@ -199,6 +199,32 @@ export default {
         materialLabelEdit: '/material/labeledit',
         // 修改素材标签状态
         materialLabelStatu: '/material/labelstatus',
+        // 平台用户总数
+        totalUser: '/ypj/workbench/totaluser',
+        // 新增用户折线图
+        totalUserChart: '/ypj/workbench/totaluserchart',
+        // 活跃用户统计
+        activeUser:'/ypj/workbench/activeuser',
+        // 活跃用户折线图
+        activeChart:'/ypj/workbench/activechart',
+        // 沉睡用户折线图
+        sleepChart:"/ypj/workbench/sleepuserchart",
+        // 沉睡用户数据
+        sleepUser:"/ypj/workbench/sleepuser",
+        // 下单用户统计数据
+        orderUser:'/ypj/workbench/orderuser',
+        // 下单用户折线图
+        orderUserChart:'/ypj/workbench/orderuserchart',
+        // 商品分享数据
+        goodsShare:'/ypj/workbench/goodsshare',
+        // 商品分享折线图
+        sharEchart:'/ypj/workbench/sharechart',
+        // 沉睡用户列表
+        sleepUserList:'/user/getAll',
+        // 沉睡用户列表表头
+        sleepUserHeader:'/app/field?field_type=userList',
+        // 商品分享列表
+        shareList:'/ypj/workbench/sharelist'
         // 定向佣金列表
         directList: '/ypj/directed/list',
         // 新增或修改定向佣金
@@ -220,6 +246,10 @@ export default {
             首页: [
                 require('@/assets/home_selected.png'),
                 require('@/assets/home_selected-1.png')
+            ],
+            数据工作台: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
             ],
             cps管理: [
                 require('@/assets/menu_cps_selected.png'),
@@ -628,6 +658,11 @@ export default {
             name: 'sxy-article',
             title: '素材管理',
             subTitle1: '文章'
+        },
+        '/dashbord/operation':{
+            name:'total-user',
+            title:"数据工作台",
+            subTitle1: '运营数据'
         },
         '/directed/list': {
             name: 'directed-list',
