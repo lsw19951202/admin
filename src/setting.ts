@@ -3,8 +3,8 @@
  */
 export default {
     // baseUrl: 'http://tongji.chenlong.com',
-    // baseUrl: 'http://dash.yunzhanxinxi.com',
-    baseUrl: 'http://test.dash.yunzhanxinxi.com',
+    baseUrl: 'http://dash.yunzhanxinxi.com',
+    // baseUrl: 'http://test.dash.yunzhanxinxi.com',
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
@@ -224,7 +224,7 @@ export default {
         // 沉睡用户列表表头
         sleepUserHeader:'/app/field?field_type=userList',
         // 商品分享列表
-        shareList:'/ypj/workbench/sharelist'
+        shareList:'/ypj/workbench/sharelist',
         // 定向佣金列表
         directList: '/ypj/directed/list',
         // 新增或修改定向佣金
