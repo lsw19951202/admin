@@ -81,8 +81,9 @@
         </tbody>
         <tbody v-if="tbType == 'userList'" ref="tbody" class="user-list">
             <tr v-for="(tbRow, index) in tbData" v-bind:key="index">
+                <!-- 取消团队迁移前面选择按钮 -->
                 <td style="width: 2.5625rem; text-align: center;">
-                    <input type="checkbox" @click="changeCheckStatus($event, index)" :checked="selectUserList[index].checked">
+                    <!-- <input type="checkbox" @click="changeCheckStatus($event, index)" :checked="selectUserList[index].checked"> -->
                 </td>
                 <td v-for="(tbCol, idx) in tbRow" v-bind:key="idx">
                     <img :src="tbCol" v-if="idx == 2 && tbCol != '--'" style="width: 1.375rem; height: 1.375rem; border-radius: 50%;">
@@ -97,7 +98,9 @@
                 </td>
                 <td>
                     <a @click="showMyTeam(tbRow)">我的团队</a>
-                    <a @click="changeUserRank(tbRow, index)">用户调级</a>
+                    <!-- 去掉用户调级 -->
+                    <!-- <a @click="changeUserRank(tbRow, index)">用户调级</a> -->
+                    <a @click="showIncomeDetail(tbRow)">收益详情</a>
                 </td>
             </tr>
         </tbody>
@@ -266,6 +269,9 @@ export default {
         },
         showMyTeam: function(user){
             this.$emit('showMyTeam', user)
+        },
+        showIncomeDetail: function(userId){
+            this.$emit('showIncomeDetail', userId)
         },
         showHandDetail: function(handData){
             this.$emit('loadHandDetail', handData)

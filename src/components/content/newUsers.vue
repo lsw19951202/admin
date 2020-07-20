@@ -1,14 +1,14 @@
 <template>
     <div class="newAddUser">
         <div class="userName">新增用户</div>
-        <div class="addList">
+        <div class="addList" v-if="addUserData">
             <div class="today">
             <div class="today_top">
                 <div class="today_num">
-                <span>今日新增:{{addUserData.addTopData.todayAddNum}}人</span>
-                <span>{{addUserData.addTopData.dayRate}} 环比昨日</span>
+                <span>今日新增:{{addUserData.today.user_num}}人</span>
+                <span>{{addUserData.rate.day_rate}} 环比昨日</span>
                 </div>
-                <div>昨日新增:{{addUserData.addTopData.yesTodayAddNum}}人</div>
+                <div>昨日新增:{{addUserData.yesterday.user_num}}人</div>
             </div>
             <table>
                 <thead>
@@ -20,41 +20,97 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item,index) in this.addUserData.addDataList" :key="index">
-                    <td>{{item.valid_change_rate==''?item.name:item.name+item.valid_change_rate}}</td>
-                    <td>{{item.member_num}}</td>
-                    <td>{{item.leader_num}}</td>
-                    <td>{{item.director_num}}</td>
-                </tr>
+                    <tr>
+                        <td>今日拉新</td>
+                        <td>{{addUserData.today.director_num}}</td>
+                        <td>{{addUserData.today.leader_num}}</td>
+                        <td>{{addUserData.today.leader_num}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="今日有效转化">
+                            今日有效转化 {{addUserData.today.valid_change_rate}}</td>
+                        <td>{{addUserData.today.member_valid_change_rate}}</td>
+                        <td>{{addUserData.today.leader_valid_change_rate}}</td>
+                        <td>{{addUserData.today.director_valid_change_rate}}</td>
+                    </tr>
+                    <tr>
+                        <td>昨日拉新</td>
+                        <td>{{addUserData.yesterday.director_num}}</td>
+                        <td>{{addUserData.yesterday.leader_num}}</td>
+                        <td>{{addUserData.yesterday.leader_num}}</td>
+                    </tr>
+                    <tr>
+                        <td>昨日有效转化 {{addUserData.yesterday.valid_change_rate}}</td>
+                        <td>{{addUserData.yesterday.member_valid_change_rate}}</td>
+                        <td>{{addUserData.yesterday.leader_valid_change_rate}}</td>
+                        <td>{{addUserData.yesterday.director_valid_change_rate}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比昨日转化率">
+                            环比昨日转化率 {{addUserData.rate.day_valid_change_rate}}</td>
+                        <td>{{addUserData.rate.day_member_valid_change_rate}}</td>
+                        <td>{{addUserData.rate.day_leader_valid_change_rate}}</td>
+                        <td>{{addUserData.rate.day_director_valid_change_rate}}</td>
+                    </tr>
                 </tbody>
             </table>
             </div>
             <div class="today">
-            <div class="today_top">
-                <div class="today_num">
-                <span>本月新增:{{addUserMouth.addTopData.todayAddNum}}人</span>
-                <span>{{addUserMouth.addTopData.dayRate}} 环比上月</span>
+                <div class="today_top">
+                    <div class="today_num">
+                    <span>本月新增:{{addUserData.thisMonth.user_num}}人</span>
+                    <span>{{addUserData.rate.month_rate}} 环比上月</span>
+                    </div>
+                    <div>上月新增:{{addUserData.lastMonth.user_num}}人</div>
                 </div>
-                <div>上月新增:{{addUserMouth.addTopData.yesTodayAddNum}}人</div>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                    <th></th>
-                    <th>会员</th>
-                    <th>团长</th>
-                    <th>总监</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(item,index) in this.addUserMouth.addDataList" :key="index">
-                    <td>{{item.valid_change_rate==''?item.name:item.name+item.valid_change_rate}}</td>
-                    <td>{{item.member_num}}</td>
-                    <td>{{item.leader_num}}</td>
-                    <td>{{item.director_num}}</td>
-                </tr>
-                </tbody>
-            </table>
+                <table>
+                    <thead>
+                        <tr>
+                        <th></th>
+                        <th>会员</th>
+                        <th>团长</th>
+                        <th>总监</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>本月拉新</td>
+                            <td>{{addUserData.thisMonth.director_num}}</td>
+                            <td>{{addUserData.thisMonth.leader_num}}</td>
+                            <td>{{addUserData.thisMonth.leader_num}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="本月有效转化">
+                                本月有效转化 {{addUserData.thisMonth.valid_change_rate}}</td>
+                            <td>{{addUserData.thisMonth.member_valid_change_rate}}</td>
+                            <td>{{addUserData.thisMonth.leader_valid_change_rate}}</td>
+                            <td>{{addUserData.thisMonth.director_valid_change_rate}}</td>
+                        </tr>
+                        <tr>
+                            <td>上月拉新</td>
+                            <td>{{addUserData.lastMonth.director_num}}</td>
+                            <td>{{addUserData.lastMonth.leader_num}}</td>
+                            <td>{{addUserData.lastMonth.leader_num}}</td>
+                        </tr>
+                        <tr>
+                            <td>上月有效转化 {{addUserData.lastMonth.valid_change_rate}}</td>
+                            <td>{{addUserData.lastMonth.member_valid_change_rate}}</td>
+                            <td>{{addUserData.lastMonth.leader_valid_change_rate}}</td>
+                            <td>{{addUserData.lastMonth.director_valid_change_rate}}</td>
+                        </tr>
+                         <tr>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比上月转化率">
+                                环比上月转化率 {{addUserData.rate.month_valid_change_rate}}</td>
+                            <td>{{addUserData.rate.month_director_valid_change_rate}}</td>
+                            <td>{{addUserData.rate.month_leader_valid_change_rate}}</td>
+                            <td>{{addUserData.rate.day_director_valid_change_rate}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="userChart">
@@ -103,7 +159,7 @@ import legend from 'echarts/lib/component/legend'
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components:{
-        'flat-picker': flatPicker
+        'flat-picker': flatPicker,
     },
     data(){
         const now = new Date();
@@ -119,22 +175,7 @@ export default {
                 maxDate: nStr,
                 locale: Mandarin
             },
-            addUserData:{//今日
-                addTopData:{
-                    todayAddNum:0,//今日新增
-                    dayRate:'',//环比昨天百分比
-                    yesTodayAddNum:0//昨日新增
-                },
-                addDataList:[]
-            },
-            addUserMouth:{//本月
-                addTopData:{
-                    todayAddNum:0,//本月新增
-                    dayRate:'',//环比上月百分比
-                    yesTodayAddNum:0//上月新增
-                },
-                addDataList:[]
-            },
+            addUserData:'',
             conditions:{
                 'is_today':'T',
                 'user_type':0,
@@ -161,79 +202,7 @@ export default {
                 if(res.status == 200){
                 if(res.data.code == 200){
                     const rest = res.data.data;
-                    this.addUserData.addTopData.todayAddNum = rest.today.user_num;
-                    this.addUserData.addTopData.dayRate = rest.rate.day_rate;
-                    this.addUserData.addTopData.yesTodayAddNum = rest.yesterday.user_num;
-
-                    this.addUserMouth.addTopData.todayAddNum = rest.thisMonth.user_num;
-                    this.addUserMouth.addTopData.dayRate = rest.rate.month_rate;
-                    this.addUserMouth.addTopData.yesTodayAddNum = rest.lastMonth.user_num;
-                    this.addUserData.addDataList.push(
-                    {
-                        'name':"今日拉新",
-                        'valid_change_rate':'',
-                        'member_num':rest.today.member_num,
-                        'leader_num':rest.today.leader_num,
-                        'director_num':rest.today.director_num
-                    },{
-                        'name':"今日有效转化 ",
-                        'valid_change_rate':rest.today.valid_change_rate,
-                        'member_num':rest.today.member_valid_change_rate,
-                        'leader_num':rest.today.leader_valid_change_rate,
-                        'director_num':rest.today.director_valid_change_rate
-                    },{
-                        'name':"昨日拉新",
-                        'valid_change_rate':'',
-                        'member_num':rest.yesterday.member_num,
-                        'leader_num':rest.yesterday.leader_num,
-                        'director_num':rest.yesterday.director_num
-                    },{
-                        'name':"昨日有效转化 ",
-                        'valid_change_rate':rest.yesterday.valid_change_rate,
-                        'member_num':rest.yesterday.member_valid_change_rate,
-                        'leader_num':rest.yesterday.leader_valid_change_rate,
-                        'director_num':rest.yesterday.director_valid_change_rate
-                    },{
-                        'name':"环比昨日转化率 ",
-                        'valid_change_rate':rest.rate.day_valid_change_rate,
-                        'member_num':rest.rate.day_member_valid_change_rate,
-                        'leader_num':rest.rate.day_leader_valid_change_rate,
-                        'director_num':rest.rate.day_director_valid_change_rate
-                    }
-                    )
-                    this.addUserMouth.addDataList.push(
-                    {
-                        'name':"本月拉新",
-                        'valid_change_rate':'',
-                        'member_num':rest.thisMonth.member_num,
-                        'leader_num':rest.thisMonth.leader_num,
-                        'director_num':rest.thisMonth.director_num
-                    },{
-                        'name':"本月有效转化 ",
-                        'valid_change_rate':rest.thisMonth.valid_change_rate,
-                        'member_num':rest.thisMonth.member_valid_change_rate,
-                        'leader_num':rest.thisMonth.leader_valid_change_rate,
-                        'director_num':rest.thisMonth.director_valid_change_rate
-                    },{
-                        'name':"上月拉新",
-                        'valid_change_rate':'',
-                        'member_num':rest.lastMonth.member_num,
-                        'leader_num':rest.lastMonth.leader_num,
-                        'director_num':rest.lastMonth.director_num
-                    },{
-                        'name':"上月有效转化 ",
-                        'valid_change_rate':rest.lastMonth.valid_change_rate,
-                        'member_num':rest.lastMonth.member_valid_change_rate,
-                        'leader_num':rest.lastMonth.leader_valid_change_rate,
-                        'director_num':rest.lastMonth.director_valid_change_rate
-                    },{
-                        'name':"环比上月转化率 ",
-                        'valid_change_rate':rest.rate.month_valid_change_rate,
-                        'member_num':rest.rate.month_member_valid_change_rate,
-                        'leader_num':rest.rate.month_leader_valid_change_rate,
-                        'director_num':rest.rate.month_director_valid_change_rate	
-                    }
-                    )
+                    this.addUserData = Object.assign([], rest)
                 }else{
                     this.alert(res.data.message || '新增用户列表失败')
                 }
@@ -404,30 +373,30 @@ export default {
             return day;
         },
         chooseRan(e){//筛选会员
-        switch (e.target.innerHTML) {
-            case "总体":
-            this.conditions['user_type'] = 0;
-            this.range = 0;
-            this.getTotalUserChart()
-            break;
-            case "会员":
-            this.conditions['user_type'] = 1;
-            this.range = 1;
-            this.getTotalUserChart()
-            break;
-            case "团长":
-            this.conditions['user_type'] = 2;
-            this.range = 2;
-            this.getTotalUserChart()
-            break;
-            case "总监":
-            this.conditions['user_type'] = 3;
-            this.range = 3;
-            this.getTotalUserChart()
-            break;
-            default:
-            break;
-        }
+            switch (e.target.innerHTML) {
+                case "总体":
+                this.conditions['user_type'] = 0;
+                this.range = 0;
+                this.getTotalUserChart()
+                break;
+                case "会员":
+                this.conditions['user_type'] = 1;
+                this.range = 1;
+                this.getTotalUserChart()
+                break;
+                case "团长":
+                this.conditions['user_type'] = 2;
+                this.range = 2;
+                this.getTotalUserChart()
+                break;
+                case "总监":
+                this.conditions['user_type'] = 3;
+                this.range = 3;
+                this.getTotalUserChart()
+                break;
+                default:
+                break;
+            }
         },
         limitsTime(e){//筛选时间段
             this.text = e.target.innerHTML;
@@ -452,7 +421,7 @@ export default {
             this.conditions['start_time'] = this.createTimeBegin;
             this.conditions['end_time'] = this.createTimeEnd;
             this.getTotalUserChart()
-        }
+        },
     }
 }
 </script>
@@ -486,4 +455,7 @@ tbody tr:last-child>td{color: #52c7f2;}
 .echarts-g{height: 220px;}
 .range{display: block;width: 85px;height: 26px;text-align: center;line-height: 26px;font-size: 14px;color: #52c7f2;border: 1px solid #52c7f2;border-radius: 3px;cursor: pointer;}
 .select{color: #52c7f2;font-size: 14px;margin: 0 10px;display: block;position: relative;top: 5px;cursor: pointer;}
+.imgIcon{width: 20px;height: 20px;position: relative;top: 3px;cursor: pointer;}
+/* 模态框 */
+#modal-box{width: 300px;position: fixed;display: none;z-index: 999;}
 </style>

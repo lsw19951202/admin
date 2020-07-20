@@ -1,6 +1,6 @@
 <template>
     <div class="detail-container">
-        <div class="detail-data-box" v-show="!showTeamList">
+        <div class="detail-data-box" v-show="showUserList">
             <header class="search-header">
                 <div class="search-group">
                     <label>用户ID:</label>
@@ -30,18 +30,20 @@
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
             </header>
             <div class="table-container hideScrollBar">
-                <detail-table v-bind:tbType="tbType" v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" @showMyTeam="loadTeamList" @changeUserRank="changeUserRank" @changeCheckStatus="changeUserCheckStatu" v-bind:selectUserList="selectedUserList"></detail-table>
+                <detail-table v-bind:tbType="tbType" v-bind:tbData="tbData" v-bind:tableHeader="tableHeader" @showIncomeDetail="showDetailList" @showMyTeam="loadTeamList" @changeUserRank="changeUserRank" @changeCheckStatus="changeUserCheckStatu" v-bind:selectUserList="selectedUserList"></detail-table>
             </div>
             <div class="page-footer" style="display: flex;">
-                <div style="margin-top: .3rem; height: .875rem; line-height: .875rem;">
+                <!-- 取消团队迁移全选按钮 与table.vue 组件相互作用 -->
+                <!-- <div style="margin-top: .3rem; height: .875rem; line-height: .875rem;">
                     <input @click="changeAllUserCheckStatu($event)" type="checkbox" :checked="allUserChecked" style="margin-left: 1rem;" id="checkAllUser">
                     <label for="checkAllUser" style="font-size: .375rem; color: #666666; display: inline-block; height: 100%; line-height: 1rem; margin-left: .3125rem; vertical-align: top;">全选</label>
                     <button class="action-btn" @click="moveTeam">团队迁移</button>
-                </div>
+                </div> -->
                 <page style="width: 0; flex: 1;" v-bind:pageData="pageData" @loadList="loadTBData"></page>
             </div>
         </div>
         <team-list v-if="showTeamList" :teamId="teamId"></team-list>
+        <income-detail v-if="showIncomeList" :incomeDetailUserId='incomeDetailUserId' @returnOne='hiddenDetail'></income-detail>
         <pop-ups :isShow="showChangeLevelPop" :popParams="changeLevelPopParams" @userLevelSelectOptsClicked="changeUserLevel" @popSave="saveNewUserLevel" @popCancel="cancelChangeUserLevel"></pop-ups>
         <pop-ups :isShow="showMoveTeamPop" :popParams="moveTeamPopParams" @searchClicked="searchTeamLeader" @popSave="saveMoveTeam" @popCancel="cancelMoveTeam" @teamLeaderChecked="teamLeaderChecked"></pop-ups>
     </div>
@@ -57,6 +59,7 @@ import setting from '@/setting'
 import page from '@/components/content/page.vue'
 import TeamList from '@/components/content/teamList.vue'
 import popUpsVue from '../components/common/popUps.vue'
+import incomeDetailVue from '../views/incomeDetail.vue'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
@@ -66,7 +69,8 @@ export default {
         'detail-table': DetailTable,
         'page': page,
         'team-list': TeamList,
-        'pop-ups': popUpsVue
+        'pop-ups': popUpsVue,
+        'income-detail': incomeDetailVue,
     },
     data: () => {
         const now = new Date()
@@ -75,7 +79,9 @@ export default {
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return {
-            showTeamList: false,
+            showUserList:true,//初始化默认展示用户列表
+            showTeamList: false,//是否展示“我的团队”列表
+            showIncomeList:false,//是否展示“收益详情”列表
             dateConfig: {
                 'time_24hr': true,
                 maxDate: nStr,
@@ -154,7 +160,8 @@ export default {
                 leaderName: '',
                 leaders: []
             },
-            showMoveTeamPop: false
+            showMoveTeamPop: false,
+            incomeDetailUserId:'',//收益详情用户ID
         }
     },
     created: function(){
@@ -293,9 +300,25 @@ export default {
         },
         loadTeamList: function(user){
             this.showTeamList = true
+            this.showUserList = false
+            this.showIncomeList = false
             this.$parent.subTitle2 = '我的团队'
             this.teamId = user[0]
             console.log(this.teamId)
+        },
+        showDetailList(user){//收益详情
+            this.showIncomeList = true
+            this.showUserList = false
+            this.showTeamList = false
+            this.$parent.subTitle2 = '收益详情'
+            this.incomeDetailUserId = user[0]
+            console.log("个人收益详情ID:",user[0])
+        },
+        hiddenDetail(){//隐藏收益详情
+            this.showIncomeList = false
+            this.showUserList = true
+            this.showTeamList = false
+            this.$parent.subTitle2 = ''
         },
         selectOptsClicked: function(dt){
             this.rank = dt

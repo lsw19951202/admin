@@ -5,7 +5,9 @@
             <div class="shareLable">
                 <div class="lable_top">
                     <div class="lable_num">
-                        <span class="share_num">今日分享:{{shareData.today.share_num}}次</span>
+                        <span class="share_num">
+                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="今日分享">
+                            今日分享:{{shareData.today.share_num}}次</span>
                         <span class="chain">{{shareData.rate.day_rate}} 环比昨日</span>
                         <span class="check" @click="shareListData('今日')">查看商品</span>
                     </div>
@@ -33,7 +35,9 @@
                             <td>{{shareData.today.pdd_share_num}}</td>
                         </tr>
                         <tr>
-                            <td>今日分享转化率 {{shareData.today.valid_change_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="今日分享转化率" @mouseenter="modalOver" @mouseleave="leaveModal">
+                                今日分享转化率 {{shareData.today.valid_change_rate}}</td>
                             <td>{{shareData.today.tb_valid_change_rate}}</td>
                             <td>{{shareData.today.jd_valid_change_rate}}</td>
                             <td>{{shareData.today.pdd_valid_change_rate}}</td>
@@ -51,7 +55,9 @@
                             <td>{{shareData.yesterday.pdd_valid_change_rate}}</td>
                         </tr>
                         <tr>
-                            <td>环比昨日转化率 {{shareData.rate.day_valid_change_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比昨日转化率" @mouseenter="modalOver" @mouseleave="leaveModal">
+                                环比昨日转化率 {{shareData.rate.day_valid_change_rate}}</td>
                             <td>{{shareData.rate.day_tb_valid_change_rate}}</td>
                             <td>{{shareData.rate.day_jd_valid_change_rate}}</td>
                             <td>{{shareData.rate.day_pdd_valid_change_rate}}</td>
@@ -62,7 +68,9 @@
             <div class="shareLable">
                 <div class="lable_top">
                     <div class="lable_num">
-                        <span class="share_num">本月分享:{{shareData.thisMonth.share_num}}次</span>
+                        <span class="share_num">
+                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="本月分享" @mouseenter="modalOver" @mouseleave="leaveModal">
+                            本月分享:{{shareData.thisMonth.share_num}}次</span>
                         <span class="chain">{{shareData.rate.month_rate}} 环比上月</span>
                         <span class="check" @click="shareListData('本月')">查看商品</span>
                     </div>
@@ -90,7 +98,9 @@
                             <td>{{shareData.thisMonth.pdd_share_num}}</td>
                         </tr>
                         <tr>
-                            <td>本月分享转化率 {{shareData.thisMonth.valid_change_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="本月分享转化率" @mouseenter="modalOver" @mouseleave="leaveModal">
+                                本月分享转化率 {{shareData.thisMonth.valid_change_rate}}</td>
                             <td>{{shareData.thisMonth.tb_valid_change_rate}}</td>
                             <td>{{shareData.thisMonth.jd_valid_change_rate}}</td>
                             <td>{{shareData.thisMonth.pdd_valid_change_rate}}</td>
@@ -108,7 +118,9 @@
                             <td>{{shareData.lastMonth.pdd_valid_change_rate}}</td>
                         </tr>
                         <tr>
-                            <td>环比上月转化率 {{shareData.rate.month_valid_change_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比上月转化率" @mouseenter="modalOver" @mouseleave="leaveModal">
+                                环比上月转化率 {{shareData.rate.month_valid_change_rate}}</td>
                             <td>{{shareData.rate.month_tb_valid_change_rate}}</td>
                             <td>{{shareData.rate.month_jd_valid_change_rate}}</td>
                             <td>{{shareData.rate.month_pdd_valid_change_rate}}</td>
@@ -197,7 +209,7 @@ export default {
                 'start_time':'',
                 'end_time':''
             },
-            echart:null
+            echart:null,
         }
     },
     created(){
@@ -399,7 +411,7 @@ export default {
         },
         shareListData(time){//点击分享时间
             this.$emit("shareTime",time)
-        }
+        },
     }
 }
 </script>
@@ -429,4 +441,7 @@ tbody>tr:nth-child(even){background-color: transparent;}
 .inSelect{font-size: 14px;color: #666666;margin: 0 10px;position: relative;top: -5px;cursor: pointer;}
 .action-btn{position: relative;top: -5px;}
 .echarts_share{height: 250px;}
+.imgIcon{width: 20px;height: 20px;position: relative;top: 3px;cursor: pointer;}
+/* 模态框 */
+#modal-box{width: 300px;position: fixed;display: none;z-index: 999;}
 </style>

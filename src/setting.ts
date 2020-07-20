@@ -234,7 +234,11 @@ export default {
         // 修改定向佣金状态
         directStatu: '/ypj/directed/operate',
         // 定向佣金商品详情
-        directGoodsInfo: '/ypj/directed/goodsinfo'
+        directGoodsInfo: '/ypj/directed/goodsinfo',
+        // 收益详情
+        userProfitInfo:'/ypj/user/userprofitinfo',
+        // 团队常购商品表头
+        teamHeader:'/app/field?field_type=salesRanking',
     },
     // 图片地址
     images: {

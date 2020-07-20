@@ -23,27 +23,15 @@ export default {
         }
     },
     created(){
-        this.getSleepChart();//沉睡用户折线图
-        // this.getTime();
+        // this.getSleepChart();//沉睡用户折线图
+        this.getEvent(0);//先拿取最近7天的时间段
     },
     methods:{
-        GMTToStr(time){
-            const date = new Date(time)
-            const Str=date.getFullYear() + '-' +
-            (date.getMonth() + 1) + '-' + 
-            date.getDate() + ' ' + 
-            date.getHours() + ':' + 
-            date.getMinutes() + ':' + 
-            date.getSeconds()
-            return Str
-        },
-        getTime(){// 近七天
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            this.startTimeWeek = this.GMTToStr(start);
-            this.endTimeWeek = this.GMTToStr(end);
-            console.log()
+        getEvent(){
+            this.startTimeWeek = this.getToday(7);
+            this.endTimeWeek = this.getToday(0);
+            console.log(this.startTimeWeek,this.endTimeWeek)
+            this.getSleepChart();//沉睡用户折线图
         },
         getSleepChart(){//获取沉睡用户折线图
             this.showLoading()
@@ -52,8 +40,8 @@ export default {
                 method:'get',
                 params:{
                     'order_type':'0',
-                    'start_time':'2020-07-10',
-                    'end_time':'2020-07-15'
+                    'start_time':this.startTimeWeek,
+                    'end_time':this.endTimeWeek
                 }
             }).then(res=>{
                 // console.log(res,"沉睡用户折线图")
@@ -169,6 +157,28 @@ export default {
             }
             this.echart.setOption(options)
         },
+        getToday(n){//最近7天，n为0表示今天日期，n为7表示往前推7天
+            const num = n;
+            const date = new Date();
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            if(day <= num){
+                if(month > 1){
+                    month = month -1
+                }else{
+                    year = year -1;
+                    month = 12;
+                }
+            }
+            date.setDate(date.getDate()-num);
+            year =  date.getFullYear();
+            month = date.getMonth() + 1;
+            day = date.getDate();
+            const s = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day)
+            // console.log(s)
+            return s
+        }
     }
 }
 </script>

@@ -45,7 +45,9 @@
                             <td>{{orderUserData.yesterday.director_order_num?orderUserData.yesterday.director_order_num:'0%'}}</td>
                         </tr>
                         <tr>
-                            <td>环比昨日下单单数 {{orderUserData.rate.day_order_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比昨日下单单数">
+                                环比昨日下单单数 {{orderUserData.rate.day_order_rate}}</td>
                             <td>{{orderUserData.rate.day_member_order_rate}}</td>
                             <td>{{orderUserData.rate.day_leader_order_rate}}</td>
                             <td>{{orderUserData.rate.day_director_order_rate}}</td>
@@ -96,7 +98,9 @@
                             <td>{{orderUserData.lastMonth.director_order_num?orderUserData.lastMonth.director_order_num:'0%'}}</td>
                         </tr>
                         <tr>
-                            <td>环比上月下单单数 {{orderUserData.rate.month_order_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比上月下单单数">
+                                环比上月下单单数 {{orderUserData.rate.month_order_rate}}</td>
                             <td>{{orderUserData.rate.month_member_order_rate}}</td>
                             <td>{{orderUserData.rate.month_leader_order_rate}}</td>
                             <td>{{orderUserData.rate.month_director_order_rate}}</td>
@@ -150,7 +154,7 @@ import legend from 'echarts/lib/component/legend'
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components:{
-        'flat-picker': flatPicker
+        'flat-picker': flatPicker,
     },
     data(){
         const now = new Date();
@@ -174,7 +178,7 @@ export default {
             },
             range:0,// 0全部用户类型   1会员   2团长   3总监,默认全部用户类型
             text:"今日", //默认查询今日
-            orderUserData:''
+            orderUserData:'',
         }
     },
     created(){
@@ -411,7 +415,7 @@ export default {
             this.conditions['start_time'] = this.createTimeBegin;
             this.conditions['end_time'] = this.createTimeEnd;
             this.getOrderUserChart()
-        }
+        },
     }
 }
 </script>
@@ -445,4 +449,7 @@ tbody tr:last-child>td{color: #52c7f2;}
 .echarts-g{height: 220px;}
 .range{display: block;width: 85px;height: 26px;text-align: center;line-height: 26px;font-size: 14px;color: #52c7f2;border: 1px solid #52c7f2;border-radius: 3px;cursor: pointer;}
 .select{color: #52c7f2;font-size: 14px;margin: 0 10px;display: block;position: relative;top: 5px;cursor: pointer;}
+.imgIcon{width: 20px;height: 20px;position: relative;top: 3px;cursor: pointer;}
+/* 模态框 */
+#modal-box{width: 300px;position: fixed;display: none;z-index: 999;}
 </style>
