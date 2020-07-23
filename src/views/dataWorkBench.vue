@@ -1,7 +1,7 @@
 <template>
   <div class="detail-container">
     <div class="detail-data-box">
-      <div v-if="isShow=='record'">
+      <div v-show="isShow=='record'">
         <new-users></new-users>
         <active-users @sleepDataList='lookType'></active-users>
         <order-users></order-users>
@@ -166,8 +166,11 @@ export default {
       createTimeEnd:'',
       selectData: {
         label: '职级',
-        placeholder: '请选择',
+        // placeholder: '请选择',
         options: [{
+          value: '',
+          text: '请选择'
+        }, {
           value: '2',
           text: '团长'
         }, {
@@ -254,11 +257,12 @@ export default {
           nickName:this.nickName,
           phone:this.phone,
           teamId:this.teamId,
+          'is_sleep':1,
           createTimeBegin:this.createTimeBegin,
           createTimeEnd:this.createTimeEnd,
         }
       }).then(res=>{
-        // console.log(res,"沉睡用户列表")
+        console.log(res,"沉睡用户列表")
         if(res.status == 200){
           const rest = res.data;
           if(rest.code == 200){

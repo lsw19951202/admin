@@ -6,9 +6,7 @@
             <div class="today">
                 <div class="today_top">
                     <div class="today_num">
-                        <span>
-                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="今日活跃">
-                            今日活跃:{{activeData.today.total_user_num}}人</span>
+                        <span>今日活跃:{{activeData.today.total_user_num}}人</span>
                         <span>{{activeData.rate.day_rate}} 环比昨日</span>
                     </div>
                     <div>昨日活跃:{{activeData.yesterday.total_user_num}}人</div>
@@ -60,9 +58,7 @@
                             <td>{{activeData.yesterday.director_order_num?activeData.yesterday.director_order_num:0}}</td>
                         </tr>
                         <tr>
-                            <td>
-                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比昨日下单数">
-                                环比昨日下单数 {{activeData.rate.day_order_rate}}</td>
+                            <td>环比昨日下单数 {{activeData.rate.day_order_rate}}</td>
                             <td>{{activeData.rate.day_member_order_rate}}</td>
                             <td>{{activeData.rate.day_leader_order_rate}}</td>
                             <td>{{activeData.rate.day_director_order_rate}}</td>
@@ -74,15 +70,13 @@
             <div class="today">
                 <div class="today_top_right">
                     <div class="time_quantum">
-                        <span class="quantum_text">0~10天</span>
-                        <span class="quantum_text">10~20天</span>
-                        <span class="quantum_text">20天以上</span>
+                        <span class="quantum_text" :class="type==1?'choosed':''" @click="chooseTimeSlot(1)">0~10天</span>
+                        <span class="quantum_text" :class="type==2?'choosed':''" @click="chooseTimeSlot(2)">10~20天</span>
+                        <span class="quantum_text" :class="type==3?'choosed':''" @click="chooseTimeSlot(3)">20天以上</span>
                     </div>
                     <div class="quantum_rate">
                         <div class="today_num">
-                            <span>
-                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="本月活跃">
-                                本月活跃:{{activeData.thisMonth.total_user_num}}人</span>
+                            <span>本月活跃:{{activeData.thisMonth.total_user_num}}人</span>
                             <span>{{activeData.rate.month_rate}} 环比上月</span>
                         </div>
                         <div>上月活跃:{{activeData.lastMonth.total_user_num}}人</div>
@@ -135,9 +129,7 @@
                             <td>{{activeData.lastMonth.director_order_num?activeData.lastMonth.director_order_num:0}}</td>
                         </tr>
                         <tr>
-                            <td>
-                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比上月下单数">
-                                环比上月下单数 {{activeData.rate.month_order_rate}}</td>
+                            <td>环比上月下单数 {{activeData.rate.month_order_rate}}</td>
                             <td>{{activeData.rate.month_member_order_rate}}</td>
                             <td>{{activeData.rate.month_leader_order_rate}}</td>
                             <td>{{activeData.rate.month_director_order_rate}}</td>
@@ -160,15 +152,15 @@
                         <tbody>
                             <tr>
                                 <td>本月活跃</td>
-                                <td>100</td>
-                                <td>200</td>
-                                <td>300</td>
+                                <td>{{activeData.thisMonth.one_active_user}}</td>
+                                <td>{{activeData.thisMonth.two_active_user}}</td>
+                                <td>{{activeData.thisMonth.three_active_user}}</td>
                             </tr>
                             <tr>
                                 <td>上月活跃</td>
-                                <td>100</td>
-                                <td>200</td>
-                                <td>300</td>
+                                <td>{{activeData.lastMonth.one_active_user==null?0:activeData.lastMonth.one_active_user}}</td>
+                                <td>{{activeData.lastMonth.two_active_user==null?0:activeData.lastMonth.two_active_user}}</td>
+                                <td>{{activeData.lastMonth.three_active_user==null?0:activeData.lastMonth.three_active_user}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -176,11 +168,11 @@
                 <div class="activeRightBottom">
                     <div class="sleepText">沉睡会员 <span class="sleepTip">(48小时以上未商品分享的高级会员)</span></div>
                     <div class="sleepSort">
-                        <span class="sleepUser">总监:{{sleepUserData.leaderNum}}人</span>
+                        <span class="sleepUser">总监:{{sleepUserData.directorNum}}人</span>
                         <span class="sleepLook" @click="lookSleepData(3)">查看</span>
                     </div>
                     <div class="sleepSort">
-                        <span class="sleepUser">团长:{{sleepUserData.directorNum}}人</span>
+                        <span class="sleepUser">团长:{{sleepUserData.leaderNum}}人</span>
                         <span class="sleepLook" @click="lookSleepData(2)">查看</span>
                     </div>
                 </div>
@@ -271,6 +263,7 @@ export default {
                 leaderNum:'',
                 directorNum:''
             },
+            type:1,//活跃用户时间段，1表示0~10天   2表示10~20天   3表示20天以上
         }
     },
     created(){
@@ -280,6 +273,7 @@ export default {
     },
     methods:{
         lookSleepData(e){//查看沉睡列表
+            console.log(e)
             this.$emit("sleepDataList",e)
         },
         getActiveUser(){//获取活跃用户总数
@@ -287,17 +281,20 @@ export default {
             request({
                 url:setting.urls.activeUser,
                 method:'get',
-                params:{}
+                params:{
+                    'type':this.type
+                }
             }).then(res=>{
                 if(res.status == 200){
-                if(res.data.code == 200){
-                    const rest = res.data.data;
-                    this.activeData = Object.assign([], rest)
+                    console.log(res,"活跃用户")
+                    if(res.data.code == 200){
+                        const rest = res.data.data;
+                        this.activeData = Object.assign([], rest)
+                    }else{
+                        this.alert(res.data.message || '活跃用户统计失败')
+                    }
                 }else{
-                    this.alert(res.data.message || '活跃用户统计失败')
-                }
-                }else{
-                this.alert('活跃用户统计失败')
+                    this.alert('活跃用户统计失败')
                 }
             }).catch((e) => {
                 this.alert('活跃用户统计失败')
@@ -321,6 +318,10 @@ export default {
             }).then(() => {
                 this.hideLoading()
             })
+        },
+        chooseTimeSlot(e){//活跃用户筛选时间段
+            this.type = e;
+            this.getActiveUser()
         },
         getSleepUser(){//获取沉睡用户数据
             request({
@@ -531,6 +532,8 @@ export default {
         queryData(){//查询按钮
             this.conditions['start_time'] = this.createTimeBegin;
             this.conditions['end_time'] = this.createTimeEnd;
+            this.conditions['is_today'] = 'F';
+            this.text = '';
             this.getActiveChart()
         },
     }
@@ -549,6 +552,7 @@ export default {
 .newAddUser{border: 1px solid #eeeeee;border-radius: 10px;padding: 20px;background-color: #f2f2f2;margin-bottom: 30px;}
 .userName{font-size: 18px;font-weight: bold;color: #3f413f;height: 40px;}
 .addList{display: flex;justify-content: space-between;}
+.choosed{color: #52c7f2!important;border: 1px solid #52c7f2;}
 /* 右侧沉睡用户表格 */
 .activeRight{width: 25%;height: 470px;padding:10px;box-sizing: border-box;background-color: #ffffff;border-radius: 10px;}
 .activeRightTop{border: 1px solid #eeeeee;border-radius: 3px;padding: 10px;box-sizing: border-box;margin: 20px 0 40px;}
@@ -556,7 +560,7 @@ export default {
 .activeRightTop>table>tbody>tr td{text-align: center;color: #747770;}
 .activeRightBottom{display: flex;flex-direction: column;align-items: center; height: 180px;border: 1px solid #eeeeee;border-radius: 3px;padding: 10px;box-sizing: border-box;}
 .sleepText{font-size: 16px;color: #000000;font-weight: bold;height: 50px;line-height: 50px;}
-.sleepTip{font-size: 14px;color: #000000;font-weight: bold;}
+.sleepTip{font-size: 14px;color: #000000;font-weight: bold;font-family: "微软雅黑";}
 .sleepUser{font-size: 16px;color: #333333;font-weight: bold;}
 .sleepLook{width: 60px;height: 28px;font-size: 14px;color: #ffffff;background-color: #52c7f2;display: block;text-align: center;line-height: 28px;border-radius: 5px;cursor: pointer;}
 .sleepSort{width: 100%;height: 40px;line-height: 40px; display: flex;justify-content: space-between;align-items: center;padding: 0 20px;box-sizing: border-box;}
