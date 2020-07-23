@@ -266,12 +266,14 @@ export default {
                     tbData[idx].push(tdText)
                 }
             }
+            console.log(tbData,"处理后的数据+++++++")
             this.tbData = Object.assign([], tbData)
         },
         selectOptsClicked: function(dt){
             this.platform = dt
         },
         changeAllGoodsCheckStatu: function(e){
+            console.log(e,"全选")
             const checked = e.target.checked
             for(let idx = 0; idx < this.tbData.length; idx++){
                 if(this.tbData[idx][0] != '--'){

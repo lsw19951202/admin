@@ -29,6 +29,10 @@
                 <button class="search-btn" @click="loadTBData(1)">搜索</button>
                 <a class="action-btn" style="display: inline-block;" :href="downloadUrl" download="团队列表.xlsx">导出</a>
             </header>
+            <div class="newAdd">
+                <span class="textStyle">实际邀请用户:{{newAddDate.inviteUser}}</span>
+                <span class="textStyle">转化率:{{newAddDate.rate}}</span>
+            </div>
             <div class="table-container hideScrollBar">
                 <detail-table :tbType="tbType" :tbData="tbData" :tableHeader="tableHeader"></detail-table>
             </div>
@@ -121,6 +125,10 @@ export default {
                     value: 'team_profit_amount',
                     text: '团队返利'
                 }]
+            },
+            newAddDate:{
+                inviteUser:'',
+                rate:''
             }
         }
     },
@@ -163,6 +171,8 @@ export default {
             }).then((resp) => {
                 if(resp.status == 200){
                     if(resp.data.code == 200){
+                        this.newAddDate.inviteUser = resp.data.data.direct_num;
+                        this.newAddDate.rate = resp.data.data.order_rate + '%';
                         this.createTBData(resp.data.data)
                     }else{
                         this.alert(resp.data.message || '加载团队列表失败')
@@ -187,7 +197,7 @@ export default {
                 imgSrc: require('@/assets/blue_eq.png')
             })
             cardData.push({
-                text: '一般会员人数(个)',
+                text: '普通会员(个)',
                 num: dt.commonUser || 0,
                 imgSrc: require('@/assets/blue_eq.png')
             })
@@ -224,4 +234,6 @@ export default {
 .team-list { flex: 1; height: 0; box-sizing: border-box; display: flex; flex-direction: column; }
 .search-header { display: block; }
 .search-group { margin-bottom: .5rem; }
+.newAdd{display: flex;justify-content: flex-end;padding-right: 40px;box-sizing: border-box;}
+.textStyle{font-size: 16px;color: #52c7f2;font-weight: bold;margin: 0 30px;}
 </style>

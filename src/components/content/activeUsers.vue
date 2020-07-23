@@ -6,7 +6,9 @@
             <div class="today">
                 <div class="today_top">
                     <div class="today_num">
-                        <span>今日活跃:{{activeData.today.total_user_num}}人</span>
+                        <span>
+                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="今日活跃">
+                            今日活跃:{{activeData.today.total_user_num}}人</span>
                         <span>{{activeData.rate.day_rate}} 环比昨日</span>
                     </div>
                     <div>昨日活跃:{{activeData.yesterday.total_user_num}}人</div>
@@ -58,7 +60,9 @@
                             <td>{{activeData.yesterday.director_order_num?activeData.yesterday.director_order_num:0}}</td>
                         </tr>
                         <tr>
-                            <td>环比昨日下单数 {{activeData.rate.day_order_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比昨日下单数">
+                                环比昨日下单数 {{activeData.rate.day_order_rate}}</td>
                             <td>{{activeData.rate.day_member_order_rate}}</td>
                             <td>{{activeData.rate.day_leader_order_rate}}</td>
                             <td>{{activeData.rate.day_director_order_rate}}</td>
@@ -76,7 +80,9 @@
                     </div>
                     <div class="quantum_rate">
                         <div class="today_num">
-                            <span>本月活跃:{{activeData.thisMonth.total_user_num}}人</span>
+                            <span>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="本月活跃">
+                                本月活跃:{{activeData.thisMonth.total_user_num}}人</span>
                             <span>{{activeData.rate.month_rate}} 环比上月</span>
                         </div>
                         <div>上月活跃:{{activeData.lastMonth.total_user_num}}人</div>
@@ -129,7 +135,9 @@
                             <td>{{activeData.lastMonth.director_order_num?activeData.lastMonth.director_order_num:0}}</td>
                         </tr>
                         <tr>
-                            <td>环比上月下单数 {{activeData.rate.month_order_rate}}</td>
+                            <td>
+                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比上月下单数">
+                                环比上月下单数 {{activeData.rate.month_order_rate}}</td>
                             <td>{{activeData.rate.month_member_order_rate}}</td>
                             <td>{{activeData.rate.month_leader_order_rate}}</td>
                             <td>{{activeData.rate.month_director_order_rate}}</td>
@@ -262,7 +270,7 @@ export default {
             sleepUserData:{
                 leaderNum:'',
                 directorNum:''
-            }
+            },
         }
     },
     created(){
@@ -320,7 +328,7 @@ export default {
                 method:'get',
                 params:{}
             }).then(res=>{
-                console.log(res,"沉睡用户数据")
+                // console.log(res,"沉睡用户数据")
                 if(res.status == 200){
                     if(res.data.code == 200){
                         const rest = res.data.data;
@@ -524,7 +532,7 @@ export default {
             this.conditions['start_time'] = this.createTimeBegin;
             this.conditions['end_time'] = this.createTimeEnd;
             this.getActiveChart()
-        }
+        },
     }
 }
 </script>
@@ -578,4 +586,7 @@ tbody tr:last-child>td{color: #52c7f2;}
 /* 沉睡用户折线图 */
 .echartsSleep{width: 25%;height: 100%;background-color: #ffffff;border-radius: 5px;}
 .wed-tetx{font-size: 14px;color: #000000;font-weight: bold;margin: 10px 0 10px 10px;}
+.imgIcon{width: 20px;height: 20px;position: relative;top: 3px;cursor: pointer;}
+/* 模态框 */
+#modal-box{width: 300px;position: fixed;display: none;z-index:1000;}
 </style>
