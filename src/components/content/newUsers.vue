@@ -27,9 +27,7 @@
                         <td>{{addUserData.today.leader_num}}</td>
                     </tr>
                     <tr>
-                        <td>
-                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="今日有效转化">
-                            今日有效转化 {{addUserData.today.valid_change_rate}}</td>
+                        <td>今日有效转化 {{addUserData.today.valid_change_rate}}</td>
                         <td>{{addUserData.today.member_valid_change_rate}}</td>
                         <td>{{addUserData.today.leader_valid_change_rate}}</td>
                         <td>{{addUserData.today.director_valid_change_rate}}</td>
@@ -47,9 +45,7 @@
                         <td>{{addUserData.yesterday.director_valid_change_rate}}</td>
                     </tr>
                     <tr>
-                        <td>
-                            <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比昨日转化率">
-                            环比昨日转化率 {{addUserData.rate.day_valid_change_rate}}</td>
+                        <td>环比昨日转化率 {{addUserData.rate.day_valid_change_rate}}</td>
                         <td>{{addUserData.rate.day_member_valid_change_rate}}</td>
                         <td>{{addUserData.rate.day_leader_valid_change_rate}}</td>
                         <td>{{addUserData.rate.day_director_valid_change_rate}}</td>
@@ -82,9 +78,7 @@
                             <td>{{addUserData.thisMonth.leader_num}}</td>
                         </tr>
                         <tr>
-                            <td>
-                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="本月有效转化">
-                                本月有效转化 {{addUserData.thisMonth.valid_change_rate}}</td>
+                            <td>本月有效转化 {{addUserData.thisMonth.valid_change_rate}}</td>
                             <td>{{addUserData.thisMonth.member_valid_change_rate}}</td>
                             <td>{{addUserData.thisMonth.leader_valid_change_rate}}</td>
                             <td>{{addUserData.thisMonth.director_valid_change_rate}}</td>
@@ -102,9 +96,7 @@
                             <td>{{addUserData.lastMonth.director_valid_change_rate}}</td>
                         </tr>
                          <tr>
-                            <td>
-                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比上月转化率">
-                                环比上月转化率 {{addUserData.rate.month_valid_change_rate}}</td>
+                            <td>环比上月转化率 {{addUserData.rate.month_valid_change_rate}}</td>
                             <td>{{addUserData.rate.month_director_valid_change_rate}}</td>
                             <td>{{addUserData.rate.month_leader_valid_change_rate}}</td>
                             <td>{{addUserData.rate.day_director_valid_change_rate}}</td>
@@ -198,7 +190,7 @@ export default {
                 method:'get',
                 params:{}
             }).then(res=>{
-                // console.log(res,"平台用户总数")
+                console.log(res,"平台用户总数")
                 if(res.status == 200){
                 if(res.data.code == 200){
                     const rest = res.data.data;
@@ -221,7 +213,7 @@ export default {
                 method:'get',
                 params:this.conditions
             }).then(res=>{
-                // console.log(res,"新增用户折线图")
+                console.log(res,"新增用户折线图")
                 if(res.data.data.length <= 0){
                     this.alert('用户折线图无数据')
                 }
@@ -420,6 +412,8 @@ export default {
         queryData(){//查询按钮
             this.conditions['start_time'] = this.createTimeBegin;
             this.conditions['end_time'] = this.createTimeEnd;
+            this.conditions['is_today'] = 'F';
+            this.text = ''
             this.getTotalUserChart()
         },
     }

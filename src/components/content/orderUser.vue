@@ -45,9 +45,7 @@
                             <td>{{orderUserData.yesterday.director_order_num?orderUserData.yesterday.director_order_num:'0%'}}</td>
                         </tr>
                         <tr>
-                            <td>
-                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比昨日下单单数">
-                                环比昨日下单单数 {{orderUserData.rate.day_order_rate}}</td>
+                            <td>环比昨日下单单数 {{orderUserData.rate.day_order_rate}}</td>
                             <td>{{orderUserData.rate.day_member_order_rate}}</td>
                             <td>{{orderUserData.rate.day_leader_order_rate}}</td>
                             <td>{{orderUserData.rate.day_director_order_rate}}</td>
@@ -98,9 +96,7 @@
                             <td>{{orderUserData.lastMonth.director_order_num?orderUserData.lastMonth.director_order_num:'0%'}}</td>
                         </tr>
                         <tr>
-                            <td>
-                                <img src="@/assets/wenhao.png" alt="" class="imgIcon" title="环比上月下单单数">
-                                环比上月下单单数 {{orderUserData.rate.month_order_rate}}</td>
+                            <td>环比上月下单单数 {{orderUserData.rate.month_order_rate}}</td>
                             <td>{{orderUserData.rate.month_member_order_rate}}</td>
                             <td>{{orderUserData.rate.month_leader_order_rate}}</td>
                             <td>{{orderUserData.rate.month_director_order_rate}}</td>
@@ -215,7 +211,7 @@ export default {
                 method:'get',
                 params:this.conditions
             }).then(res=>{
-                // console.log(res,"下单折线图")
+                console.log(res,"下单折线图")
                 if(res.data.data.length <= 0){
                     this.alert('下单折线图无数据')
                 }
@@ -414,6 +410,8 @@ export default {
         queryData(){//查询按钮
             this.conditions['start_time'] = this.createTimeBegin;
             this.conditions['end_time'] = this.createTimeEnd;
+            this.conditions['is_today'] = 'F';
+            this.text = '';
             this.getOrderUserChart()
         },
     }

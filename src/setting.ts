@@ -3,8 +3,8 @@
  */
 export default {
     // baseUrl: 'http://tongji.chenlong.com',
-    baseUrl: 'http://dash.yunzhanxinxi.com',
-    // baseUrl: 'http://test.dash.yunzhanxinxi.com',
+    // baseUrl: 'http://dash.yunzhanxinxi.com',
+    baseUrl: 'http://test.dash.yunzhanxinxi.com',
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
@@ -239,6 +239,26 @@ export default {
         userProfitInfo:'/ypj/user/userprofitinfo',
         // 团队常购商品表头
         teamHeader:'/app/field?field_type=salesRanking',
+        // 新人免单列表表头
+        freeListHeader:'/app/field?field_type=freeList',
+        // 新人免单列表
+        newFreeList:'/ypj/free/list',
+        // 新人免单添加/修改
+        newFreeAdd:'/ypj/free/add',
+        // 新人免单导入
+        newFreeImport:'/ypj/free/import',
+        // 新人免单发布/下架
+        newFreeOperate:'/ypj/free/operate',
+        // 高佣商品列表
+        higServantList:'/ypj/high/list',
+        // 高佣商品列表表头
+        higServantListHeader:'/app/field?field_type=highList',
+        // 高佣商品添加/修改
+        higServantAdd:'/ypj/high/add',
+        // 高佣商品导入
+        higServantImport:'/ypj/high/import',
+        // 高佣商品发布/下架
+        higServanOperate:'/ypj/high/operate'
     },
     // 图片地址
     images: {
@@ -672,6 +692,11 @@ export default {
             name: 'directed-list',
             title: '招商管理',
             subTitle1: '定向佣金列表'
-        }
+        },
+        '/goods/list':{
+            name: 'goods-material',
+            title: '素材管理',
+            subTitle1: '商品素材'
+        },
     }
 }
