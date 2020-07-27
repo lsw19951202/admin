@@ -111,7 +111,7 @@ export default {
         'material-label': materialLabelVue,
         'total-user':totalUserVue,
         'directed-list': directedListVue,
-        'goods-material': goodsMaterialVue,
+        'goods-material': goodsMaterialVue
     }
 }
 </script>

@@ -204,27 +204,27 @@ export default {
         // 新增用户折线图
         totalUserChart: '/ypj/workbench/totaluserchart',
         // 活跃用户统计
-        activeUser:'/ypj/workbench/activeuser',
+        activeUser: '/ypj/workbench/activeuser',
         // 活跃用户折线图
-        activeChart:'/ypj/workbench/activechart',
+        activeChart: '/ypj/workbench/activechart',
         // 沉睡用户折线图
-        sleepChart:"/ypj/workbench/sleepuserchart",
+        sleepChart: "/ypj/workbench/sleepuserchart",
         // 沉睡用户数据
-        sleepUser:"/ypj/workbench/sleepuser",
+        sleepUser: "/ypj/workbench/sleepuser",
         // 下单用户统计数据
-        orderUser:'/ypj/workbench/orderuser',
+        orderUser: '/ypj/workbench/orderuser',
         // 下单用户折线图
-        orderUserChart:'/ypj/workbench/orderuserchart',
+        orderUserChart: '/ypj/workbench/orderuserchart',
         // 商品分享数据
-        goodsShare:'/ypj/workbench/goodsshare',
+        goodsShare: '/ypj/workbench/goodsshare',
         // 商品分享折线图
-        sharEchart:'/ypj/workbench/sharechart',
+        sharEchart: '/ypj/workbench/sharechart',
         // 沉睡用户列表
-        sleepUserList:'/user/getAll',
+        sleepUserList: '/user/getAll',
         // 沉睡用户列表表头
-        sleepUserHeader:'/app/field?field_type=userList',
+        sleepUserHeader: '/app/field?field_type=userList',
         // 商品分享列表
-        shareList:'/ypj/workbench/sharelist',
+        shareList: '/ypj/workbench/sharelist',
         // 定向佣金列表
         directList: '/ypj/directed/list',
         // 新增或修改定向佣金
@@ -236,29 +236,29 @@ export default {
         // 定向佣金商品详情
         directGoodsInfo: '/ypj/directed/goodsinfo',
         // 收益详情
-        userProfitInfo:'/ypj/user/userprofitinfo',
+        userProfitInfo: '/ypj/user/userprofitinfo',
         // 团队常购商品表头
-        teamHeader:'/app/field?field_type=salesRanking',
+        teamHeader: '/app/field?field_type=salesRanking',
         // 新人免单列表表头
-        freeListHeader:'/app/field?field_type=freeList',
+        freeListHeader: '/app/field?field_type=freeList',
         // 新人免单列表
-        newFreeList:'/ypj/free/list',
+        newFreeList: '/ypj/free/list',
         // 新人免单添加/修改
-        newFreeAdd:'/ypj/free/add',
+        newFreeAdd: '/ypj/free/add',
         // 新人免单导入
-        newFreeImport:'/ypj/free/import',
+        newFreeImport: '/ypj/free/import',
         // 新人免单发布/下架
-        newFreeOperate:'/ypj/free/operate',
+        newFreeOperate: '/ypj/free/operate',
         // 高佣商品列表
-        higServantList:'/ypj/high/list',
+        higServantList: '/ypj/high/list',
         // 高佣商品列表表头
-        higServantListHeader:'/app/field?field_type=highList',
+        higServantListHeader: '/app/field?field_type=highList',
         // 高佣商品添加/修改
-        higServantAdd:'/ypj/high/add',
+        higServantAdd: '/ypj/high/add',
         // 高佣商品导入
-        higServantImport:'/ypj/high/import',
+        higServantImport: '/ypj/high/import',
         // 高佣商品发布/下架
-        higServanOperate:'/ypj/high/operate'
+        higServanOperate: '/ypj/high/operate'
     },
     // 图片地址
     images: {
@@ -683,9 +683,9 @@ export default {
             title: '素材管理',
             subTitle1: '文章'
         },
-        '/dashbord/operation':{
-            name:'total-user',
-            title:"数据工作台",
+        '/dashbord/operation': {
+            name: 'total-user',
+            title: "数据工作台",
             subTitle1: '运营数据'
         },
         '/directed/list': {
@@ -693,10 +693,10 @@ export default {
             title: '招商管理',
             subTitle1: '定向佣金列表'
         },
-        '/goods/list':{
+        '/goods/list': {
             name: 'goods-material',
             title: '素材管理',
             subTitle1: '商品素材'
-        },
+        }
     }
 }
