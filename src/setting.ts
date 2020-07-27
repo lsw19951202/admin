@@ -258,7 +258,13 @@ export default {
         // 高佣商品导入
         higServantImport: '/ypj/high/import',
         // 高佣商品发布/下架
-        higServanOperate: '/ypj/high/operate'
+        higServanOperate: '/ypj/high/operate',
+        // 添加中间页
+        addMiddle: '/ypj/middle/add',
+        // 中间页上下架
+        changeMiddleStatus: '/ypj/middle/operate',
+        // 中间页列表
+        pageList: '/ypj/middle/list'
     },
     // 图片地址
     images: {

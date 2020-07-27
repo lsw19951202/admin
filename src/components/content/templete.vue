@@ -38,7 +38,7 @@
                         <select v-model="platform" :disabled="!editable">
                             <option value="tb">淘宝</option>
                             <option value="jd">京东</option>
-                            <option value="pdd">拼多多</option>
+                            <!-- <option value="pdd">拼多多</option> -->
                             <option value="vph">唯品会</option>
                         </select>
                     </div>
@@ -46,7 +46,7 @@
                         <label>活动链接</label>
                         <input type="text" v-model="jump_url" :disabled="!editable">
                     </div>
-                    <div class="edit-gourp need" v-if="platform == 'jd'">
+                    <div class="edit-group need" v-if="platform == 'jd'">
                         <label>短链接</label>
                         <input type="text" v-model="short_url" :disabled="!editable">
                     </div>
@@ -93,7 +93,7 @@
                     <div class="edit-group tips">
                         <label></label>
                         <div>
-                            文件大小35k以下，尺寸360*93
+                            文件大小35k以下，尺寸420*103
                         </div>
                     </div>
                     <div class="edit-group">
@@ -116,17 +116,25 @@
                 </form>
             </div>
         </div>
+        <div class="cover" v-if="showPreview" @click.prevent.stop="hidePreview"></div>
+        <div class="previewBox" v-if="showPreview">
+            <iframe :src="pageUrl" style="width: 100%; height: 100%;"></iframe>
+        </div>
     </div>
 </template>
 <script>
 import request from '@/axios'
 import Setting from '@/setting'
+import qs from 'qs'
+import setting from '@/setting'
 
 export default {
-    inject: ['alert'],
-    props: ['editable', 'pageId', 'pageList'],
+    inject: ['alert', 'showLoading', 'hideLoading'],
+    props: ['editable', 'pageId'],
     data(){
         return {
+            showPreview: false,
+            pagePrefix: ['http://static.yunzhanxinxi.com/templete1.html'],
             templete: 0,
             isCreateNew: 1,
             'page_id': '',
@@ -142,35 +150,102 @@ export default {
             'button_img': '',
             imgType: 'bg',
             bgSize: 300 * 1024,
-            btnSize: 30 * 1024
+            btnSize: 30 * 1024,
+            pageList: null
+        }
+    },
+    computed: {
+        pageUrl() {
+            return this.pagePrefix[this.templete] + '?preview=1&title=' + encodeURIComponent(this.title)
+                + '&platform=' + encodeURIComponent(this.platform) + '&jump_url=' + encodeURIComponent(this.jump_url)
+                + '&short_url=' + encodeURIComponent(this.short_url) + '&copywriting=' + encodeURIComponent(this.copywriting)
+                + '&bg_color=' + encodeURIComponent(this.bg_color) + '&border_color=' + encodeURIComponent(this.border_color)
+                + '&bg_img=' + encodeURIComponent(this.bg_img) + '&button_img=' + encodeURIComponent(this.button_img)
         }
     },
     created(){
-        if(this.pageId){
-            this.$data['page_id'] = this.pageId
-            let page = null
-            for(let idx = 0; idx < (this.pageList || []).length; idx++){
-                if(this.pageList[idx].id == this.pageId){
-                    page = this.pageList[idx]
+        this.getPageList()
+            .then(() => {
+                if(this.pageId){
+                    this.$data['page_id'] = this.pageId
+                    let page = null
+                    for(let idx = 0; idx < (this.pageList || []).length; idx++){
+                        if(this.pageList[idx].id == this.pageId){
+                            page = this.pageList[idx]
+                            break
+                        }
+                    }
+                    if(page){
+                        this.title = page.title
+                        this.platform = page.platform
+                        this.copywriting = page.copywriting
+                        this.$data['jump_url'] = page.jump_url
+                        this.$data['short_url'] = page.short_url
+                        this.$data['bg_color'] = page.bg_color
+                        this.$data['border_color'] = page.border_color
+                        this.desc = page.desc
+                        this.$data['bg_img'] = page.bg_img
+                        this.$data['button_img'] = page.button_img
+                    }
                 }
-            }
-            if(page){
-                this.title = page.title
-                this.platform = page.platform
-                this.copywriting = page.copywriting
-                this.$data['jump_url'] = page.jump_url
-                this.$data['short_url'] = page.short_url
-                this.$data['bg_color'] = page.bg_color
-                this.$data['border_color'] = page.border_color
-                this.desc = page.desc
-                this.$data['bg_img'] = page.bg_img
-                this.$data['button_img'] = page.button_img
-            }
-        }
-        // this.editable = !!this.editable
-        this.editable = true
+            })
     },
     methods: {
+        /**
+         * 获取所有发布中的中间页
+         */
+        getPageList(){
+            return request({
+                url: setting.urls.pageList,
+                method: 'get',
+                params: {
+                    status: 1
+                }
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.pageList = rst.data.data.data || []
+                }else{
+                    this.alert('加载中间页列表失败')
+                }
+            }).catch(e => {
+                this.alert(e.message || '加载中间页列表失败')
+            })
+        },
+        /**
+         * 添加新的中间页
+         * @param {*} newPage 新中间页配置数据
+         */
+        addNewPage(newPage){
+            return request({
+                method: 'post',
+                url: setting.urls.addMiddle,
+                data: qs.stringify(newPage)
+            }).then(rst => {
+                if(rst.status == 200 &&  rst.data.code == 200){
+                    return rst.data.data
+                }else{
+                    throw new Error('添加中间页失败')
+                }
+            })
+        },
+        /**
+         * 发布中间页
+         * @param {*} id中间页唯一标识
+         */
+        pubNewPage(id){
+            return request({
+                url: setting.urls.changeMiddleStatus,
+                method: 'post',
+                data: qs.stringify({
+                    ids: id,
+                    type: 'open'
+                })
+            }).then(rst => {
+                if(rst.status != 200 && rst.data.data != 200){
+                    throw new Error('发布中间页失败')
+                }
+            })
+        },
         /**
          * 素材保存时，通过该方法获取创建的中间页
          * 如果是新增 返回新增的中间页所有属性
@@ -178,7 +253,8 @@ export default {
          */
         getPageData(){
             if(this.isCreateNew == 1){
-                return {
+                this.showLoading()
+                const requestParams = {
                     'title': this.title,
                     'platform': this.platform,
                     'jump_url': this.jump_url,
@@ -190,10 +266,25 @@ export default {
                     'bg_img': this.bg_img,
                     'button_img': this.button_img
                 }
+                return this.addNewPage(requestParams)
+                    .then(pageId => {
+                        return this.pubNewPage(pageId)
+                            .then(() => {
+                                return pageId
+                            })
+                    }).catch(e => {
+                        this.hideLoading()
+                        this.alert(e.message || '添加中间页失败')
+                    }).then(pageId => {
+                        this.hideLoading()
+                        return {
+                            pageContent: requestParams,
+                            pageId,
+                            pageUrl: this.pagePrefix[this.templete] + '?pageId=' + this.pageId
+                        }
+                    })
             }else{
-                return {
-                    pageId: this.pageId
-                }
+                return this.pageId
             }
         },
         /**
@@ -219,6 +310,10 @@ export default {
          */
         preview(){
             console.log('preview')
+            this.showPreview = true
+        },
+        hidePreview(){
+            this.showPreview = false
         },
         /**
          * 上传图片
@@ -250,7 +345,7 @@ export default {
                             reject()
                         }
                     }else if(this.imgType == 'btn'){
-                        if(tmpImg.width != 360 || tmpImg.height != 93){
+                        if(tmpImg.width != 420 || tmpImg.height != 103){
                             this.alert('按钮图片尺寸为360*93,所选图片尺寸错误')
                             reject()
                         }
@@ -435,6 +530,21 @@ export default {
                     height: auto;
                 }
             }
+        }
+    }
+    .previewBox {
+        position: fixed;
+        z-index: 10000;
+        width: 400px;
+        height: 568px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        overflow: hidden;
+        iframe {
+            margin: 0;
+            padding: 0;
+            background-color: white;
         }
     }
 }
