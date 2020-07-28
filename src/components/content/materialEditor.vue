@@ -16,6 +16,14 @@
                     <html-editor :htmlText="material.material_detail" :config="htmlEditorConfig" :editable="editable"></html-editor>
                 </div>
             </div>
+            <div class="editor-groups">
+                <label>生效时间</label>
+                <div>
+                    <flat-picker v-model="material.start_time" class="search-time-picker" :config="dateConfig" :disabled="!editable"></flat-picker>
+                    到
+                    <flat-picker v-model="material.end_time" class="search-time-picker" :config="dateConfig" :disabled="!editable"></flat-picker>
+                </div>
+            </div>
             <div class="editor-groups" style="height: 5.21875rem;">
                 <label>图片上传</label>
                 <div>
@@ -36,14 +44,25 @@
 <script>
 import htmlEditorVue from '../common/htmlEditor.vue'
 import imageEditorVue from '../common/imageEditor.vue'
+import flatPicker from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
+
 export default {
     props: ['material', 'editable', 'materialLabelList'],
     components: {
         'html-editor': htmlEditorVue,
-        'image-editor': imageEditorVue
+        'image-editor': imageEditorVue,
+        'flat-picker': flatPicker
     },
     data: () => {
         return {
+            dateConfig: {
+                locale: Mandarin,
+                dateFormat: 'Y-m-d H:i:S',
+                enableTime: true,
+                'time_24hr': true
+            },
             htmlEditorConfig: {
                 actions: {
                     bold: true,
@@ -96,4 +115,5 @@ export default {
 .editor-groups>div { flex: 1; height: 100%; width: 0; }
 .editor-groups input,.editor-groups select { font-size: .4375rem; width: 15.9375rem; height: 100%; line-height: 1.25rem; border: 1px solid #d9d9d9; border-radius: .125rem; padding: .3125rem; box-sizing: border-box; }
 .editor-groups select { -webkit-appearance: menulist; }
+.editor-groups input.search-time-picker { width: 7.5rem; }
 </style>
