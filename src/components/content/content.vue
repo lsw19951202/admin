@@ -52,6 +52,7 @@ import materialLabelVue from '../../views/materialLabel.vue'
 import totalUserVue from '../../views/dataWorkBench.vue'
 import directedListVue from '../../views/directedList.vue'
 import goodsMaterialVue from '../../views/goodsMaterial.vue'
+import YfdRobotListVue from '../../views/YfdRobotList.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -111,7 +112,8 @@ export default {
         'material-label': materialLabelVue,
         'total-user':totalUserVue,
         'directed-list': directedListVue,
-        'goods-material': goodsMaterialVue
+        'goods-material': goodsMaterialVue,
+        'robot-index': YfdRobotListVue
     }
 }
 </script>

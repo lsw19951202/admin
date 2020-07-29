@@ -2,6 +2,9 @@
     <table cellspacing="0" ref="table">
         <thead :class="tableHeaderFixed?'theadFixed':''" ref="thead">
             <tr v-for="(row, index) in tableHeader" v-bind:key="index">
+                <td v-if="tbType == 'yfdRobotList'" style="width: 2.5625rem; text-align: center;">
+                    <input type="checkbox" @click="changeAllCheckStatus($event)" :checked="allChecked">
+                </td>
                 <td v-for="(col, idx) in row" v-bind:key="idx" :colspan="col.colspan || 1" :rowspan="col.rowspan || 1">
                     {{col.name}}
                     <div v-if="col.canSort" class="sort">
@@ -11,6 +14,29 @@
                 </td>
             </tr>
         </thead>
+        <tbody v-if="tbType == 'yfdRobotList'" ref="tbody">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td style="width: 2.5625rem; text-align: center;">
+                    <input type="checkbox" @click="changeCheckStatus($event, index)" :checked="tbRow[1] != '--' && checkedArray.indexOf(tbRow[1]) >= 0">
+                </td>
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <slot v-if="idx < tbRow.length - 1">{{tbCol}}</slot>
+                    <slot v-else>
+                        <div style="display: inline-block; height: 1rem; line-height: 1rem;">
+                            <label style="display: inline-block; height: .75rem; line-height: .75rem; margin-right: 3px;">微信群</label>
+                            <switch-progress style="vertical-align: middle;" :turnOn="tbCol['group_syn'] == 'T'" :statusData="tbRow" @changeSwitchStatus="changeWechatStatu"></switch-progress>
+                        </div>
+                        <button class="action-btn" v-if="tbCol.outline_status == 'T'" @click.prevent.stop="$parent.outlineRobotConfirm(tbRow[1])">下线</button>
+                        <button class="action-btn" v-if="tbCol.renew_status == 'T'" @click.prevent.stop="$parent.renewRobotConfirm(tbRow[1])">续时</button>
+                        <button class="action-btn" v-if="tbCol.delete_status == 'T'" @click.prevent.stop="$parent.deleteRobotConfirm(tbRow[1])">删除</button>
+                        <div style="display: inline-block; margin-left: 8px; height: 1rem; line-height: 1rem;">
+                            <label style="display: inline-block; height: .75rem; line-height: .75rem; margin-right: 3px;">朋友圈</label>
+                            <switch-progress style="vertical-align: middle;" :turnOn="tbCol['friend_syn'] == 'T'" :statusData="tbRow" @changeSwitchStatus="changeTimeLineStatu"></switch-progress>
+                        </div>
+                    </slot>
+                </td>
+            </tr>
+        </tbody>
         <tbody v-if="tbType == 'user'" ref="tbody">
             <tr v-for="(tbRow, index) in tbData" v-bind:key="index">
                 <td>{{tbRow.user_name}}</td>
@@ -218,19 +244,33 @@
     </table>
 </template>
 <script>
-// import switchProgress from '@/components/common/switch.vue'
+import switchProgress from '@/components/common/switch.vue'
 
 export default {
-    props: ['tableHeader', 'tbData', 'tbType', 'tableHeaderFixed', 'tableBodyClick', 'reduceData', 'selectUserList', 'checkedArray'],
+    props: ['tableHeader', 'tbData', 'tbType', 'tableHeaderFixed', 'tableBodyClick', 'reduceData', 'selectUserList', 'checkedArray', 'allChecked'],
     data: () => {
         return {
             'sortType': ''
         }
     },
     components: {
-        // 'switch-progress': switchProgress
+        'switch-progress': switchProgress
     },
     methods: {
+        changeWechatStatu(dt){
+            if(dt.data[dt.data.length - 1].group_status == 'T'){
+                this.$emit('changeWechatStatu', {userId: dt.data[1], status: dt.status})
+            }else{
+                return
+            }
+        },
+        changeTimeLineStatu(dt){
+            if(dt.data[dt.data.length - 1].friends_status == 'T'){
+                this.$emit('changeTimeLineStatu', {userId: dt.data[1], status: dt.status})
+            }else{
+                return
+            }
+        },
         changeSwitchStatus: function(dt){
             this.$emit('changeSwitchStatus', dt)
         },
@@ -252,6 +292,9 @@ export default {
                     }
                 })
             // e.target.parentNode.childNodes[0].focus()
+        },
+        changeAllCheckStatus(e){
+            this.$emit('changeAllCheckStatus', e)
         },
         cancelEdit: function(e){
             e.target.parentNode.className = 'editable-box'
