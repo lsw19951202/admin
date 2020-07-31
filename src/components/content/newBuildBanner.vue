@@ -100,9 +100,10 @@ export default {
             createTimeBegin: '',
             createTimeEnd: '',
             dateConfig: {
-                'time_24hr': true,
-                maxDate: nStr,
-                locale: Mandarin
+                locale: Mandarin,
+                dateFormat: 'Y-m-d H:i',
+                enableTime: true,
+                'time_24hr': true
             },
             tipsText:'',
             showTips:false,

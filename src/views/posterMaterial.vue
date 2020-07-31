@@ -9,16 +9,17 @@
             </div>
             <banner-manage v-if="show == 1" @newBuildEvent='newBuildFn' @lookBanner='lookBanFn' @editBanner='editBanFn'></banner-manage>
             <banner-manage-two v-if="show == 2"></banner-manage-two>
-            <beanCurd-manage v-if="show == 3" @newBuildEvent='newBuildBean'></beanCurd-manage>
+            <beanCurd-manage v-if="show == 3" @newBuildEvent='newBuildBean' @lookDataList='lookDataFn' @editTofo='editTofoFn'></beanCurd-manage>
             <scrollbar-manage v-if="show == 4" @newBuildEvent='newBuildScroll' @lookMessge='lookMessFn' @editMessge='editFn'></scrollbar-manage>
         </div>
         <!-- 新建banner1组件 -->
         <newBuild-banner v-if="newBuild=='banner1'" @goBackPage='goBackPageFn' :dataAddree='dataAddree' :lookBannerMessge='lookBannerMessge' :isLook='isLook'
         :isEdit='isEdit'></newBuild-banner>
         <!-- 新建豆腐块组件 -->
-        <newBuild-bean v-if="newBuild=='tofo'" @goBackPage='goBackPageFn'></newBuild-bean>
+        <newBuild-bean v-if="newBuild=='tofo'" @goBackPage='goBackPageFn' :isLook='isLook' :looktofoData='looktofoData'></newBuild-bean>
         <!-- 新建滚动条组件 -->
         <newBuild-scroll v-if="newBuild=='scroll'" @goBackPage='goBackPageFn' @saveEvent='saveBtn' :lookMessgeData='lookMessgeData' :isLook='isLook' :editData='editData'></newBuild-scroll>
+        <!--  -->
     </div>
 </template>
 
@@ -54,6 +55,7 @@ export default {
             dataAddree:'',
             lookBannerMessge:'',//查看banner
             isEdit:false,
+            looktofoData:'',//查看豆腐块信息
         }
     },
     created(){
@@ -76,10 +78,12 @@ export default {
             this.editData = ''
             this.show = 1
             this.lookBannerMessge = ''
+            this.looktofoData = ''
         },
         newBuildBean(){//新建豆腐块组件
             this.newBuild = 'tofo';
             this.$parent.subTitle2 = '新建豆腐块'
+            this.isLook = false
         },
         newBuildScroll(){//新建滚动条
             this.newBuild = 'scroll';
@@ -113,6 +117,18 @@ export default {
             this.newBuild = 'banner1';
             this.$parent.subTitle2 = '编辑banner'
             this.isEdit = true
+        },
+        lookDataFn(item){//查看豆腐块
+            this.isLook = true
+            this.looktofoData = item
+            this.newBuild = 'tofo';
+            this.$parent.subTitle2 = '查看豆腐块'
+        },
+        editTofoFn(item){//编辑豆腐块
+            this.isLook = false
+            this.looktofoData = item
+            this.newBuild = 'tofo';
+            this.$parent.subTitle2 = '编辑豆腐块'
         }
     }
 }
