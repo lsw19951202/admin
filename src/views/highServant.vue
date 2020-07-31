@@ -13,7 +13,7 @@
             <selector class="search-group" :selectParams="selectParams" @selectOptsClicked="choosePlatform" :value="platform"></selector>
             <selector class="search-group" :selectParams="statusrelease" @selectOptsClicked="chooseStatus" :value="platform"></selector>
             <div class="search-group">
-                <label>创建时间:</label>
+                <label>更新时间:</label>
                 <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeBegin" placeholder="起始时间"></flat-picker>
                 <div class="split-line">
                     <div></div>
@@ -95,6 +95,7 @@ export default {
             createTimeEnd: '',
             type:'',
             showNewTable:false,
+            operationType:'',
             newFreeHeader:[],//表头信息
             newFreeTbody:[],//列表信息
             goodsid:'',//商品id
@@ -238,10 +239,11 @@ export default {
                     this.alert('操作失败')
                 }
             }).catch((e) => {
-                this.alert('发布/下架失败')
+                this.alert(this.operationType + '失败!')
             }).then(() => {
                 this.checkedId = []
                 this.hideLoading()
+                this.alert(this.operationType + '成功!')
             })
         },
         shooseStatusFn(idx){//批量选择状态
@@ -268,6 +270,7 @@ export default {
             }).then(resp => {
                 if(resp.data.code == 200){
                     this.getNewFreeHeader()
+                    this.alert(resp.data.data.msg || '导入成功!')
                 }else{
                     this.alert('批量导入失败')
                 }
@@ -287,17 +290,33 @@ export default {
             this.contentData.ids = this.checkedId.join(',')
             this.contentData.type = 'off'
             this.showTips = true
+            this.operationType = '下架'
         },
         batchDelete(){//批量删除
+            let flag = true;
             const dataListTbody = this.newFreeTbody.data
             if(this.checkedId.length == 0){
                 this.alert('请先选择需要删除的商品')
                 return
             }
-            this.tipsText = '确定要删除选中的商品?'
-            this.contentData.ids = this.checkedId.join(',')
-            this.contentData.type = 'del'
-            this.showTips = true
+            for (let index = 0; index < this.checkedId.length; index++) {
+                for (let v = 0; v < dataListTbody.length; v++) {
+                    if(this.checkedId[index] == dataListTbody[v].id){
+                        if(dataListTbody[v].status == '发布中'){
+                            flag = false
+                        }
+                    }
+                }
+            }
+            if(!flag){
+                this.alert('商品中有未下架的商品!请重新选择！') 
+            }else{
+                this.tipsText = '确定要删除选中的商品?'
+                this.contentData.ids = this.checkedId.join(',')
+                this.contentData.type = 'del'
+                this.showTips = true
+                this.operationType = '删除'
+            }
         },
         copy() {//复制按钮
             const clipboard = new Clipboard('#copy_text');
@@ -316,18 +335,21 @@ export default {
             this.contentData.ids = ids
             this.contentData.type = 'off'
             this.showTips = true
+            this.operationType = '下架'
         },
         releaseFn(ids){//单个发布
             this.tipsText = '确定要发布选中商品?'
             this.contentData.ids = ids
             this.contentData.type = 'open'
             this.showTips = true
+            this.operationType = '发布'
         },
         deleteFn(ids){//单个删除
             this.tipsText = '确定要删除选中商品?'
             this.contentData.ids = ids
             this.contentData.type = 'del'
             this.showTips = true
+            this.operationType = '删除'
         },
         editFn(e){//编辑
             this.type = 'highServantEdit'
@@ -363,6 +385,7 @@ export default {
                 this.alert('新建失败')
             }).then(() => {
                 this.hideLoading()
+                this.alert('新建成功！重复商品将自动覆盖!')
             })
         }
     }

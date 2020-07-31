@@ -265,6 +265,46 @@ export default {
         changeMiddleStatus: '/ypj/middle/operate',
         // 中间页列表
         pageList: '/ypj/middle/list',
+        // banner1列表表头
+        bannerListTheader:'/app/field?field_type=bannerList',
+        // banner1列表
+        bannerList:'/ypj/banner/list',
+        // banner1发布/下架
+        bannerOperate:'/ypj/banner/operate',
+        // banner1添加修改
+        bannerAdd:'/ypj/banner/add',
+        // 豆腐块列表表头
+        tofuListTheader:'/app/field?field_type=tofuList',
+        // 豆腐块列表
+        tofoListTbody:'/ypj/tofu/list',
+        // 豆腐块添加/修改
+        tofuAdd:'/ypj/tofu/add',
+        // 豆腐块发布/下架
+        tofoOperate:'/ypj/tofu/operate',
+        // 滚动条表头
+        scrollBarThead:'/app/field?field_type=promptList',
+        // 滚动条列表
+        scrollBarTbody:'/ypj/prompt/list',
+        // 滚动条添加/修改
+        scrollBarAdd:'/ypj/prompt/add',
+        // 滚动条发布/下架
+        scrollBarOperate:'/ypj/prompt/operate',
+        // 生活赚banner2列表表头
+        layoutListThead:'/app/field?field_type=layoutList',
+        // 生活赚banner2列表
+        layoutListTbody:'/ypj/layout/list',
+        // banner2添加/修改
+        layoutAdd:'/ypj/layout/add',
+        // banner2发布/下架
+        layoutOperate:'/ypj/layout/operate',
+        // 弹窗列表表头
+        popupListThead:'/app/field?field_type=popupList',
+        // 弹窗列表
+        popupListTbody:'/ypj/popup/list',
+        // 弹窗添加/修改
+        popupAdd:'/ypj/popup/add',
+        // 弹窗发布/下架
+        popupOperate:'/ypj/popup/operate',
         // 云发单列表
         yfdRobotList: '/robot/index',
         // 修改微信群状态
@@ -724,6 +764,16 @@ export default {
             name: 'goods-material',
             title: '素材管理',
             subTitle1: '商品素材'
+        },
+        '/adv/list':{
+            name: 'poster-material',
+            title: '素材管理',
+            subTitle1: '广告位素材'
+        },
+        '/popup/list':{
+            name: 'popup-list',
+            title: '素材管理',
+            subTitle1: '弹窗素材'
         },
         '/robot/index': {
             name: 'robot-index',

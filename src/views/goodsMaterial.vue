@@ -4,7 +4,7 @@
         <div class="newFreeHeader">
             <div class="headerNav" :class="isShow==0?'':'headerNavNo'" @click="chooseNav(0)" v-if="newFreeLimit">新人免单</div>
             <div class="headerNav" :class="isShow==1?'':'headerNavNo'" @click="chooseNav(1)">高佣商品</div>
-            <div class="headerNav" :class="isShow==2?'':'headerNavNo'" @click="chooseNav(2)">集合商品</div>
+            <!-- <div class="headerNav" :class="isShow==2?'':'headerNavNo'" @click="chooseNav(2)">集合商品</div> -->
         </div>
         <!-- 新人免单 -->
         <new-free v-if="isShow==0?true:false" @limitsFn='isShowNewFreeVue'></new-free>
