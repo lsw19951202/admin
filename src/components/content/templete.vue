@@ -107,7 +107,7 @@
                     <div class="edit-group need">
                         <label>选择中间页</label>
                         <select v-model="page_id">
-                            <option v-for="(page, idx) in pageList" :key="idx" value="page.id">{{page.title}}</option>
+                            <option v-for="(page, idx) in pageList" :key="idx" :value="page.id">{{page.title}}</option>
                         </select>
                     </div>
                 </div>
@@ -284,7 +284,7 @@ export default {
                         }
                     })
             }else{
-                return this.pageId
+                return this.page_id
             }
         },
         /**

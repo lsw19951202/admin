@@ -2,7 +2,7 @@
     <table>
         <thead>
             <tr>
-                <th></th>
+                <th><input @click="changeAllGoodsCheckStatu($event)" type="checkbox" :checked="allGoodsChecked"></th>
                 <th v-for="(item,index) in newFreeHeader" :key="index">
                     <div v-if="item.name == 'ID'">序号</div>
                     <div v-else>{{item.name}}</div>
@@ -44,7 +44,7 @@ export default {
     props: ['newFreeHeader','newFreeTbody','checkedId','tableType'],
     data: () => {
         return {
-            
+            allGoodsChecked:false
         }
     },
     created(){
@@ -68,10 +68,27 @@ export default {
         },
         shooseStatus(key){
             this.$emit('shooseStatusEvent',key)
+            this.allGoodsChecked = false
         },
         highEdit(e){
             this.$emit("editEvent",e)
-        }
+        },
+        changeAllGoodsCheckStatu: function(e){
+            this.allGoodsChecked = true
+            const checked = e.target.checked
+            console.log("全选",checked)
+            for(let idx = 0; idx < this.newFreeTbody.data.length; idx++){
+                if(checked){
+                    if(this.checkedId.indexOf(this.newFreeTbody.data[idx].id) == -1){
+                        this.checkedId.push(this.newFreeTbody.data[idx].id)
+                    }
+                }else{
+                    if(this.checkedId.indexOf(this.newFreeTbody.data[idx].id) >= 0){
+                        this.checkedId.splice(this.checkedId.indexOf(this.newFreeTbody.data[idx].id), 1)
+                    }
+                }
+            }
+        },
     }
 }
 </script>

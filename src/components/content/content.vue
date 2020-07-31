@@ -52,6 +52,8 @@ import materialLabelVue from '../../views/materialLabel.vue'
 import totalUserVue from '../../views/dataWorkBench.vue'
 import directedListVue from '../../views/directedList.vue'
 import goodsMaterialVue from '../../views/goodsMaterial.vue'
+import posterMaterialVue from '../../views/posterMaterial.vue'
+import popupListVue from '../../views/popupList.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -111,7 +113,9 @@ export default {
         'material-label': materialLabelVue,
         'total-user':totalUserVue,
         'directed-list': directedListVue,
-        'goods-material': goodsMaterialVue
+        'goods-material': goodsMaterialVue,
+        'poster-material': posterMaterialVue,
+        'popup-list': popupListVue
     }
 }
 </script>

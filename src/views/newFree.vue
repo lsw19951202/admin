@@ -13,7 +13,7 @@
             <selector class="search-group" :selectParams="selectParams" @selectOptsClicked="choosePlatform" :value="platform"></selector>
             <selector class="search-group" :selectParams="statusrelease" @selectOptsClicked="chooseStatus" :value="platform"></selector>
             <div class="search-group">
-                <label>创建时间:</label>
+                <label>更新时间:</label>
                 <flat-picker class="search-time-picker" :config="dateConfig" v-model="createTimeBegin" placeholder="起始时间"></flat-picker>
                 <div class="split-line">
                     <div></div>
@@ -94,6 +94,7 @@ export default {
             createTimeBegin: '',
             createTimeEnd: '',
             type:'',
+            operationType:'',
             showNewTable:false,
             newFreeHeader:[],//表头信息
             newFreeTbody:[],//列表信息
@@ -239,9 +240,10 @@ export default {
                     this.alert('操作失败')
                 }
             }).catch((e) => {
-                this.alert('新人免单发布/下架失败')
+                this.alert(this.operationType + '失败!')
             }).then(() => {
                 this.hideLoading()
+                this.alert(this.operationType + '成功!')
             })
         },
         shooseStatusFn(idx){//批量选择状态
@@ -266,14 +268,16 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(resp => {
+                console.log(resp,"批量导入")
                 if(resp.data.code == 200){
                     this.getNewFreeHeader()
+                    this.alert(resp.data.data.msg || '导入成功!')
                 }else{
                     this.alert('批量导入失败')
                 }
             }).catch(e => {
                 this.alert('批量导入失败')
-            }).then(() => {
+            }).then(resp => {
                 this.hideLoading()
                 this.$refs.excelIpt.value = ''
             })
@@ -287,16 +291,33 @@ export default {
             this.contentData.ids = this.checkedId.join(',')
             this.contentData.type = 'off'
             this.showTips = true
+            this.operationType = '下架'
         },
         batchDelete(){//批量删除
+            let flag = true;
             if(this.checkedId.length == 0){
                 this.alert('请先选择需要删除的商品')
                 return
             }
-            this.tipsText = '确定要删除选中的商品?'
-            this.contentData.ids = this.checkedId.join(',')
-            this.contentData.type = 'del'
-            this.showTips = true
+            for (let index = 0; index < this.checkedId.length; index++) {
+                for (let v = 0; v < this.newFreeTbody.data.length; v++) {
+                    if(this.checkedId[index] == this.newFreeTbody.data[v].id){
+                        if(this.newFreeTbody.data[v]['in_show'] == '发布中'){
+                            flag = false
+                        }
+                    }
+                }
+            }
+            if(!flag){
+                this.alert('商品中有未下架的商品!请重新选择！') 
+            }else{
+                this.tipsText = '确定要删除选中的商品?'
+                this.contentData.ids = this.checkedId.join(',')
+                this.contentData.type = 'del'
+                this.showTips = true
+                this.operationType = '删除'
+            }
+            
         },
         copy() {//复制按钮
             const clipboard = new Clipboard('#copy_text');
@@ -315,18 +336,21 @@ export default {
             this.contentData.ids = ids
             this.contentData.type = 'off'
             this.showTips = true
+            this.operationType = '下架'
         },
         releaseFn(ids){//单个发布
             this.tipsText = '确定要发布选中商品?'
             this.contentData.ids = ids
             this.contentData.type = 'open'
             this.showTips = true
+            this.operationType = '发布'
         },
         deleteFn(ids){//单个删除
             this.tipsText = '确定要删除选中商品?'
             this.contentData.ids = ids
             this.contentData.type = 'del'
             this.showTips = true
+            this.operationType = '删除'
         },
         cancelEvent(e){
             this.showTips = e;
@@ -350,12 +374,13 @@ export default {
                     console.log(res,"新建成功!")
                     this.getNewFreeTbody()
                 }else{
-                    this.alert('新建失败')
+                    this.alert('新建失败!')
                 }
             }).catch((e) => {
-                this.alert('失败')
+                this.alert('新建失败!')
             }).then(() => {
                 this.hideLoading()
+                this.alert('新建成功!重复商品自动覆盖!')
             })
         }
     }
