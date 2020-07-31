@@ -305,6 +305,20 @@ export default {
         popupAdd:'/ypj/popup/add',
         // 弹窗发布/下架
         popupOperate:'/ypj/popup/operate',
+        // 云发单列表
+        yfdRobotList: '/robot/index',
+        // 修改微信群状态
+        yfdWechatStatu: '/robot/group',
+        // 下线
+        yfdLogout: '/robot/outline',
+        // 删除
+        yfdDel: '/robot/deleteuser',
+        // 续时
+        yfdAddTime: '/robot/renew',
+        // 修改朋友圈状态
+        yfdTimeLineStatu: '/robot/friendsyn',
+        // 全局配置
+        yfdGlobalSetting: '/robot/config'
     },
     // 图片地址
     images: {
@@ -378,6 +392,10 @@ export default {
                 require('@/assets/menu_cps_normal.png')
             ],
             招商管理: [
+                require('@/assets/menu_cps_selected.png'),
+                require('@/assets/menu_cps_normal.png')
+            ],
+            发单机器人: [
                 require('@/assets/menu_cps_selected.png'),
                 require('@/assets/menu_cps_normal.png')
             ]
@@ -521,6 +539,9 @@ export default {
         ],
         prizeList: [
             [{ name: '序号' }, { name: '奖励详情' }]
+        ],
+        yfdRobotList: [
+            [{ name: '序号' }, { name: '用户ID' }, { name: '用户手机号' }, { name: '微信昵称' }, { name: '最高群个数' }, { name: '已使用群个数' }, { name: '登陆状态' }, { name: '初始登陆时间', canSort: true, sortBy: 'first_login_time' }, { name: '激活时间', canSort: true, sortBy: 'activate_time' }, { name: '到期时间', canSort: true, sortBy: 'exp_time' }, { name: '操作' }]
         ]
     },
     views: {
@@ -753,6 +774,11 @@ export default {
             name: 'popup-list',
             title: '素材管理',
             subTitle1: '弹窗素材'
+        },
+        '/robot/index': {
+            name: 'robot-index',
+            title: '发单机器人',
+            subTitle1: '发单机器人'
         }
     }
 }

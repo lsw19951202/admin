@@ -144,7 +144,9 @@ export default {
             this.showLoading()
             const requestParams = {
                 'material_type': this.material['material_type'],
-                'material_detail': this.material['material_detail']
+                'material_detail': this.material['material_detail'],
+                'start_time': this.material['start_time'],
+                'end_time': this.material['end_time']
             }
             if(this.material['id']){
                 requestParams['material_id'] = this.material['id']

@@ -54,6 +54,7 @@ import directedListVue from '../../views/directedList.vue'
 import goodsMaterialVue from '../../views/goodsMaterial.vue'
 import posterMaterialVue from '../../views/posterMaterial.vue'
 import popupListVue from '../../views/popupList.vue'
+import YfdRobotListVue from '../../views/YfdRobotList.vue'
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],
@@ -115,7 +116,8 @@ export default {
         'directed-list': directedListVue,
         'goods-material': goodsMaterialVue,
         'poster-material': posterMaterialVue,
-        'popup-list': popupListVue
+        'popup-list': popupListVue,
+        'robot-index': YfdRobotListVue
     }
 }
 </script>
