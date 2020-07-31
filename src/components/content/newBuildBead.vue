@@ -252,45 +252,50 @@ export default {
         saveBtnFn(){//保存按钮
             console.log(this.$children)
             const childNode = this.$children
-            // if(this.isMiddlePageL == '1'){
-            //     let returnDateL
-            //     for (let v = 0; v < childNode.length; v++) {
-            //         // console.log(childNode[v].$el.className)
-            //         if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
-            //             returnDateL = childNode[v].getPageData()
-            //             break;
-            //         }
-            //     }
-            //     console.log(returnDateL,"左侧")
-            //     if(typeof returnDateL == 'string'){
-            //         this.leftPageId = returnDateL
-            //     }else{
-            //         returnDateL.then(res=>{
-            //             this.leftPageId = res.pageId
-            //             this.leftJumpUrl = res.pageUrl
-            //         })
-            //     }
-            // }
-            // if(this.isMiddlePageR == '3'){
-            //     let returnDateR
-            //     for (let v = 0; v < childNode.length; v++) {
-            //         if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
-            //             returnDateR = childNode[v].getPageData()
-            //             break;
-            //         }
-            //     }
-            //     console.log(returnDateR,"右侧")
-            //     if(typeof returnDateR == 'string'){
-            //         this.rightPageId = returnDateR
-            //     }else{
-            //         returnDateR.then(res=>{
-            //             this.rightPageId = res.pageId
-            //             this.rightJumpUrl = res.pageUrl
-            //         })
-            //     }
-            // }
-            // this.newBuildBeadRequest()
-            // this.$emit('goBackPage')
+            if(this.isMiddlePageL == '1'){
+                let returnDateL
+                for (let v = 0; v < childNode.length; v++) {
+                    if(childNode[v].$el.id.indexOf('leftTem') >= 0 ){
+                        returnDateL = childNode[v].getPageData()
+                    }
+                }
+                console.log(returnDateL,"左侧")
+                if(typeof returnDateL == 'string'){
+                    this.leftPageId = returnDateL
+                    this.newBuildBeadRequest()
+                }else{
+                    returnDateL.then(res=>{
+                        this.leftPageId = res.pageId
+                        this.leftJumpUrl = res.pageUrl
+                        this.newBuildBeadRequest()
+                    })
+                }
+            }else{
+                this.newBuildBeadRequest()
+            }
+            if(this.isMiddlePageR == '3'){
+                let returnDateR
+                for (let v = 0; v < childNode.length; v++) {
+                    if(childNode[v].$el.id.indexOf('rightTem') >= 0 ){
+                        returnDateR = childNode[v].getPageData()
+                    }
+                }
+                console.log(returnDateR,"右侧")
+                if(typeof returnDateR == 'string'){
+                    this.rightPageId = returnDateR
+                    this.newBuildBeadRequest()
+                }else{
+                    returnDateR.then(res=>{
+                        this.rightPageId = res.pageId
+                        this.rightJumpUrl = res.pageUrl
+                        this.newBuildBeadRequest()
+                    })
+                }
+
+            }else{
+                this.newBuildBeadRequest()
+            }
+            this.$emit('goBackPage')
         },
         newBuildBeadRequest(){//豆腐块添加修改
             const parmsaData = {

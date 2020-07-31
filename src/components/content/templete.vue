@@ -107,7 +107,7 @@
                     <div class="edit-group need">
                         <label>选择中间页</label>
                         <select v-model="page_id">
-                            <option v-for="(page, idx) in pageList" :key="idx" :value="page.id">{{page.title}}</option>
+                            <option v-for="(page, idx) in pageList" :key="idx" :value="page.id">{{page.title}}{{page['page_url']}}</option>
                         </select>
                     </div>
                 </div>
@@ -347,7 +347,7 @@ export default {
                         }
                     }else if(this.imgType == 'btn'){
                         if(tmpImg.width != 420 || tmpImg.height != 103){
-                            this.alert('按钮图片尺寸为360*93,所选图片尺寸错误')
+                            this.alert('按钮图片尺寸为420*103,所选图片尺寸错误')
                             reject()
                         }
                     }
