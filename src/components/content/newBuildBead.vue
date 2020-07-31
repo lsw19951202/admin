@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="configuration" v-if="isMiddlePageL=='1'">
-                        <templete :editable='leftEdit' :pageId="looktofoData['left_page_id']"></templete>
+                        <templete id="leftTem" :editable='leftEdit' :pageId="looktofoData['left_page_id']"></templete>
                     </div>
                 </div>
                 <div class="tofoRight">
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="configuration" v-if="isMiddlePageR=='3'">
-                        <templete :editable='rightEdit' :pageId="looktofoData['right_page_id']"></templete>
+                        <templete id="rightTem" :editable='rightEdit' :pageId="looktofoData['right_page_id']"></templete>
                     </div>
                 </div>
             </div>
@@ -252,47 +252,45 @@ export default {
         saveBtnFn(){//保存按钮
             console.log(this.$children)
             const childNode = this.$children
-            if(this.isMiddlePageL == '1'){
-                let returnDateL
-                for (let v = 0; v < childNode.length; v++) {
-                    // console.log(childNode[v].$el.className)
-                    if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
-                        console.log("左侧有中间页")
-                        returnDateL = childNode[v].getPageData()
-                        break;
-                    }
-                }
-                console.log(returnDateL,"左侧")
-                if(typeof returnDateL == 'string'){
-                    this.leftPageId = returnDateL
-                }else{
-                    returnDateL.then(res=>{
-                        this.leftPageId = res.pageId
-                        this.leftJumpUrl = res.pageUrl
-                    })
-                }
-            }
-            if(this.isMiddlePageR == '3'){
-                let returnDateR
-                for (let v = 0; v < childNode.length; v++) {
-                    if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
-                        console.log("右侧有中间页")
-                        returnDateR = childNode[v].getPageData()
-                        break;
-                    }
-                }
-                console.log(returnDateR,"右侧")
-                if(typeof returnDateR == 'string'){
-                    this.rightPageId = returnDateR
-                }else{
-                    returnDateR.then(res=>{
-                        this.rightPageId = res.pageId
-                        this.rightJumpUrl = res.pageUrl
-                    })
-                }
-            }
-            this.newBuildBeadRequest()
-            this.$emit('goBackPage')
+            // if(this.isMiddlePageL == '1'){
+            //     let returnDateL
+            //     for (let v = 0; v < childNode.length; v++) {
+            //         // console.log(childNode[v].$el.className)
+            //         if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
+            //             returnDateL = childNode[v].getPageData()
+            //             break;
+            //         }
+            //     }
+            //     console.log(returnDateL,"左侧")
+            //     if(typeof returnDateL == 'string'){
+            //         this.leftPageId = returnDateL
+            //     }else{
+            //         returnDateL.then(res=>{
+            //             this.leftPageId = res.pageId
+            //             this.leftJumpUrl = res.pageUrl
+            //         })
+            //     }
+            // }
+            // if(this.isMiddlePageR == '3'){
+            //     let returnDateR
+            //     for (let v = 0; v < childNode.length; v++) {
+            //         if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
+            //             returnDateR = childNode[v].getPageData()
+            //             break;
+            //         }
+            //     }
+            //     console.log(returnDateR,"右侧")
+            //     if(typeof returnDateR == 'string'){
+            //         this.rightPageId = returnDateR
+            //     }else{
+            //         returnDateR.then(res=>{
+            //             this.rightPageId = res.pageId
+            //             this.rightJumpUrl = res.pageUrl
+            //         })
+            //     }
+            // }
+            // this.newBuildBeadRequest()
+            // this.$emit('goBackPage')
         },
         newBuildBeadRequest(){//豆腐块添加修改
             const parmsaData = {
