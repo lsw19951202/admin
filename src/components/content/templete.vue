@@ -255,6 +255,7 @@ export default {
             if(this.isCreateNew == 1){
                 this.showLoading()
                 const requestParams = {
+                    'page_id':this.pageId,
                     'title': this.title,
                     'platform': this.platform,
                     'jump_url': this.jump_url,

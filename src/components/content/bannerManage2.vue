@@ -10,7 +10,10 @@
                 <Select :selectParams="selectPosition" @selectOptsClicked="choosePosition"></Select>
                 <Select :selectParams="selectStatus" @selectOptsClicked="chooseStatus"></Select>
                 <button class="actionAdd-btn" @click="searchBtn">搜索</button>
-                <button class="actionAdd-btn">新建</button>
+                <!-- <button class="actionAdd-btn">新建</button> -->
+                <select name="" id="select" class="actionAdd-btnSelect" @change="selectOption($event)">
+                    <option :value="item.value" v-for="(item,index) in newAddoptions" :key="index">{{item.text}}</option>
+                </select>
             </header>
             <div class="table-container hideScrollBar">
                 <advert-table :theadData='theadData' :tbodyData='tbodyData' @offShelfEvent='offShelfFn' @releaseEvent='releaseFn' @deleteEvent='deleteFn' @lookUpEvent='lookUpFn'></advert-table>
@@ -53,20 +56,11 @@ export default {
                     text: '请选择'
                 }, {
                     value: 'shopping',
-                    text: '首页(购物赚)'
+                    text: '购物赚'
                 }, {
                     value: 'live',
                     text: '生活赚'
-                }, {
-                    value: 'my',
-                    text: '我的页面'
-                }, {
-                    value: 'brandSpecial',
-                    text: '品牌专场'
-                }, {
-                    value: 'brandHigh',
-                    text: '高佣精品'
-                }]
+                },]
             },
             selectPosition: {//页面位置
                 label: '页面位置',
@@ -74,14 +68,14 @@ export default {
                     value: '',
                     text: '请选择'
                 }, {
-                    value: 'Center',
-                    text: '中部'
-                }, {
-                    value: 'Up',
+                    value: 'bannerUp',
                     text: '顶部'
                 }, {
-                    value: 'Down',
-                    text: '底部'
+                    value: 'bannerDown',
+                    text: '中部'
+                }, {
+                    value: 'singleImage',
+                    text: '横幅'
                 }]
             },
             selectStatus: {//发布状态  0待发布 1发布中 2已下架
@@ -104,6 +98,21 @@ export default {
                 ids:'',
                 type:'',// del 删除   off 下架    open发布
             },
+            newAddoptions: [//新建下拉选择框
+                {
+                    value: '',
+                    text: '新建'
+                }, {
+                    value: 'live_bannerUp',
+                    text: '生活赚,顶部'
+                }, {
+                    value: 'shopping_bannerDown',
+                    text: '购物赚,中部'
+                }, {
+                    value: 'shopping_singleImage',
+                    text: '购物赚,横幅'
+                },
+            ],
         }
     },
     created(){
@@ -216,7 +225,21 @@ export default {
         },
         lookUpFn(e){//查看的商品的信息
             console.log(e,"查看的商品的信息")
-        }
+        },
+        selectOption(e){//新建banner所在页面和位置
+            const selectIndex = e.target.selectedIndex;
+            const myselect = document.getElementById('select');
+            const texts = myselect.options[selectIndex].text
+            const values = myselect.options[selectIndex].value
+            const address = {
+                pageTable:'',
+                pageLocation:''
+            }
+            address.pageTable = values.split('_')[0]
+            address.pageLocation = values.split('_')[1]
+            // this.$emit('newBuildEvent',address)
+            console.log(address)
+        },
     }
 }
 </script>
@@ -227,6 +250,8 @@ export default {
 .actionAdd-btn{appearance: menulist;cursor: pointer;padding: 0 1rem;width: 4rem;height: 1rem;line-height: 1rem;background-color: #4880EA;border-radius: .125rem;color: white;vertical-align: top;margin-left: 20px;}
 .actionAdd-btn option{cursor: pointer;margin: 0 auto;height: 1.3rem;line-height: 1.3rem;background-color: rgb(243, 241, 241);border: none;border-radius: .5rem;color: #666666;}
 .table-container{margin-top: .5rem;}
+.actionAdd-btnSelect{appearance: menulist;cursor: pointer;padding: 0 1rem;height: 1rem;background-color: #4880EA;border-radius: .125rem;color: white;vertical-align: top;margin-left: 20px;}
+.actionAdd-btnSelect option{cursor: pointer;margin: 0 auto;height: 1.3rem;line-height: 1.3rem;background-color: rgb(243, 241, 241);border: none;border-radius: .5rem;color: #666666;}
 
 .issue{height: 30px;display: flex;justify-content: space-around;align-items: center;padding: 0 10px;box-sizing: border-box;}
 .textValue{width: 40px;height: 25px;line-height: 25px;text-align: center;background-color: #4880EA;color: #ffffff;border-radius: 3px;cursor: pointer;margin: 0 5px;}
