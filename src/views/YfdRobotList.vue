@@ -94,12 +94,22 @@ export default {
                 groupStatu: false,
                 friendStatu: false,
                 maxGroup: 5
+            },
+            'rank_time': '',
+            'time_type': '',
+            globalSettings: {
+                "max_group": '',
+                "friend_status": '',
+                "group_status": ''
             }
         }
     },
     created(){
         console.log('created')
+        // 获取机器人列表
         this.loadTBData()
+        // 获取全局配置
+        this.loadGlobalSetting()
     },
     provide(){
         return {
@@ -109,6 +119,22 @@ export default {
         }
     },
     methods: {
+        loadGlobalSetting(){
+            request({
+                url: setting.urls.yfdGetGlobalSetting,
+                method: 'get'
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.globalSettings['max_group'] = rst.data.data.max_group
+                    this.globalSettings['friend_status'] = rst.data.data.friend_status == 'T'
+                    this.globalSettings['group_status'] = rst.data.data.group_status == 'T'
+                }else{
+                    this.alert('加载全局配置失败')
+                }
+            }).catch(e => {
+                this.alert('加载全局配置失败')
+            })
+        },
         globalSetting(dt){
             request({
                 url: setting.urls.yfdGlobalSetting,
@@ -120,7 +146,8 @@ export default {
                 })
             }).then(rst => {
                 if(rst.status == 200 && rst.data.code == 200){
-                    this.loadTBData(this.pageData.page || 1)
+                    // this.loadTBData(this.pageData.page || 1)
+                    this.loadGlobalSetting()
                 }else{
                     this.alert('修改全局配置失败')
                 }
@@ -131,6 +158,9 @@ export default {
         openGlobalSetting(){
             this.confirmParams.header = '编辑全局配置'
             this.confirmParams.tp = 'globalSetting'
+            this.confirmParams.groupStatu = this.globalSettings.group_status
+            this.confirmParams.friendStatu = this.globalSettings.friend_status
+            this.confirmParams.maxGroup = this.globalSettings.max_group
             this.showConfirm = true
         },
         confirmClicked(dt){
@@ -289,7 +319,9 @@ export default {
                     'user_id': this.user_id,
                     'login_status': this.login_status,
                     'nick_name': this.nick_name,
-                    'telephone': this.telephone
+                    'telephone': this.telephone,
+                    'time_type': this.time_type,
+                    'rank_time': this.rank_time
                 })
             }).then(rst => {
                 console.log(rst)
@@ -304,27 +336,31 @@ export default {
             })
         },
         sortTBData(dt){
-            this.robots = this.robots || []
-            this.robots.sort((i1, i2) => {
-                if(dt.sortType == 'asc'){
-                    return new Date(i1[dt.sortBy]).getTime() - new Date(i2[dt.sortBy]).getTime()
-                }else{
-                    return new Date(i2[dt.sortBy]).getTime() - new Date(i1[dt.sortBy]).getTime()
-                }
-            })
-            const tbData = []
-            const fields = ['user_id', 'telephone', 'nick_name', 'max_group', 'bind_group', 'login_status', 'first_login_time', 'activate_time', 'exp_time']
-            for(let idx = 0; idx < this.robots.length; idx++){
-                const tmp = this.robots[idx]
-                tbData.push([(idx + 1) < 10 ? ('0' + (idx + 1)) : (idx + 1)])
-                for(let idxx = 0; idxx < fields.length; idxx++){
-                    tbData[idx].push(tmp[fields[idxx]] ? tmp[fields[idxx]] : (tmp[fields[idxx]] == 0 ? 0 : '--'))
-                }
-                tbData[idx].push(tmp['actions'] || {})
-                tbData[idx][tbData[idx].length - 1]['group_syn'] = tmp.group_status
-                tbData[idx][tbData[idx].length - 1]['friend_syn'] = tmp.friends_status
-            }
-            this.tbData = tbData
+            this.$data['rank_time'] = dt.sortBy
+            this.$data['time_type'] = dt.sortType
+            this.loadTBData(this.pageData.page)
+            // this.robots = this.robots || []
+            // this.robots.sort((i1, i2) => {
+            //     if(dt.sortType == 'asc'){
+            //         return new Date(i1[dt.sortBy]).getTime() - new Date(i2[dt.sortBy]).getTime()
+            //     }else{
+            //         return new Date(i2[dt.sortBy]).getTime() - new Date(i1[dt.sortBy]).getTime()
+            //     }
+            // })
+            // const tbData = []
+            // const fields = ['user_id', 'telephone', 'nick_name', 'max_group', 'bind_group', 'login_status', 'first_login_time', 'activate_time', 'exp_time']
+            // for(let idx = 0; idx < this.robots.length; idx++){
+            //     const tmp = this.robots[idx]
+            //     tbData.push([(idx + 1) < 10 ? ('0' + (idx + 1)) : (idx + 1)])
+            //     for(let idxx = 0; idxx < fields.length; idxx++){
+            //         tbData[idx].push(tmp[fields[idxx]] ? tmp[fields[idxx]] : (tmp[fields[idxx]] == 0 ? 0 : '--'))
+            //     }
+            //     tbData[idx].push(tmp['actions'] || {})
+            //     tbData[idx][tbData[idx].length - 1]['group_syn'] = tmp.group_status
+            //     tbData[idx][tbData[idx].length - 1]['friend_syn'] = tmp.friends_status
+            //     tbData[idx][tbData[idx].length - 1]['online_status'] = tmp.online_status
+            // }
+            // this.tbData = tbData
         },
         createTBData(data){
             this.robots = data.data
@@ -346,6 +382,7 @@ export default {
                 tbData[idx].push(tmp['actions'] || {})
                 tbData[idx][tbData[idx].length - 1]['group_syn'] = tmp.group_status
                 tbData[idx][tbData[idx].length - 1]['friend_syn'] = tmp.friends_status
+                tbData[idx][tbData[idx].length - 1]['online_status'] = tmp.online_status
             }
             this.tbData = tbData
         },

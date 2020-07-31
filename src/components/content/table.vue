@@ -22,14 +22,14 @@
                 <td v-for="(tbCol, idx) in tbRow" :key="idx">
                     <slot v-if="idx < tbRow.length - 1">{{tbCol}}</slot>
                     <slot v-else>
-                        <div style="display: inline-block; height: 1rem; line-height: 1rem;">
+                        <div style="display: inline-block; height: 1rem; line-height: 1rem;" v-if="tbCol['group_status'] == 'T'">
                             <label style="display: inline-block; height: .75rem; line-height: .75rem; margin-right: 3px;">微信群</label>
                             <switch-progress style="vertical-align: middle;" :turnOn="tbCol['group_syn'] == 'T'" :statusData="tbRow" @changeSwitchStatus="changeWechatStatu"></switch-progress>
                         </div>
-                        <button class="action-btn" v-if="tbCol.outline_status == 'T'" @click.prevent.stop="$parent.outlineRobotConfirm(tbRow[1])">下线</button>
+                        <button class="action-btn" v-if="tbCol.online_status == 'T'" @click.prevent.stop="$parent.outlineRobotConfirm(tbRow[1])">下线</button>
                         <button class="action-btn" v-if="tbCol.renew_status == 'T'" @click.prevent.stop="$parent.renewRobotConfirm(tbRow[1])">续时</button>
                         <button class="action-btn" v-if="tbCol.delete_status == 'T'" @click.prevent.stop="$parent.deleteRobotConfirm(tbRow[1])">删除</button>
-                        <div style="display: inline-block; margin-left: 8px; height: 1rem; line-height: 1rem;">
+                        <div style="display: inline-block; margin-left: 8px; height: 1rem; line-height: 1rem;" v-if="tbCol['friends_status'] == 'T'">
                             <label style="display: inline-block; height: .75rem; line-height: .75rem; margin-right: 3px;">朋友圈</label>
                             <switch-progress style="vertical-align: middle;" :turnOn="tbCol['friend_syn'] == 'T'" :statusData="tbRow" @changeSwitchStatus="changeTimeLineStatu"></switch-progress>
                         </div>
@@ -258,18 +258,18 @@ export default {
     },
     methods: {
         changeWechatStatu(dt){
-            if(dt.data[dt.data.length - 1].group_status == 'T'){
+            // if(dt.data[dt.data.length - 1].group_status == 'T'){
                 this.$emit('changeWechatStatu', {userId: dt.data[1], status: dt.status})
-            }else{
-                return
-            }
+            // }else{
+                // return
+            // }
         },
         changeTimeLineStatu(dt){
-            if(dt.data[dt.data.length - 1].friends_status == 'T'){
+            // if(dt.data[dt.data.length - 1].friends_status == 'T'){
                 this.$emit('changeTimeLineStatu', {userId: dt.data[1], status: dt.status})
-            }else{
-                return
-            }
+            // }else{
+                // return
+            // }
         },
         changeSwitchStatus: function(dt){
             this.$emit('changeSwitchStatus', dt)

@@ -112,10 +112,10 @@ export default {
         },
         addNumber(){
             if(this.confirmParams.tp == 'renew'){
-                this.confirmParams.month += 1
+                this.confirmParams.month = this.confirmParams.month - 0 + 1
             }else if(this.confirmParams.tp == 'globalSetting'){
                 if(this.confirmParams.maxGroup < 10){
-                    this.confirmParams.maxGroup += 1
+                    this.confirmParams.maxGroup = this.confirmParams.maxGroup - 0 + 1
                 }
             }
         },

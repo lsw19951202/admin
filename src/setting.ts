@@ -318,7 +318,9 @@ export default {
         // 修改朋友圈状态
         yfdTimeLineStatu: '/robot/friendsyn',
         // 全局配置
-        yfdGlobalSetting: '/robot/config'
+        yfdGlobalSetting: '/robot/config',
+        // 获取全局配置
+        yfdGetGlobalSetting: '/robot/configlist'
     },
     // 图片地址
     images: {
@@ -541,7 +543,7 @@ export default {
             [{ name: '序号' }, { name: '奖励详情' }]
         ],
         yfdRobotList: [
-            [{ name: '序号' }, { name: '用户ID' }, { name: '用户手机号' }, { name: '微信昵称' }, { name: '最高群个数' }, { name: '已使用群个数' }, { name: '登陆状态' }, { name: '初始登陆时间', canSort: true, sortBy: 'first_login_time' }, { name: '激活时间', canSort: true, sortBy: 'activate_time' }, { name: '到期时间', canSort: true, sortBy: 'exp_time' }, { name: '操作' }]
+            [{ name: '序号' }, { name: '用户ID' }, { name: '用户手机号' }, { name: '微信昵称' }, { name: '最高群个数' }, { name: '已使用群个数' }, { name: '登陆状态' }, { name: '初始登陆时间', canSort: true, sortBy: 'login_time' }, { name: '激活时间', canSort: true, sortBy: 'active_time' }, { name: '到期时间', canSort: true, sortBy: 'exp_time' }, { name: '操作' }]
         ]
     },
     views: {
