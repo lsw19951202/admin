@@ -22,6 +22,7 @@
                 <advert-table :theadData='theadData' :tbodyData='tbodyData' @offShelfEvent='offShelfFn' @releaseEvent='releaseFn' @deleteEvent='deleteFn' 
                 @lookUpEvent='lookUpEvFn' @editEvent='editEvetFn'></advert-table>
             </div>
+            <page :pageData='pageData' @loadList="getTheader"></page>
             <!-- 提示框 -->
             <operation-tip :tipsText='tipsText' :showTips='showTips' @cancelEvent='cancelFn' @determineEvent='determineFn'></operation-tip>
         </div>
@@ -35,12 +36,14 @@ import setting from '@/setting'
 import advertTable from '@/components/content/advertTable.vue'
 import operationTips from '@/components/content/operationTips.vue'
 import select from '@/components/common/select.vue'
+import page from '@/components/content/page.vue'
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
     components:{
         'Select': select,
         'advert-table':advertTable,
         'operation-tip':operationTips,
+        'page':page,
     },
     data(){
         return{
@@ -117,13 +120,18 @@ export default {
                     text: '购物赚,横幅'
                 },
             ],
+            pageData: {
+                total: 0,
+                page: 1,
+                'total_page': 0
+            }
         }
     },
     created(){
-        this.getTheader();
+        this.getTheader(1);
     },
     methods:{
-        getTheader(){//表头
+        getTheader(pageNum){//表头
             this.showLoading()
             request({
                 url:setting.urls.bannerListTheader,
@@ -134,7 +142,7 @@ export default {
                 if(res.status == 200){
                     if(res.data.code == 200){
                         this.theadData = res.data.data;
-                        this.getTbody()
+                        this.getTbody(pageNum)
                     }
                 }
             }).catch((e) => {
@@ -143,12 +151,13 @@ export default {
                 this.hideLoading()
             })
         },
-        getTbody(){//banner2管理列表
+        getTbody(pageNum){//banner2管理列表
             this.showLoading()
             request({
                 url:setting.urls.layoutListTbody,
                 method:'get',
                 params:{
+                    page:pageNum || 1,
                     name:this.avdTitle,
                     'belong_prefecture':this.pageTable,
                     typeIos:this.pageLocation,
@@ -159,6 +168,9 @@ export default {
                     if(res.data.code == 200){
                         console.log(res,"banner2管理列表")
                         this.tbodyData = res.data.data
+                        this.pageData.total = res.data.data.total
+                        this.pageData.page = res.data.data.page
+                        this.pageData['total_page'] = res.data.data.pageCount
                     }
                 }
             }).catch((e) => {
