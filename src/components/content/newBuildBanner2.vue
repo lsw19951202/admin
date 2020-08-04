@@ -1,16 +1,16 @@
 <template>
     <div class="detail-container">
         <div class="detail-data-box">
-            <h5 style="margin-bottom: 20px;" v-show="!isLook && !isEdit">新建banner</h5>
-            <h5 style="margin-bottom: 20px;" v-show="isLook">查看banner</h5>
-            <h5 style="margin-bottom: 20px;" v-show="isEdit">编辑banner</h5>
+            <h5 style="margin-bottom: 20px;" v-show="!isLook && !isEdit">新建banner2</h5>
+            <h5 style="margin-bottom: 20px;" v-show="isLook">查看banner2</h5>
+            <h5 style="margin-bottom: 20px;" v-show="isEdit">编辑banner2</h5>
             <div class="search-group">
                 <span class="totalS">所在页面</span>
-                <input type="text" placeholder="请输入"  disabled :value="pageTb=='shopping'?'首页(购物赚)':pageTb=='my'?'我的页面':pageTb=='brandSpecial'?'品牌专场':'高佣精品'">
+                <input type="text" placeholder="请输入"  disabled :value="pageTb=='shopping'?'购物赚':pageTb=='live'?'生活赚':''">
             </div>
             <div class="search-group">
                 <span class="totalS">页面位置</span>
-                <input type="text" placeholder="请输入"  disabled :value="pageSite=='Center'?'中部':'顶部'">
+                <input type="text" placeholder="请输入"  disabled :value="pageSite=='bannerUp'?'顶部':pageSite=='bannerDown'?'中部':'横幅'">
             </div>
             <div class="search-group">
                 <span class="totalS bannerTips1">展示顺序</span>
@@ -233,9 +233,10 @@ export default {
             if(this.isMiddlePage==1){
                 let returnDate
                 for (let v = 0; v < childNode.length; v++) {
-                    // console.log(childNode[v].$el,"kzsdhckzshb")
+                    console.log(childNode[v].$el,"kzsdhckzshb")
                     if(childNode[v].$el.className == 'pageEditor'){
                         returnDate = childNode[v].getPageData()
+
                     }
                 }
                 console.log(returnDate,"返回参数")
@@ -245,6 +246,7 @@ export default {
                         this.jumpLink = res.pageUrl
                         this.newBuildRequest()
                     }).catch(e => {
+                        // false
                         this.alert(e.message)
                     })
                 }else{
@@ -273,7 +275,7 @@ export default {
             }
             this.showLoading()
             request({
-                url: setting.urls.bannerAdd,
+                url: setting.urls.layoutAdd,
                 method: 'post',
                 data:qs.stringify(requestData)
             }).then(res=>{
@@ -367,7 +369,7 @@ export default {
 .action-btn{height: 1.2rem;border: none;position: relative;}
 .action-btn:focus{outline:0;} /*去掉按钮点击时的边框*/ 
 .imgSize{font-size: 0.4rem;color: red;}
-.bannerTips1::before{position: absolute;content: '若有重复顺序，将默认按照时间倒序再次排序(后建先展示)';color: red;top: -20px;right: -370px;width: 350px;font-size: 0.475rem;}
+.bannerTips1::before{position: absolute;content: '若有重复顺序，将默认按照时间倒序再次排序(后建先展示)';color: red;top: -20px;right: -390px;width: 370px;font-size: 0.475rem;}
 
 .footerBtn{display: flex;justify-content: space-around;padding: 20px 10rem;box-sizing: border-box;}
 .footerCancel{width: 4rem;height: 1.3rem;background-color: #b4b3b3;text-align: center;line-height: 1.3rem;color: #333333;font-size: 14px;border-radius: 6px;cursor: pointer;}

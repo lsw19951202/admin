@@ -216,6 +216,7 @@ export default {
         goBackPageFn(e){//取消新建并且返回上一级
             this.$parent.subTitle2 = ''
             this.isShowNew = false
+            this.lookMessge = ''
             this.getListThead()
         },
         editFn(item){//编辑

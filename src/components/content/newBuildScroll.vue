@@ -211,11 +211,14 @@ export default {
                 method:'post',
                 data:qs.stringify(pramsData)
             }).then(res=>{
-                if(res.status == 200){
-                    console.log(res,"添加成功")
+                console.log(res,'滚动条')
+                if(res.status == 200 && res.data.code == 200){
+                    this.$emit('goBackPage')
+                }else{
+                    this.alert(res.data.message)
                 }
             }).catch((res) => {
-                this.alert('滚动条添加修改请求失败')
+                this.alert(res.data.message)
             }).then((res) => {
                 this.hideLoading()
             })
@@ -223,7 +226,6 @@ export default {
         preservationBtn(){//保存按钮
             // console.log("保存了",this.popObj)
             this.scrollPrompt()
-            this.$emit('goBackPage')
         },
         changLogin(e){//选择是否登录,
             this.isLogin = e.target.value;

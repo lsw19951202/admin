@@ -1,5 +1,6 @@
 <template>
     <div class="team-list">
+        <div class="goBack" @click.prevent.stop="goBackPage">返回上一级</div>
         <card-container v-bind:cardData="cardData" style="width: 50%;"></card-container>
         <div class="detail-data-box">
             <header class="search-header">
@@ -226,6 +227,9 @@ export default {
         },
         sortTypeSelectOptsClicked: function(dt){
             this.sortType = dt
+        },
+        goBackPage(){
+            this.$emit('goBackEvent')
         }
     }
 }
@@ -236,4 +240,5 @@ export default {
 .search-group { margin-bottom: .5rem; }
 .newAdd{display: flex;justify-content: flex-end;padding-right: 40px;box-sizing: border-box;}
 .textStyle{font-size: 16px;color: #52c7f2;font-weight: bold;margin: 0 30px;}
+.goBack{font-size: 0.575rem;color: #52c7f2;font-weight: bolder;text-align: right;padding-right: 1rem;box-sizing: border-box;cursor: pointer;font-family: '微软雅黑';}
 </style>

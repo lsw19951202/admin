@@ -185,6 +185,7 @@ export default {
                     page: pageNum || 1
                 }
             }).then((resp) => {
+                console.log(resp,"用户列表2323232")
                 if(resp.status == 200){
                     if(resp.data.code == 200){
                         this.createTBData(resp.data.data)
@@ -234,6 +235,7 @@ export default {
                         'field_type': 'userRanking'
                     }
                 }).then((resp) => {
+                    console.log(resp,"用户表头")
                     if(resp.status == 200){
                         if(resp.data.code == 200){
                             this.createTableHeader(resp.data.data.title)

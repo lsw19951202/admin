@@ -106,8 +106,8 @@
                 <div v-if="isCreateNew == 0 && editable" class="pageEditBox">
                     <div class="edit-group need">
                         <label>选择中间页</label>
-                        <select v-model="page_id">
-                            <option v-for="(page, idx) in pageList" :key="idx" :value="page.id">{{page.title}}{{page['page_url']}}</option>
+                        <select v-model="page_id" @change="choosePageMidle">
+                            <option v-for="(page, idx) in pageList" :key="idx" :value="page.id">{{page.title}}</option>
                         </select>
                     </div>
                 </div>
@@ -151,7 +151,8 @@ export default {
             imgType: 'bg',
             bgSize: 300 * 1024,
             btnSize: 30 * 1024,
-            pageList: null
+            pageList: null,
+            middlePageUrl:''
         }
     },
     computed: {
@@ -191,6 +192,14 @@ export default {
             })
     },
     methods: {
+        choosePageMidle(e){//选择已有中间页
+            for (let v = 0; v < this.pageList.length; v++) {
+                if(this.pageList[v].id == e.target.value){
+                    console.log(this.pageList[v]['page_url'])
+                    this.middlePageUrl = this.pageList[v]['page_url']
+                }
+            }
+        },
         /**
          * 获取所有发布中的中间页
          */
@@ -276,6 +285,7 @@ export default {
                     }).catch(e => {
                         this.hideLoading()
                         this.alert(e.message || '添加中间页失败')
+                        // throw new Error(e.message || '添加中间页失败')
                     }).then(pageId => {
                         this.hideLoading()
                         return {
@@ -285,7 +295,7 @@ export default {
                         }
                     })
             }else{
-                return this.page_id
+                return {pageId:this.page_id,pageUrl:this.middlePageUrl}
             }
         },
         /**
