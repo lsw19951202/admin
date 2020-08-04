@@ -215,6 +215,7 @@ export default {
                 console.log(res,'滚动条')
                 if(res.status == 200 && res.data.code == 200){
                     this.$emit('goBackPage')
+                    this.alert(res.data.message)
                 }else{
                     this.alert(res.data.message)
                 }
