@@ -92,7 +92,7 @@
                     </div>
                     <div class="ruleCro">
                         <span class="lableText">展示逻辑</span>
-                        <span class="information">暂时没有数据</span>
+                        <span class="information">{{lookMessgeData['time_lag']=='0'?'登录就弹':lookMessgeData['time_lag']=='-1'?'点击后不弹':lookMessgeData['time_lag']=='4'?'每隔4小时弹':''}}</span>
                     </div>
                     <div class="ruleCro">
                         <span class="lableText">展示对象</span>
@@ -176,6 +176,7 @@ export default {
         }
     },
     mounted(){
+        console.log(this.lookMessgeData)
         this.lookUpMessgeFn()
         this.editScroll()
         // console.log(this.isLook,this.editData)
