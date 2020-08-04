@@ -30,6 +30,7 @@
                     <input type="file" ref="excelIpt" @change="uploadExcel" accept=".xls, .xlsx" name="file">
                 </form>
                 <div class="undercar operationText" @click="batchShelf">批量下架</div>
+                <div class="undercar operationText" @click="batchRelease">批量发布</div>
                 <div class="cutOff operationText" @click="batchDelete">批量删除</div>
             </div>
             <div style="copyAddre">
@@ -268,8 +269,17 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(resp => {
-                console.log(resp,"批量导入")
+                console.log(resp,"批量导入了数据")
+                const reslt = resp.data.data
                 if(resp.data.code == 200){
+                    if(reslt.data.length > 0){
+                        let thead = ['商品ID','平台']
+                        for (let v = 0; v < reslt.data.length; v++) {
+                            thead.push('\r' + reslt.data[v]['goods_id'] + ',' + reslt.data[v].platform)
+                        }
+                        thead = thead.join(',')
+                        this.excel(thead);//js写成csv文件
+                    }
                     this.getNewFreeHeader()
                     this.alert(resp.data.data.msg || '导入成功!')
                 }else{
@@ -283,15 +293,54 @@ export default {
             })
         },
         batchShelf(){//批量下架
+            let flag = true
             if(this.checkedId.length == 0){
                 this.alert('请先选择需要下架的商品')
                 return
             }
-            this.tipsText = '确定要下架选中商品?'
-            this.contentData.ids = this.checkedId.join(',')
-            this.contentData.type = 'off'
-            this.showTips = true
-            this.operationType = '下架'
+            for (let index = 0; index < this.checkedId.length; index++) {
+                for (let v = 0; v < this.newFreeTbody.data.length; v++) {
+                    if(this.checkedId[index] == this.newFreeTbody.data[v].id){
+                        if(this.newFreeTbody.data[v]['in_show'] != '发布中'){
+                            flag = false
+                        }
+                    }
+                }
+            }
+            if(!flag){
+                this.alert('商品中有未发布的商品!请重新选择！') 
+            }else{
+                this.tipsText = '确定要下架选中商品?'
+                this.contentData.ids = this.checkedId.join(',')
+                this.contentData.type = 'off'
+                this.showTips = true
+                this.operationType = '下架'
+            }
+        },
+        batchRelease(){//批量发布
+            let flag = true
+            if(this.checkedId.length == 0){
+                this.alert('请先选择需要发布的商品')
+                return
+            }
+            for (let index = 0; index < this.checkedId.length; index++) {
+                for (let v = 0; v < this.newFreeTbody.data.length; v++) {
+                    if(this.checkedId[index] == this.newFreeTbody.data[v].id){
+                        if(this.newFreeTbody.data[v]['in_show'] == '发布中'){
+                            flag = false
+                        }
+                    }
+                }
+            }
+            if(!flag){
+                this.alert('商品中有未下架的商品!请重新选择！') 
+            }else{
+                this.tipsText = '确定要发布选中商品?'
+                this.contentData.ids = this.checkedId.join(',')
+                this.contentData.type = 'open'
+                this.showTips = true
+                this.operationType = '发布'
+            }
         },
         batchDelete(){//批量删除
             let flag = true;
@@ -370,18 +419,29 @@ export default {
                 method:'post',
                 data:qs.stringify(e),
             }).then(res=>{
+                console.log(res)
                 if(res.data.code == 200){
-                    console.log(res,"新建成功!")
                     this.getNewFreeTbody()
+                    this.alert(res.data.message)
                 }else{
-                    this.alert('新建失败!')
+                    this.alert(res.data.message || '新建失败')
                 }
             }).catch((e) => {
                 this.alert('新建失败!')
-            }).then(() => {
+            }).then((e) => {
                 this.hideLoading()
-                this.alert('新建成功!重复商品自动覆盖!')
             })
+        },
+        excel(data){
+            const blob = new Blob([data])       
+            const a = window.document.createElement("a");
+            a.href = window.URL.createObjectURL(blob, {
+                type: "text/plain"
+            });
+            a.download = "免单商品.csv";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     }
 }
@@ -391,8 +451,8 @@ export default {
 .operation{display: flex;margin-top: 20px;justify-content: space-between;}
 .operationText{width: 100px;height: 30px;line-height: 30px;text-align: center;border-radius: 5px;background-color: #4880EA;color: #ffffff;font-size: 16px;margin-right: 30px;cursor: pointer;}
 .table-container{margin: .22em 0 .875em;}
-.urlAddre{font-size: 14px;color: red;}
-.copyBtn{font-size: 16px;color: #4880EA;cursor: pointer;margin:0 40px 0 20px;background-color: transparent;}
+.urlAddre{font-size: 0.475rem;color: red;}
+.copyBtn{font-size: 0.575rem;color: #4880EA;cursor: pointer;margin:0 40px 0 20px;background-color: transparent;}
 .selectOption{width: 4rem;height: 1rem;line-height: 1rem;border-radius: .125rem !important;border: 1px solid #D9D9D9;box-sizing: border-box;font-size: .4375rem;vertical-align: top;padding-left: .3125rem;padding-right: .3125rem;margin-left: .2rem;}
 
 </style>

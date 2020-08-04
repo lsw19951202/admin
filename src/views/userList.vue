@@ -42,7 +42,7 @@
                 <page style="width: 0; flex: 1;" v-bind:pageData="pageData" @loadList="loadTBData"></page>
             </div>
         </div>
-        <team-list v-if="showTeamList" :teamId="teamId"></team-list>
+        <team-list v-if="showTeamList" :teamId="teamId" @goBackEvent='goBackFn'></team-list>
         <income-detail v-if="showIncomeList" :incomeDetailUserId='incomeDetailUserId' @returnOne='hiddenDetail'></income-detail>
         <pop-ups :isShow="showChangeLevelPop" :popParams="changeLevelPopParams" @userLevelSelectOptsClicked="changeUserLevel" @popSave="saveNewUserLevel" @popCancel="cancelChangeUserLevel"></pop-ups>
         <pop-ups :isShow="showMoveTeamPop" :popParams="moveTeamPopParams" @searchClicked="searchTeamLeader" @popSave="saveMoveTeam" @popCancel="cancelMoveTeam" @teamLeaderChecked="teamLeaderChecked"></pop-ups>
@@ -168,6 +168,13 @@ export default {
         this.loadTBData()
     },
     methods: {
+        goBackFn(){
+            this.showTeamList = false
+            this.showUserList = true
+            this.showIncomeList = false
+            // this.$parent.subTitle2 = '我的团队'
+
+        },
         cancelChangeUserLevel: function(){
             this.showChangeLevelPop = false
         },

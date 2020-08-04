@@ -1,6 +1,10 @@
 <template>
     <div class="detail-container">
         <div class="detail-data-box">
+            <div class="banner2TopTips">
+                <span class="banner-tips-list">当前banner列表可管理banner位置：</span>
+                <span class="banner-tips-row">首页中部上banner,首页中部下banner,生活赚banner</span>
+            </div>
             <header class="search-header">
                 <div class="search-group">
                     <label>广告名称:</label>
@@ -10,13 +14,13 @@
                 <Select :selectParams="selectPosition" @selectOptsClicked="choosePosition"></Select>
                 <Select :selectParams="selectStatus" @selectOptsClicked="chooseStatus"></Select>
                 <button class="actionAdd-btn" @click="searchBtn">搜索</button>
-                <!-- <button class="actionAdd-btn">新建</button> -->
                 <select name="" id="select" class="actionAdd-btnSelect" @change="selectOption($event)">
                     <option :value="item.value" v-for="(item,index) in newAddoptions" :key="index">{{item.text}}</option>
                 </select>
             </header>
             <div class="table-container hideScrollBar">
-                <advert-table :theadData='theadData' :tbodyData='tbodyData' @offShelfEvent='offShelfFn' @releaseEvent='releaseFn' @deleteEvent='deleteFn' @lookUpEvent='lookUpFn'></advert-table>
+                <advert-table :theadData='theadData' :tbodyData='tbodyData' @offShelfEvent='offShelfFn' @releaseEvent='releaseFn' @deleteEvent='deleteFn' 
+                @lookUpEvent='lookUpEvFn' @editEvent='editEvetFn'></advert-table>
             </div>
             <!-- 提示框 -->
             <operation-tip :tipsText='tipsText' :showTips='showTips' @cancelEvent='cancelFn' @determineEvent='determineFn'></operation-tip>
@@ -223,9 +227,6 @@ export default {
         searchBtn(){//搜索按钮
             this.getTheader()
         },
-        lookUpFn(e){//查看的商品的信息
-            console.log(e,"查看的商品的信息")
-        },
         selectOption(e){//新建banner所在页面和位置
             const selectIndex = e.target.selectedIndex;
             const myselect = document.getElementById('select');
@@ -237,9 +238,15 @@ export default {
             }
             address.pageTable = values.split('_')[0]
             address.pageLocation = values.split('_')[1]
-            // this.$emit('newBuildEvent',address)
-            console.log(address)
+            this.$emit('newBuildEvent',address)
         },
+        lookUpEvFn(e){//查看
+            console.log(e,"查看")
+            this.$emit('lookBanner',e)
+        },
+        editEvetFn(item){//编辑
+            this.$emit('editBanner',item)
+        }
     }
 }
 </script>
@@ -247,6 +254,9 @@ export default {
 <style scoped>
 .detail-data-box,.detail-container{margin: 0;}
 .detail-data-box{padding-top: 0;}
+.banner2TopTips{width: 100%;padding: 0 10px 10px 10px;box-sizing: border-box;border: 1px solid #999999;margin-bottom: 15px;}
+.banner-tips-list{font-size: 0.475rem;color: #4880EA;}
+.banner-tips-row{font-size: 0.475rem;color: #666666;}
 .actionAdd-btn{appearance: menulist;cursor: pointer;padding: 0 1rem;width: 4rem;height: 1rem;line-height: 1rem;background-color: #4880EA;border-radius: .125rem;color: white;vertical-align: top;margin-left: 20px;}
 .actionAdd-btn option{cursor: pointer;margin: 0 auto;height: 1.3rem;line-height: 1.3rem;background-color: rgb(243, 241, 241);border: none;border-radius: .5rem;color: #666666;}
 .table-container{margin-top: .5rem;}

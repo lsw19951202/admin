@@ -3,8 +3,8 @@
  */
 export default {
     // baseUrl: 'http://tongji.chenlong.com',
-    baseUrl: 'http://dash.yunzhanxinxi.com',
-    // baseUrl: 'http://test.dash.yunzhanxinxi.com',
+    // baseUrl: 'http://dash.yunzhanxinxi.com',
+    baseUrl: 'http://test.dash.yunzhanxinxi.com',
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',

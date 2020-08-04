@@ -1,10 +1,13 @@
 <template>
     <div class="detail-container">
         <div class="detail-data-box">
-            <h5 style="margin-bottom: 20px;">新建豆腐块</h5>
+            <h5 style="margin-bottom: 20px;" v-show="!isLook && !editTofo">新建豆腐块</h5>
+            <h5 style="margin-bottom: 20px;" v-show="isLook">查看豆腐块</h5>
+            <h5 style="margin-bottom: 20px;" v-show="editTofo">编辑豆腐块</h5>
             <div class="search-group">
                 <span class="totalS">展示顺序</span>
                 <input type="text" placeholder="请输入" v-model="sortNum" :disabled='isLook'>
+                <span class="tofoSortTips">数字越小排序越高</span>
             </div>
             <div class="search-group">
                 <span class="totalS">生效时间</span>
@@ -49,7 +52,7 @@
                         </div>
                     </div>
                     <div class="configuration" v-if="isMiddlePageL=='1'">
-                        <templete :editable='leftEdit' :pageId="looktofoData['left_page_id']"></templete>
+                        <templete id="leftTem" :editable='leftEdit' :pageId="looktofoData['left_page_id']"></templete>
                     </div>
                 </div>
                 <div class="tofoRight">
@@ -88,7 +91,7 @@
                         </div>
                     </div>
                     <div class="configuration" v-if="isMiddlePageR=='3'">
-                        <templete :editable='rightEdit' :pageId="looktofoData['right_page_id']"></templete>
+                        <templete id="rightTem" :editable='rightEdit' :pageId="looktofoData['right_page_id']"></templete>
                     </div>
                 </div>
             </div>
@@ -96,9 +99,12 @@
                 <span class="totalS">当前状态</span>
                 <input class="statusBtn" type="text" :disabled='isLook' :value="state=='0'?'待发布':state=='1'?'发布中':'已下架'">
             </div>
-            <div class="footerBtn">
+            <div class="footerBtn" v-show="!isLook">
                 <button class="footerCancel" @click.prevent.stop="bannerCancel">取消</button>
                 <button class="footerSave" @click.prevent.stop="saveBtnFn">保存</button>
+            </div>
+            <div class="footerBtn" v-show="isLook">
+                <button class="footerSave" @click.prevent.stop="lookSureBtn">确定</button>
             </div>
         </div>
         <!-- 提示框 -->
@@ -117,7 +123,7 @@ import operationTips from '@/components/content/operationTips.vue'
 import templete from '@/components/content/templete.vue'
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
-    props:['looktofoData','isLook'],
+    props:['looktofoData','isLook','editTofo'],
     components: {
         'flat-picker': flatPicker,
         'operation-tip':operationTips,
@@ -184,11 +190,9 @@ export default {
         },
         changeRadioL(e){
             this.isMiddlePageL = e.target.value;
-            console.log(this.isMiddlePageL)
         },
         changeRadioR(e){
             this.isMiddlePageR = e.target.value;
-            console.log(this.isMiddlePageR)
         },
         cancelFn(){
             this.showTips = false
@@ -255,46 +259,48 @@ export default {
             if(this.isMiddlePageL == '1'){
                 let returnDateL
                 for (let v = 0; v < childNode.length; v++) {
-                    // console.log(childNode[v].$el.className)
-                    if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
-                        console.log("左侧有中间页")
+                    if(childNode[v].$el.id.indexOf('leftTem') >= 0 ){
                         returnDateL = childNode[v].getPageData()
-                        break;
                     }
                 }
-                console.log(returnDateL,"左侧")
-                if(typeof returnDateL == 'string'){
-                    this.leftPageId = returnDateL
-                }else{
-                    returnDateL.then(res=>{
+                if(returnDateL.then){
+                    returnDateL.then(res => {
                         this.leftPageId = res.pageId
                         this.leftJumpUrl = res.pageUrl
+                        this.newBuildBeadRequest()
+                    }).catch(e => {
+                        this.alert(e.message)
                     })
+                }else{
+                    this.leftPageId = returnDateL.pageId
+                    this.leftJumpUrl = returnDateL.pageUrl
+                    this.newBuildBeadRequest()
                 }
             }
             if(this.isMiddlePageR == '3'){
                 let returnDateR
                 for (let v = 0; v < childNode.length; v++) {
-                    if(childNode[v].$el.className.indexOf('pageEditor') >= 0 ){
-                        console.log("右侧有中间页")
+                    if(childNode[v].$el.id.indexOf('rightTem') >= 0 ){
                         returnDateR = childNode[v].getPageData()
-                        break;
                     }
                 }
-                console.log(returnDateR,"右侧")
-                if(typeof returnDateR == 'string'){
-                    this.rightPageId = returnDateR
-                }else{
-                    returnDateR.then(res=>{
+                if(returnDateR.then){
+                    returnDateR.then(res => {
                         this.rightPageId = res.pageId
                         this.rightJumpUrl = res.pageUrl
+                        this.newBuildBeadRequest()
+                    }).catch(e => {
+                        this.alert(e.message)
                     })
+                }else{
+                    this.rightPageId = returnDateR.pageId
+                    this.rightJumpUrl = returnDateR.pageUrl
+                    this.newBuildBeadRequest()
                 }
             }
             this.newBuildBeadRequest()
-            this.$emit('goBackPage')
         },
-        newBuildBeadRequest(){//豆腐块添加修改
+        newBuildBeadRequest(){//豆腐块添加/修改
             const parmsaData = {
                 sort:this.sortNum,
                 type:'card',
@@ -324,12 +330,13 @@ export default {
             }).then(res=>{
                 console.log(res,"豆腐块")
                 if(res.status == 200 && res.data.code == 200){
+                    this.$emit('goBackPage')
                     this.alert(res.data.message)
                 }else{
                     this.alert(res.data.message)
                 }
             }).catch(res=>{
-                this.alert("新建修改失败")
+                this.alert("新建/修改失败")
             }).then(res=>{
                 this.hideLoading()
             })
@@ -382,6 +389,9 @@ export default {
                         break;
                 }
             }
+        },
+        lookSureBtn(){//查看豆腐块信息确定按钮
+            this.$emit('goBackPage')
         }
     }
 }
@@ -409,7 +419,7 @@ export default {
 .action-btn{height: 1.2rem;border: none;position: relative;}
 .action-btn:focus{outline:0;} /*去掉按钮点击时的边框*/ 
 .imgSize{font-size: 0.4rem;color: red;}
-
+.tofoSortTips{font-size: 0.475rem;color: red;margin-left: 5px;}
 
 .footerBtn{display: flex;justify-content: space-around;padding: 20px 10rem;box-sizing: border-box;}
 .footerCancel{width: 5rem;height: 1.5rem;background-color: #b4b3b3;text-align: center;line-height: 1.5rem;color: #333333;font-size: 14px;border-radius: 6px;cursor: pointer;}

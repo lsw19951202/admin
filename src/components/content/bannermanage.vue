@@ -1,6 +1,10 @@
 <template>
     <div class="detail-container">
         <div class="detail-data-box">
+            <div class="banner1TopTips">
+                <span class="banner-tips-list">当前banner列表可管理banner位置：</span>
+                <span class="banner-tips-row">首页顶部banner,高佣商品顶部banner,品牌专场顶部banner,我的页面中部banner</span>
+            </div>
             <header class="search-header">
                 <div class="search-group">
                     <label>广告名称:</label>
@@ -263,6 +267,9 @@ export default {
 <style scoped>
 .detail-data-box,.detail-container{margin: 0;}
 .detail-data-box{padding-top: 0;}
+.banner1TopTips{width: 100%;padding: 0 10px 10px 10px;box-sizing: border-box;border: 1px solid #999999;margin-bottom: 15px;}
+.banner-tips-list{font-size: 0.475rem;color: #4880EA;}
+.banner-tips-row{font-size: 0.475rem;color: #666666;}
 .actionAdd-btn{appearance: menulist;cursor: pointer;padding: 0 1rem;width: 4rem;height: 1rem;background-color: #4880EA;border-radius: .125rem;color: white;vertical-align: top;margin-left: 20px;}
 .actionAdd-btnSelect{appearance: menulist;cursor: pointer;padding: 0 1rem;width: 5rem;height: 1rem;background-color: #4880EA;border-radius: .125rem;color: white;vertical-align: top;margin-left: 20px;}
 .actionAdd-btnSelect option{cursor: pointer;margin: 0 auto;height: 1.3rem;line-height: 1.3rem;background-color: rgb(243, 241, 241);border: none;border-radius: .5rem;color: #666666;}

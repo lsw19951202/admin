@@ -24,7 +24,7 @@
                         <div class="imgSize">限宽915px</div>
                         <input class="action-btn" type="button" value="上传+" @click="selectImg">
                     </div>
-                    <img style="width:100px; height: 40px;cursor: pointer;margin-left:20px;" :src="imgUrl" alt="">
+                    <img style="width:100px; height: 40px;cursor: pointer;margin-left:20px;" :src="imgUrl" alt="" @click.prevent.stop="previewImg(imgUrl)">
                 </div>
                 <form enctype="multipart/form-data" style="display: none;" ref="fileForm">
                     <input type="file" accept=".jpg, .jpeg, .png, .gif" style="display: none;" name="file" ref="files" @change="uploadImage">
@@ -51,7 +51,7 @@
                     <div class="search-group">
                         <span class="totalS isLogin">弹窗顺序</span>
                         <input type="text" class="search-time-picker" v-model="popupSort" :disabled='isLook'>
-                        <span class="to">如果有两个以上弹窗手动填写的顺序一样，实际顺序将按照时间顺序排序。</span>
+                        <span class="to">如数字填写一致，则弹窗顺序为后创建先弹</span>
                     </div>
                     <div class="search-group">
                         <span class="totalS isLogin">弹窗对象</span>
@@ -106,11 +106,16 @@
                 <button class="footerSave" @click="saveBtnEvent">保存</button>
             </div>
             <div v-show="isLook" style="display:flex;justify-content: center;">
-                <button class="footerSave" @click.prevent.stop="cancelBtnEvent">确定</button>
+                <button class="footerSave" @click.prevent.stop="popupSure">确定</button>
             </div>
         </div>
         <!-- 提示框 -->
         <operation-tip :tipsText='tipsText' :showTips='showTips' @cancelEvent='cancelFn' @determineEvent='determineFn'></operation-tip>
+        <!-- 图片预览 -->
+        <div class="mask" v-if="showImg">
+            <div class="alert-mark" @click="closeImg"></div>
+            <img :src="maskImgUrl" alt="图片" class="imgBox">
+        </div>
     </div>
 </template>
 
@@ -141,8 +146,9 @@ export default {
             tipsText:'',
             showTips:false,
             dateConfig: {
+                dateFormat: 'Y-m-d H:i',
+                enableTime: true,
                 'time_24hr': true,
-                maxDate: nStr,
                 locale: Mandarin
             },
             createTimeBegin:'',
@@ -171,6 +177,8 @@ export default {
             isMiddlePage:'',
             jumpLink:'',//跳转链接
             editable:true,//中间页是否可编辑
+            maskImgUrl:'',
+            showImg:false
         }
     },
     created(){
@@ -179,7 +187,7 @@ export default {
     methods:{
         lookMessgeFn(){//查看信息
             if(this.lookMessge){
-                if(this.lookMessge['page_id'] != '0'){
+                if(this.lookMessge['page_id'] != '0' && this.lookMessge['page_id'] != null){
                     this.isMiddlePage = 1
                 }else{
                     this.isMiddlePage = 0
@@ -366,6 +374,9 @@ export default {
             this.tipsText = '是否离开当前页面？您编辑的内容将不会保存!'
             this.showTips = true
         },
+        popupSure(){
+            this.$emit('goBackPage') 
+        },
         saveBtnEvent(){//保存按钮
             console.log("点击了保存按钮")
             console.log(this.$children)
@@ -374,32 +385,27 @@ export default {
                 let returnDate
                 for (let v = 0; v < childNode.length; v++) {
                     console.log(childNode[v].$el.className)
-                    if(childNode[v].$el.className == 'pageEditor'){
+                    if(childNode[v].$el.className.indexOf('pageEditor') >= 0){
                         returnDate = childNode[v].getPageData()
                     }
                 }
-                // if(this.isEdit){
-                //     returnDate = this.$children[3].getPageData()
-                // }else{
-                //     returnDate = this.$children[2].getPageData()
-                // }
-                // // const returnDate = this.$children[3].getPageData()
-                if(typeof returnDate == 'string'){
-                    this.pageId = returnDate
-                    this.popUpAdd()
-                }else{
-                    returnDate.then(res=>{
-                        console.log(res,"新建的pageId",returnDate)
+                console.log(returnDate,"123456789")
+                if(returnDate.then){
+                    returnDate.then(res => {
                         this.pageId = res.pageId
                         this.jumpLink = res.pageUrl
-                        console.log(this.jumpLink)
                         this.popUpAdd()
+                    }).catch(e => {
+                        this.alert(e.message)
                     })
+                }else{
+                    this.pageId = returnDate.pageId
+                    this.jumpLink = returnDate.pageUrl
+                    this.popUpAdd()
                 }
             }else{
                 this.popUpAdd()
             }
-            this.$emit('goBackPage')
         },
         cancelFn(){
             this.showTips = false
@@ -432,16 +438,24 @@ export default {
                 data:qs.stringify(requestData)
             }).then(res=>{
                 if(res.status == 200 && res.data.code == 200){
-                    this.alert(res.data.message+'**')
+                    this.$emit('goBackPage')
+                    this.alert(res.data.message)
                 }else{
-                    this.alert(res.data.message+'***')
+                    this.alert(res.data.message)
                 }
             }).catch(res=>{
                 this.alert("添加修改失败")
             }).then(res=>{
                 this.hideLoading()
             })
-        }
+        },
+        previewImg(img){//预览图片
+            this.maskImgUrl = img
+            this.showImg=true
+        },
+        closeImg(){
+            this.showImg=false
+        },
     }
 }
 </script>
@@ -454,8 +468,8 @@ export default {
 .totalS::after{position: absolute;content: '*';color: red;top: 2px;right: -8px;width: 5px;height: 5px;}
 .desc{color: #666666;font-size: .475rem;line-height: 1rem;margin-right: 20px;display: block;width: 115px;text-align: right;}
 .textarea{width: 10rem;height: 1.5rem;border: 1px solid #D9D9D9;}
-.search-time-picker{width: 5rem!important;}
-.to{color: #666666;font-size: .475rem;line-height: 1rem;margin-left: 15px;}
+.search-time-picker{width: 6rem!important;}
+.to{color: #666666;font-size: .475rem;line-height: 1rem;}
 .upload{margin-left: 20px;display: flex;align-items: center;}
 .upload>label{font-size: 14px;color: #dd1010;width: 3rem;height: 1.3rem;line-height: 1.3rem;text-align: center;background-color: #4880EA;display: block;border-radius: 5px;cursor: pointer;}
 .action-btn{height: 1.2rem;border: none;position: relative;}
@@ -470,4 +484,8 @@ export default {
 .footerCancel{width: 5rem;height: 1.5rem;background-color: #b4b3b3;text-align: center;line-height: 1.5rem;color: #333333;font-size: 14px;border-radius: 6px;cursor: pointer;}
 .footerSave{width: 5rem;height: 1.5rem;background-color: #4880EA;text-align: center;line-height: 1.5rem;color: #ffffff;font-size: 14px;border-radius: 6px;cursor: pointer;}
 
+/* 图片预览 */
+/* 图片预览 */
+.alert-mark{width: 100%; height: 100%; position: fixed; left: 0; top: 0; background: #000000; opacity: .5; z-index: 10001;}
+.imgBox{width: 30%;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%); z-index: 10002;}
 </style>
