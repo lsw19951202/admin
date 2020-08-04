@@ -15,9 +15,9 @@
         <!-- 新建banner1组件 -->
         <newBuild-banner v-if="newBuild=='banner1'" @goBackPage='goBackPageFn' :dataAddree='dataAddree' :lookBannerMessge='lookBannerMessge' :isLook='isLook' :isEdit='isEdit'></newBuild-banner>
         <!-- 新建豆腐块组件 -->
-        <newBuild-bean v-if="newBuild=='tofo'" @goBackPage='goBackPageFn' :isLook='isLook' :looktofoData='looktofoData' :editTofo='editTofo'></newBuild-bean>
+        <newBuild-bean v-if="newBuild=='tofo'" @goBackPage='goBackPageFn' :isLook='isLook' :looktofoData='looktofoData' :editTofo='editTofo' ></newBuild-bean>
         <!-- 新建滚动条组件 -->
-        <newBuild-scroll v-if="newBuild=='scroll'" @goBackPage='goBackPageFn' @saveEvent='saveBtn' :lookMessgeData='lookMessgeData' :isLook='isLook' :editData='editData'></newBuild-scroll>
+        <newBuild-scroll v-if="newBuild=='scroll'" @goBackPage='goBackPageFn' @saveEvent='saveBtn' :lookMessgeData='lookMessgeData' :isLook='isLook' :editData='editData' :isEdit='isEdit'></newBuild-scroll>
         <!-- 新建banner2组件 -->
         <newBuild-bannerTwo v-if="newBuild=='banner2'" @goBackPage='goBackPageFn' :dataAddree='dataAddree' :lookBannerMessge='lookBannerMessge' :isLook='isLook' :isEdit='isEdit'></newBuild-bannerTwo>
     </div>
@@ -118,6 +118,7 @@ export default {
             this.editData = item
             this.newBuild = 'scroll';
             this.$parent.subTitle2 = '编辑滚动条'
+            this.isEdit = true
         },
         lookBanFn(e){//查看banner
             this.isLook = true

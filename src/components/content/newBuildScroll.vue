@@ -1,7 +1,8 @@
 <template>
     <div class="detail-container">
         <div class="detail-data-box" v-if="!isLook">
-            <h5 style="margin-bottom: 20px;">新建滚动条</h5>
+            <h5 style="margin-bottom: 20px;" v-if="!isLook && !isEdit">新建滚动条</h5>
+            <h5 style="margin-bottom: 20px;" v-if="isEdit && !isLook">编辑滚动条</h5>
             <div class="search-group">
                 <span class="totalS">滚动条名称</span>
                 <input type="text" placeholder="请输入" v-model="scrollNameL">
@@ -29,9 +30,9 @@
                     <div class="ruleCro">
                         <span class="lableText">展示逻辑</span>
                         <div style="margin-left:20px;display: flex;justify-content: flex-start;align-items: center;" @change="showLogic">
-                            <label class="middlePage"><input  type="radio" name="radio2" value="0" />打开即展示</label>
-                            <label class="middlePage"><input  type="radio" name="radio2" value="4" />每隔四小时弹</label>
-                            <label class="middlePage"><input  type="radio" name="radio2" value="-1" />点击后不弹</label>
+                            <label class="middlePage"><input  type="radio" name="radio2" value="0" :checked='displayLogic.value1=="0"' />打开即展示</label>
+                            <label class="middlePage"><input  type="radio" name="radio2" value="4" :checked='displayLogic.value2=="4"' />每隔四小时弹</label>
+                            <label class="middlePage"><input  type="radio" name="radio2" value="-1" :checked='displayLogic.value3=="-1"' />点击后不弹</label>
                         </div>
                     </div>
                     <div class="ruleCro">
@@ -130,7 +131,7 @@ import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import operationTips from '@/components/content/operationTips.vue'
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading'],
-    props:['lookMessgeData','isLook','editData'],
+    props:['lookMessgeData','isLook','editData','isEdit'],
     components: {
         'flat-picker': flatPicker,
         'operation-tip':operationTips,
@@ -162,6 +163,11 @@ export default {
             popData:{
                 shoppArr:[],
                 liveArr:[]
+            },
+            displayLogic:{//滚动条逻辑 0时，每次登陆就弹 -1点了就不弹 4 4小时弹
+                value1:'',
+                value2:'',
+                value3:''
             },
             shopping:{
                 value1:'',
@@ -339,6 +345,19 @@ export default {
                         break;
                     case '已下架':
                         this.state = 2
+                        break;
+                    default:
+                        break;
+                }
+                switch (this.editData['time_lag']) {
+                    case '0':
+                        this.displayLogic.value1 = '0'
+                        break;
+                    case '4':
+                        this.displayLogic.value2 = '4'
+                        break;
+                    case '-1':
+                        this.displayLogic.value3 = '-1'
                         break;
                     default:
                         break;
