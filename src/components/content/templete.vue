@@ -80,7 +80,7 @@
                     <div class="edit-group tips">
                         <label></label>
                         <div>
-                            文件大小300k以下，尺寸750*?
+                            文件大小300k以下，尺寸 750*?
                         </div>
                     </div>
                     <div class="edit-group need editImg">
@@ -93,7 +93,7 @@
                     <div class="edit-group tips">
                         <label></label>
                         <div>
-                            文件大小35k以下，尺寸420*103
+                            文件大小35k以下，尺寸 ?*103
                         </div>
                     </div>
                     <div class="edit-group">
@@ -356,8 +356,12 @@ export default {
                             reject()
                         }
                     }else if(this.imgType == 'btn'){
-                        if(tmpImg.width != 420 || tmpImg.height != 103){
-                            this.alert('按钮图片尺寸为420*103,所选图片尺寸错误')
+                        // if(tmpImg.width != 420 || tmpImg.height != 103){
+                        //     this.alert('按钮图片尺寸为420*103,所选图片尺寸错误')
+                        //     reject()
+                        // }
+                        if(tmpImg.height != 103){
+                            this.alert('按钮图片尺寸为*103,所选图片尺寸错误')
                             reject()
                         }
                     }

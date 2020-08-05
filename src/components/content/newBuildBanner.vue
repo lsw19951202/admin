@@ -25,6 +25,14 @@
                 <input type="text" :disabled='isLook' placeholder="请简要描述该banner本次更新情况，仅作为内部说明。将不会展示到APP界面。非必填项" v-model="textareaValue">
             </div>
             <div class="search-group">
+                <span class="color">开始颜色</span>
+                <input type="text" :disabled='isLook' placeholder="开始颜色" v-model="startColor">
+            </div>
+            <div class="search-group">
+                <span class="color">结束颜色</span>
+                <input type="text" :disabled='isLook' placeholder="结束颜色" v-model="endColor">
+            </div>
+            <div class="search-group">
                 <span class="totalS">图片上传</span>
                 <div class="upload">
                     <div v-show="!isLook">
@@ -140,11 +148,13 @@ export default {
             state:'0',//状态，0待发布 1发布中 2已下架
             editable:true,//中间页是否可编辑
             showImg:false,
-            maskImgUrl:''
+            maskImgUrl:'',
+            startColor:'',//开始颜色
+            endColor:'',//结束颜色
         }
     },
     created(){
-        console.log(this.lookBannerMessge)
+        console.log(this.lookBannerMessge,'*****',this.dataAddree)
         this.pageTb = this.dataAddree.pageTable
         this.pageSite = this.dataAddree.pageLocation
         this.lookMessge()
@@ -189,6 +199,8 @@ export default {
                         this.pageSite = 'Up'
                         break;
                 }
+                this.startColor = this.lookBannerMessge['start_color']
+                this.endColor = this.lookBannerMessge['end_color']
                 this.sequence = this.lookBannerMessge.sort
                 this.adsName = this.lookBannerMessge.name
                 this.textareaValue = this.lookBannerMessge.desc
@@ -269,7 +281,9 @@ export default {
                 'page_id':this.pageId,
                 url:this.jumpLink,
                 'start_time':this.createTimeBegin,
-                'end_time':this.createTimeEnd
+                'end_time':this.createTimeEnd,
+                'start_color':this.startColor,
+                'end_color':this.endColor
             }
             this.showLoading()
             request({
@@ -352,7 +366,9 @@ export default {
 .totalS{color: #666666;font-size: .5375rem;line-height: 1rem;position: relative;}
 .totalS::after{position: absolute;content: '*';color: red;top: 2px;right: -8px;width: 5px;height: 5px;}
 .search-group>input{width: 15rem;margin-left: 20px;display: block;}
+.color{color: #666666;font-size: .5375rem;line-height: 1rem;position: relative;}
 .select-ipt{margin-left: 20px;width: 15rem;height: 1rem;line-height: 1rem;border-radius: .125rem !important;border: 1px solid #D9D9D9;box-sizing: border-box;font-size: .4375rem;vertical-align: top;padding-left: .3125rem;padding-right: .3125rem;appearance: menulist;}
+.other{margin: 10px 0;}
 .other>span{color: #666666;font-size: .5375rem;line-height: 1rem;position: relative;}
 .other>input{width: 15rem;margin-left: 20px;border: 1px solid #D9D9D9;height: 2rem;border-radius: .125rem !important;vertical-align: top;}
 .timer{width: 4rem!important;margin-left: 20px;border: 1px solid #D9D9D9;height: 1rem;border-radius: .125rem !important;vertical-align: top;}
@@ -368,6 +384,7 @@ export default {
 .action-btn:focus{outline:0;} /*去掉按钮点击时的边框*/ 
 .imgSize{font-size: 0.4rem;color: red;}
 .bannerTips1::before{position: absolute;content: '若有重复顺序，将默认按照时间倒序再次排序(后建先展示)';color: red;top: -20px;right: -370px;width: 350px;font-size: 0.475rem;}
+.color::before{position: absolute;content: '首页(购物赚),顶部，颜色必填';color: red;top: -20px;right: -370px;width: 350px;font-size: 0.475rem;}
 
 .footerBtn{display: flex;justify-content: space-around;padding: 20px 10rem;box-sizing: border-box;}
 .footerCancel{width: 4rem;height: 1.3rem;background-color: #b4b3b3;text-align: center;line-height: 1.3rem;color: #333333;font-size: 14px;border-radius: 6px;cursor: pointer;}
