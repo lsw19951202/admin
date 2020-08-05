@@ -28,7 +28,7 @@
                 <span class="totalS">图片上传</span>
                 <div class="upload">
                     <div v-show="!isLook">
-                        <div class="imgSize">尺寸1065*420 圆角:30px</div>
+                        <div class="imgSize">尺寸1065*210 圆角:30px</div>
                         <input class="action-btn" type="button" value="上传+" @click="selectImg">
                     </div>
                     <img style="width:100px; height: 40px;cursor: pointer;margin-left:20px;" :src="srcUrl" alt="" @click="previewImg(srcUrl)">
@@ -133,6 +133,7 @@ export default {
             pageSite:'',//页面位置
             sequence:'',//展示顺序
             adsName:'',//广告名称
+            type:'',//生活赚类型
             textareaValue:'',//更新描述
             srcUrl:'',//图片地址
             pageId:0,//中间页id，0表示无中间页
@@ -144,9 +145,14 @@ export default {
         }
     },
     created(){
-        console.log(this.lookBannerMessge)
+        console.log(this.lookBannerMessge,this.dataAddree)
         this.pageTb = this.dataAddree.pageTable
         this.pageSite = this.dataAddree.pageLocation
+        if(this.dataAddree.pageLocation == "singleImage"){
+            this.type = 'singleImage'
+        }else{
+            this.type = 'banner'
+        }
         this.lookMessge()
     },
     methods:{
@@ -163,14 +169,8 @@ export default {
                     this.editable = true
                 }
                 switch (this.lookBannerMessge['belong_prefecture']) {
-                    case '品牌专场':
-                        this.pageTb = 'brandSpecial'
-                        break;
-                    case '高佣精品':
-                        this.pageTb = 'brandHigh'
-                        break;
-                    case '我的页面':
-                        this.pageTb = 'my'
+                    case '生活赚':
+                        this.pageTb = 'live'
                         break;
                     case '首页(购物赚)':
                         this.pageTb = 'shopping'
@@ -179,14 +179,16 @@ export default {
                         break;
                 }
                 switch (this.lookBannerMessge.typeIos) {
-                    case '页面顶部':
-                        this.pageSite = 'Up'
+                    case '生活赚上方':
+                        this.pageSite = 'bannerUp'
                         break;
-                    case '页面中部':
-                        this.pageSite = 'Center'
+                    case '购物赚中部':
+                        this.pageSite = 'bannerDown'
+                        break;
+                    case '购物赚中部横幅':
+                        this.pageSite = 'singleImage'
                         break;
                     default:
-                        this.pageSite = 'Up'
                         break;
                 }
                 this.sequence = this.lookBannerMessge.sort
@@ -236,7 +238,6 @@ export default {
                     console.log(childNode[v].$el,"kzsdhckzshb")
                     if(childNode[v].$el.className == 'pageEditor'){
                         returnDate = childNode[v].getPageData()
-
                     }
                 }
                 console.log(returnDate,"返回参数")
@@ -264,6 +265,7 @@ export default {
                 sort:this.sequence,
                 belong:this.pageTb,
                 typeIos:this.pageSite,
+                type:this.type,
                 name:this.adsName,
                 desc:this.textareaValue,
                 img:this.srcUrl,

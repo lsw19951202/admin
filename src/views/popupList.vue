@@ -11,7 +11,6 @@
                     <input type="text" placeholder="请输入" v-model="popupTitle">
                 </div>
                 <Select :selectParams="selectStatus" @selectOptsClicked="chooseStatus"></Select>
-                <Select :selectParams="selectSort" @selectOptsClicked="chooseSort"></Select>
                 <button class="actionAdd-btn" @click="searchBtn">搜索</button>
                 <button class="actionAdd-btn" @click="newBuildBtn">新建</button>
             </header>
@@ -64,25 +63,6 @@ export default {
                     text: '已下架'
                 }]
             },
-            selectSort: {//排序
-                label: '排序',
-                options: [{
-                    value: '',
-                    text: '请选择'
-                }, {
-                    value: '0',
-                    text: '0'
-                }, {
-                    value: '1',
-                    text: '1'
-                }, {
-                    value: '2',
-                    text: '2'
-                }, {
-                    value: '3',
-                    text: '3'
-                }]
-            },
             sortNum:'',
             theadData:'',
             tbodyData:"",
@@ -110,9 +90,6 @@ export default {
     methods:{
         chooseStatus(e){//发布状态选择
             this.releaseStatus = e;
-        },
-        chooseSort(e){//排序选择
-            this.sortNum = e;
         },
         getListThead(){//头部
             this.showLoading()
