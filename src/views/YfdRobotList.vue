@@ -372,7 +372,7 @@ export default {
             this.pageData['total_page'] = data.total_page || data.pageCount
 
             const tbData = []
-            const fields = ['user_id', 'telephone', 'nick_name', 'max_group', 'bind_group', 'login_status', 'first_login_time', 'activate_time', 'exp_time']
+            const fields = ['app_user_id', 'telephone', 'app_nick_name', 'nick_name', 'max_group', 'bind_group', 'login_status', 'first_login_time', 'activate_time', 'exp_time']
             for(let idx = 0; idx < data.data.length; idx++){
                 const tmp = data.data[idx]
                 tbData.push([(idx + 1) < 10 ? ('0' + (idx + 1)) : (idx + 1)])
