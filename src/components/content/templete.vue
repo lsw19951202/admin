@@ -134,7 +134,7 @@ export default {
     data(){
         return {
             showPreview: false,
-            pagePrefix: ['http://static.yunzhanxinxi.com/templete1.html'],
+            pagePrefix: ['http://static.yunzhanxinxi.com/templete2.html'],
             templete: 0,
             isCreateNew: 1,
             'page_id': '',
