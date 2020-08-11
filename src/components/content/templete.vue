@@ -39,7 +39,7 @@
                             <option value="tb">淘宝</option>
                             <option value="jd">京东</option>
                             <!-- <option value="pdd">拼多多</option> -->
-                            <option value="vph">唯品会</option>
+                            <option value="wph">唯品会</option>
                         </select>
                     </div>
                     <div class="edit-group need">
