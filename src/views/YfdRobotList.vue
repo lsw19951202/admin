@@ -369,8 +369,8 @@ export default {
         },
         h5Setting(dt){
             console.log(dt)
-            // this.globalSetting(dt)
-            // this.tipsStringSetting(dt)
+            this.globalSetting(dt)
+            this.tipsStringSetting(dt)
             if(dt.setGroupTwo){
                 console.log('修改2群')
                 this.adminGroupSetting(dt)
