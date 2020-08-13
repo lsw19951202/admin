@@ -36,13 +36,13 @@
                     <div class="confirm-form-line" v-if="(confirmParams.tp == 'outline') || (confirmParams.tp == 'delete')">{{confirmParams.text}}</div>
                     <div class="confirm-form-line line2" v-else-if="confirmParams.tp == 'globalSetting'">
                         <div>
-                            <label>全局权限</label>
+                            <label>H5全局权限</label>
                             <div>
-                                <div class="line" style="margin-bottom: .5rem;">
+                                <div class="line" style="margin-bottom: .5rem; display: inline-block;">
                                     微信群
                                     <switch-progress style="vertical-align: middle;" :turnOn="confirmParams.groupStatu" @changeSwitchStatus="changeGroupStatus"></switch-progress>
                                 </div>
-                                <div class="line">
+                                <div class="line" style="display: inline-block; margin-left: 1rem;">
                                     朋友圈
                                     <switch-progress style="vertical-align: middle;" :turnOn="confirmParams.friendStatu" @changeSwitchStatus="changeFriendStatus"></switch-progress>
                                 </div>
@@ -57,12 +57,62 @@
                                 限10个以内
                             </div>
                         </div>
+                        <div>
+                            <label>监控设置</label>
+                            <div>
+                                <div class="group" style="display: flex; align-items: flex-start;" v-if="confirmParams.adminGroupSettings && confirmParams.adminGroupSettings.group_one">
+                                    <div class="group_name" style="display: inline-block;">1群：</div>
+                                    <div class="group_setting" style="display: inline-block; font-size: 0.375rem; color: red;">
+                                        开启指令：{{confirmParams.adminGroupSettings.group_one.open_monitor}}
+                                        <br>
+                                        关闭指令：{{confirmParams.adminGroupSettings.group_one.close_monitor}}
+                                    </div>
+                                </div>
+                                <div class="group" style="display: flex; align-items: flex-start; margin-top: 0.3rem;" v-if="confirmParams.adminGroupSettings && confirmParams.adminGroupSettings.group_two">
+                                    <div class="group_name" style="display: inline-block;">2群：</div>
+                                    <div class="group_setting" style="display: inline-block; flex: 1;">
+                                        <div class="action-btn" :style="confirmParams.setGroupTwo ? 'background-color: #ccc; color: white; width: fit-content; display: inline-block;' : 'display: inline-block; width: fit-content;'" @click.prevent.stop="$parent.changeGroupTwoStatu">设置</div>
+                                        <div class="action-btn" v-if="confirmParams.setGroupTwo" style="float: right; display: inline-block;" @click.prevent.stop="$parent.refreshAdminGroupSettings">刷新</div>
+                                        <div class="table" style="width: 100%; height: 5rem; overflow: hidden; overflow-y: auto;" v-if="confirmParams.setGroupTwo">
+                                            <table>
+                                                <thead>
+                                                    <tr style="height: 1rem;">
+                                                        <td style="width: 1.5rem;">序号</td>
+                                                        <td>群名</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr style="height: 1rem;" v-for="(group, idx) in confirmParams.adminGroupSettings.group_two" :key="idx">
+                                                        <td style="width: 1.5rem;"><input type="checkbox" @change.prevent.stop="$parent.changeGroupTwoSelect(idx)" :checked="confirmParams.adminGroupSettings.select_group.indexOf(group.group_id) >= 0">{{idx + 1}}</td>
+                                                        <td>{{group.group_name}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div v-if="confirmParams.setGroupTwo" style="font-size: .375rem; color: red;">已选中：{{selectedGroupName}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 0.2rem;">
+                            <label>H5顶部提示</label>
+                            <div style="width: 100%; height: 3rem;">
+                                <html-editor class="headerMsgEditor" :config="confirmParams.htmlEditorConfig" :htmlText="confirmParams.tipsStringSettings.head_message" :editable="true"></html-editor>
+                            </div>
+                        </div>
+                        <div style="margin-top: 0.2rem;">
+                            <label>淘口令小尾巴</label>
+                            <div style="width: 100%; height: 3rem;">
+                                <html-editor class="tkCodeEditor" :config="confirmParams.htmlEditorConfig" :htmlText="confirmParams.tipsStringSettings.tk_code" :editable="true"></html-editor>
+                            </div>
+                        </div>
                     </div>
                     <div class="confirm-form-line" v-else>
                         <label>选择续时时间</label>
                         <div class="monthBox">
                             <div class="sub" @click.prevent.stop="subNumber">-</div>
-                            <div class="num">{{confirmParams.month}}</div>
+                            <!-- <div class="num">{{confirmParams.month}}</div> -->
+                            <input type="text" class="num" v-model="confirmParams.month">
                             <div class="add" @click.prevent.stop="addNumber">+</div>
                         月
                         </div>
@@ -78,6 +128,7 @@
 </template>
 <script>
 import switchVue from './switch.vue'
+import htmlEditor from './htmlEditor.vue'
 
 export default {
     props: ['isShow', 'confirmParams'],
@@ -88,7 +139,19 @@ export default {
         }
     },
     components: {
-        'switch-progress': switchVue
+        'switch-progress': switchVue,
+        'htmlEditor': htmlEditor
+    },
+    computed: {
+        selectedGroupName(){
+            const groupName = []
+            for(let idx = 0; idx < this.confirmParams.adminGroupSettings.group_two.length; idx++){
+                if(this.confirmParams.adminGroupSettings.select_group.indexOf(this.confirmParams.adminGroupSettings.group_two[idx].group_id) >= 0){
+                    groupName.push(this.confirmParams.adminGroupSettings.group_two[idx].group_name)
+                }
+            }
+            return groupName.join(',')
+        }
     },
     methods: {
         changeGroupStatus(dt){
@@ -133,6 +196,16 @@ export default {
             }
         },
         confirmModifyStatus: function(){
+            if(this.confirmParams.tp && this.confirmParams.tp == 'globalSetting'){
+                for(const idx in this.$children){
+                    if(this.$children[idx].$el.className.indexOf('headerMsgEditor') >= 0){
+                        this.confirmParams.tipsStringSettings['head_message'] = this.$children[idx].getContent()
+                    }
+                    if(this.$children[idx].$el.className.indexOf('tkCodeEditor') >= 0){
+                        this.confirmParams.tipsStringSettings['tk_code'] = this.$children[idx].getContent()
+                    }
+                }
+            }
             this.$emit('confirmClicked', this.confirmParams)
         },
         confirmDel: function(){
@@ -168,7 +241,7 @@ export default {
 .confirm-body { position: relative; padding: .5rem; box-sizing: border-box; width: 100%; }
 .confirm-form-line { height: 1.06rem; width: 100%; margin-bottom: .5rem; box-sizing: border-box; font-size: .4375rem; display: flex; color: #676b6d; }
 .confirm-form-line.line2 { height: fit-content; display: block; }
-.confirm-form-line.line2>div { width: 100%; height: fit-content; display: flex; margin-bottom: .5rem; }
+.confirm-form-line.line2>div { width: 100%; height: fit-content; display: flex; margin-bottom: 0rem; }
 .confirm-form-line.line2>div>label { display: inline-block; width: 3rem; text-align: right; }
 .confirm-form-line.line2>div>div { display: inline-block; width: 0; flex: 1; }
 
@@ -176,7 +249,7 @@ export default {
 .confirm-form-line .monthBox { display: inline-block; padding-top: 0.15rem; }
 .confirm-form-line .monthBox .sub,.confirm-form-line.line2>div>div .sub { display: inline-block; width: .7rem; height: .7rem; border: 1px solid #333333; text-align: center; border-right: none; cursor: pointer; }
 .confirm-form-line .monthBox .add,.confirm-form-line.line2>div>div .add { display: inline-block; width: .7rem; height: .7rem; border: 1px solid #333333; text-align: center; border-left: none; margin-right: .2rem; cursor: pointer; }
-.confirm-form-line .monthBox .num,.confirm-form-line.line2>div>div .num { display: inline-block; width: 1rem; height: .7rem; border: 1px solid #333333; text-align: center; outline: none; }
+.confirm-form-line .monthBox .num,.confirm-form-line.line2>div>div .num { vertical-align: top; display: inline-block; width: 1rem; height: .7rem; border: 1px solid #333333; text-align: center; outline: none; }
 .confirm-form-line-right { flex: 1; height: 100%; line-height: 1.06rem; box-sizing: border-box; padding: 0 .5rem; }
 .confirm-form-line-right input { box-sizing: border-box; width: 100%; display: block; height: 100%; padding: 0.2rem 0.375rem; font-size: .4375rem; color: #555; background-color: white; border: 1px solid #cccccc;border-radius: .125rem; }
 .confirm-footer { width: 100%; border-top: 1px solid #e5e5e5; box-sizing: border-box; padding: 0 .5rem; height: 1.75rem; line-height: 1.75rem; text-align: right; }

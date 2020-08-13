@@ -320,7 +320,17 @@ export default {
         // 全局配置
         yfdGlobalSetting: '/robot/config',
         // 获取全局配置
-        yfdGetGlobalSetting: '/robot/configlist'
+        yfdGetGlobalSetting: '/robot/configlist',
+        // 设置用户最大群数
+        yfdMaxGroup: '/robot/setgroup',
+        // 开通账号
+        yfdOpenDevice: '/robot/opendevice',
+        // 前端顶部提示，淘口令提示
+        // 获取get，修改post
+        yfdTipsString: '/robot/inform',
+        // 管理员群设置
+        yfdAdminGroup: '/robot/setmonitor',
+        yfdGetAdminGroup: '/robot/monitor'
     },
     // 图片地址
     images: {

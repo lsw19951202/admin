@@ -16,7 +16,8 @@
                 </div>
                 <selector class="search-group" :value="login_status" :selectParams="selectParams" @selectOptsClicked="selectOptsClicked"></selector>
                 <button class="action-btn" @click.prevent.stop="loadTBData(1)">搜索</button>
-                <button class="action-btn" v-if="showGlobalSetBtn" @click.prevent.stop="openGlobalSetting">全局设置</button>
+                <button class="action-btn" v-if="showGlobalSetBtn" @click.prevent.stop="openGlobalSetting">H5设置</button>
+                <button class="action-btn" @click.prevent.stop="changeOpenDeviceBoxStatu">开通账号</button>
             </header>
             <div class="table-container hideScrollBar">
                 <detail-table :allChecked="allChecked" @changeAllCheckStatus="changeAllCheckStatus" @changeCheckStatus="changeCheckStatus" :checkedArray="checkedArray" :tbType="tbType" :tbData="tbData" :tableHeader="tbHeader" :tableHeaderFixed="false" @changeTimeLineStatu="changeTimeLineStatu" @changeWechatStatu="changeWechatStatu" @sortTBData="sortTBData"></detail-table>
@@ -31,6 +32,28 @@
             </div>
         </div>
         <confirm @confirmClicked="confirmClicked" :isShow="showConfirm" :confirmParams="confirmParams"></confirm>
+        <div class="odConfirmBox" v-if="showOpenDeviceBox">
+            <div class="main">
+                <div class="header">开通账号</div>
+                <div class="iptLine">
+                    <label class="bt">输入账号</label>
+                    <div class="iptRight">
+                        <div class="tips">
+                            请输入需要开通的用户手机号,一行一个,或者通过英文逗号隔开
+                        </div>
+                        <textarea v-model="phones"></textarea>
+                        <div class="accountNum">本次开通账号数量:{{phonesNum}}个</div>
+                    </div>
+                </div>
+                <div class="iptLine">
+                    <label></label>
+                    <div class="iptRight">
+                        <button class="action-btn" @click.prevent.stop="openDevice">开通</button>
+                        <button class="action-btn cancel" @click.prevent.stop="changeOpenDeviceBoxStatu">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -52,6 +75,9 @@ export default {
     },
     data(){
         return {
+            phonesNum: 0,
+            phones: null,
+            showOpenDeviceBox: false,
             showGlobalSetBtn: false,
             'user_id': '',
             'telephone': '',
@@ -85,6 +111,22 @@ export default {
             allChecked: false,
             showConfirm: false,
             confirmParams: {
+                htmlEditorConfig: {
+                    actions: {
+                        bold: true,
+                        italic: true,
+                        alignLeft: true,
+                        alignCenter: true,
+                        alignRight: true,
+                        strikethrough: true,
+                        underline: true,
+                        emoji: true,
+                        image: false,
+                        link: false,
+                        video: false,
+                        fontSize: true
+                    }
+                },
                 type: 'yfdRobot',
                 header: '操作提示',
                 text: '',
@@ -93,7 +135,10 @@ export default {
                 month: 1,
                 groupStatu: false,
                 friendStatu: false,
-                maxGroup: 5
+                maxGroup: 5,
+                adminGroupSettings: null,
+                tipsStringSettings: null,
+                setGroupTwo: false
             },
             'rank_time': '',
             'time_type': '',
@@ -101,7 +146,10 @@ export default {
                 "max_group": '',
                 "friend_status": '',
                 "group_status": ''
-            }
+            },
+            maxGroupChanging: false,
+            adminGroupSettings: null,
+            tipsStringSettings: null
         }
     },
     created(){
@@ -110,6 +158,10 @@ export default {
         this.loadTBData()
         // 获取全局配置
         this.loadGlobalSetting()
+        // 获取管理员群配置
+        this.loadAdminGroupSetting()
+        // 获取前端顶部字符串和淘口令字符串配置和
+        this.loadTipsStringSetting()
     },
     provide(){
         return {
@@ -118,7 +170,187 @@ export default {
             deleteRobotConfirm: this.deleteRobotConfirm
         }
     },
+    watch: {
+        phones(nval){
+            if(nval == null || nval == ''){
+                this.phonesNum = 0
+                return
+            }
+            if(nval == ','){
+                console.log('一个逗号')
+                this.phones = ''
+                return
+            }
+            if(nval.indexOf('，') > 0){
+                console.log('中文逗号')
+                this.phones = nval.replace('，', ',')
+                return
+            }
+            if(/[^(\d|,|\n)]/.test(nval)){
+                console.log('非数字逗号换行')
+                this.phones = nval.replace(/[^(\d|,|\n)]/, '')
+                return
+            }
+            if(/,{2,}/.test(nval)){
+                console.log('多个逗号')
+                this.phones = nval.replace(/,{2,}/, ',')
+                return
+            }
+            if(/\n{2,}/.test(nval)){
+                console.log('多个换行')
+                this.phones = nval.replace(/\n{2,}/, '\n')
+                return
+            }
+            const phonesArr = nval.split(/[,\n]/)
+            console.log(phonesArr)
+            let num = 0
+            for(let idx = 0; idx < phonesArr.length; idx++){
+                if(phonesArr[idx] != ''){
+                    num++
+                }
+            }
+            this.phonesNum = num
+        }
+    },
     methods: {
+        refreshAdminGroupSettings(){
+            this.loadAdminGroupSetting()
+                .then(() => {
+                    this.confirmParams.adminGroupSettings = JSON.parse(JSON.stringify(this.adminGroupSettings))
+                })
+        },
+        changeGroupTwoSelect(idx){
+            if(this.confirmParams.adminGroupSettings.select_group.indexOf(this.confirmParams.adminGroupSettings.group_two[idx].group_id) >= 0){
+                const i = this.confirmParams.adminGroupSettings.select_group.indexOf(this.confirmParams.adminGroupSettings.group_two[idx].group_id)
+                this.confirmParams.adminGroupSettings.select_group.splice(i, 1)
+            }else{
+                this.confirmParams.adminGroupSettings.select_group.push(this.confirmParams.adminGroupSettings.group_two[idx].group_id)
+            }
+        },
+        changeGroupTwoStatu(){
+            this.confirmParams.setGroupTwo = !this.confirmParams.setGroupTwo
+        },
+        openDevice(){
+            const phoneReg = /^1[3456789]\d{9}$/
+            const phonesArr = this.phones.split(/[,\n]/)
+            const phonesArr2 = []
+            for(let idx = 0; idx < phonesArr.length; idx++){
+                if(phoneReg.test(phonesArr[idx])){
+                    phonesArr2.push(phonesArr[idx])
+                }else if(phonesArr[idx] != ''){
+                    this.alert('手机号码' + phonesArr[idx] + '格式错误')
+                    return
+                }
+            }
+            if(phonesArr2.length == 0){
+                return
+            }
+            return request({
+                method: 'post',
+                url: setting.urls.yfdOpenDevice,
+                data: qs.stringify({
+                    telephone: phonesArr2.join(',')
+                })
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.alert(rst.data.message || '开通账号成功')
+                    this.loadTBData()
+                    this.changeOpenDeviceBoxStatu()
+                }else{
+                    this.alert(rst.data && rst.data.message || '开通账号失败')
+                }
+            }).catch(e => {
+                this.alert('开通账号失败')
+            })
+        },
+        changeOpenDeviceBoxStatu(){
+            this.phones = ''
+            this.showOpenDeviceBox = !this.showOpenDeviceBox
+        },
+        /**
+         * 修改单个用户的最大群数
+         * @param {*} idx 列表下标 用来确定修改用户
+         * @param {*} val 参数值 number 修改用户最高群数为val  reduce 用户最大群数减1  add 用户最大群数加1
+         */
+        changeMaxGroup(idx, val){
+            console.log('修改用户最大群数===' + idx + '===' + val)
+            console.log(this.robots[idx])
+            if(this.maxGroupChanging){
+                return
+            }
+            this.maxGroupChanging = true
+            let maxGroup = this.robots[idx].max_group || 0
+            if(val == 'reduce'){
+                if(maxGroup <= 0){
+                    this.maxGroupChanging = false
+                    return
+                }else{
+                    maxGroup--
+                }
+            }else if(val == 'add'){
+                maxGroup++
+            }else if(/^\d+$/.test(val)){
+                if(this.robots[idx].max_group == val){
+                    this.maxGroupChanging = false
+                    return
+                }
+                maxGroup = val
+            }else{
+                this.alert('请输入正确的数字,并回车确认')
+                this.maxGroupChanging = false
+                return
+            }
+            console.log('最大群数修改为' + maxGroup)
+            return request({
+                url: setting.urls.yfdMaxGroup,
+                method: 'post',
+                data: qs.stringify({
+                    'user_id': this.robots[idx].user_id,
+                    'group_num': maxGroup
+                })
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.robots[idx]['max_group'] = maxGroup
+                    const tbData = this.tbData
+                    tbData[idx][tbData[idx].length - 1]['max_group'] = maxGroup
+                    this.tbData = Object.assign([], tbData)
+                }else{
+                    this.alert(rst.data && rst.data.message || '修改用户最大群数失败')
+                }
+            }).catch(e => {
+                this.alert('修改用户最大群数失败')
+            }).then(() => {
+                this.maxGroupChanging = false
+            })
+        },
+        loadTipsStringSetting(){
+            return request({
+                url: setting.urls.yfdTipsString,
+                method: 'get'
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.tipsStringSettings = rst.data.data
+                }else{
+                    this.alert('加载H5提示和淘口令小尾巴失败')
+                }
+            }).catch(e => {
+                this.alert('加载H5提示和淘口令小尾巴失败')
+            })
+        },
+        loadAdminGroupSetting(){
+            return request({
+                url: setting.urls.yfdGetAdminGroup,
+                method: 'get'
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.adminGroupSettings = rst.data.data
+                }else{
+                    this.alert('加载监控配置失败')
+                }
+            }).catch(e => {
+                this.alert('加载监控配置失败')
+            })
+        },
         loadGlobalSetting(){
             request({
                 url: setting.urls.yfdGetGlobalSetting,
@@ -135,6 +367,51 @@ export default {
                 this.alert('加载全局配置失败')
             })
         },
+        h5Setting(dt){
+            console.log(dt)
+            // this.globalSetting(dt)
+            // this.tipsStringSetting(dt)
+            if(dt.setGroupTwo){
+                console.log('修改2群')
+                this.adminGroupSetting(dt)
+            }
+        },
+        tipsStringSetting(dt){
+            request({
+                url: setting.urls.yfdTipsString,
+                method: 'post',
+                data: qs.stringify({
+                    'head_message': dt.tipsStringSettings.head_message,
+                    'tk_code': dt.tipsStringSettings.tk_code
+                })
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.loadTipsStringSetting()
+                }else{
+                    this.alert('修改H5顶部提示和淘口令小尾巴失败')
+                }
+            }).catch(e => {
+                this.alert('修改H5顶部提示和淘口令小尾巴失败')
+            })
+        },
+        adminGroupSetting(dt){
+            request({
+                url: setting.urls.yfdAdminGroup,
+                method: 'post',
+                data: qs.stringify({
+                    'admin_user_id': dt.adminGroupSettings.admin_user_id,
+                    'admin_group': dt.adminGroupSettings.select_group.join(',')
+                })
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.loadAdminGroupSetting()
+                }else{
+                    this.alert('修改2群失败')
+                }
+            }).catch(e => {
+                this.alert('修改2群失败')
+            })
+        },
         globalSetting(dt){
             request({
                 url: setting.urls.yfdGlobalSetting,
@@ -149,18 +426,20 @@ export default {
                     // this.loadTBData(this.pageData.page || 1)
                     this.loadGlobalSetting()
                 }else{
-                    this.alert('修改全局配置失败')
+                    this.alert('修改H5权限配置或者最大同步群失败')
                 }
             }).catch(e => {
-                this.alert('修改全局配置失败')
+                this.alert('修改H5权限配置或者最大同步群失败')
             })
         },
         openGlobalSetting(){
-            this.confirmParams.header = '编辑全局配置'
+            this.confirmParams.header = '编辑H5配置'
             this.confirmParams.tp = 'globalSetting'
             this.confirmParams.groupStatu = this.globalSettings.group_status
             this.confirmParams.friendStatu = this.globalSettings.friend_status
             this.confirmParams.maxGroup = this.globalSettings.max_group
+            this.confirmParams.adminGroupSettings = JSON.parse(JSON.stringify(this.adminGroupSettings))
+            this.confirmParams.tipsStringSettings = JSON.parse(JSON.stringify(this.tipsStringSettings))
             this.showConfirm = true
         },
         confirmClicked(dt){
@@ -171,7 +450,7 @@ export default {
                     case 'outline': this.outlineRobot(dt.ids);break;
                     case 'delete': this.deleteRobot(dt.ids);break;
                     case 'renew': this.renewRobot(dt.ids, dt.month);break;
-                    case 'globalSetting': this.globalSetting(dt);break;
+                    case 'globalSetting': this.h5Setting(dt);break;
                     default: return
                 }
             }
@@ -231,6 +510,14 @@ export default {
             }
         },
         renewRobot(ids, month){
+            if(!/\d+/.test(month)){
+                this.alert('续时月数格式错误')
+                return
+            }
+            if(month <= 0){
+                this.alert('续时月数必须大于0')
+                return
+            }
             request({
                 method: 'post',
                 url: setting.urls.yfdAddTime,
@@ -383,6 +670,7 @@ export default {
                 tbData[idx][tbData[idx].length - 1]['group_syn'] = tmp.group_status
                 tbData[idx][tbData[idx].length - 1]['friend_syn'] = tmp.friends_status
                 tbData[idx][tbData[idx].length - 1]['online_status'] = tmp.online_status
+                tbData[idx][tbData[idx].length - 1]['max_group'] = tmp.max_group || 0
             }
             this.tbData = tbData
         },
@@ -429,6 +717,72 @@ export default {
     .pages-container {
         width: 0;
         flex: 1;
+    }
+}
+.odConfirmBox {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9900;
+    background-color: rgba(0, 0, 0, .7);
+    .main {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border-radius: 10px;
+        text-align: left;
+        .header {
+            width: 100%;
+            height: 1rem;
+            line-height: 1rem;
+            font-size: .625rem;
+            border-bottom: 1px solid #333333;
+            padding: 0 0.5rem;
+        }
+        .iptLine {
+            padding: 0.5rem;
+            font-size: .5rem;
+            display: flex;
+            align-items: flex-start;
+            label {
+                height: 100%;
+                display: inline-block;
+                width: 2.5rem;
+                text-align: right;
+            }
+            label.bt::after {
+                content: '*';
+                display: inline-block;
+                color: red;
+            }
+            .iptRight {
+                display: inline-block;
+                padding-left: .5rem;
+                .tips,.accountNum {
+                    width: 100%;
+                    font-size: .4125rem;
+                    color: red;
+                    white-space: nowrap;
+                }
+                textarea {
+                    width: 100%;
+                    resize: none;
+                    height: 5rem;
+                    padding: .3rem;
+                    border: 1px solid #999999;
+                    box-sizing: border-box;
+                    margin-top: .3rem;
+                }
+                .action-btn.cancel {
+                    color: #333333;
+                    background-color: #cccccc;
+                }
+            }
+        }
     }
 }
 </style>

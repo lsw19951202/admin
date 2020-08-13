@@ -33,6 +33,14 @@
                             <label style="display: inline-block; height: .75rem; line-height: .75rem; margin-right: 3px;">朋友圈</label>
                             <switch-progress style="vertical-align: middle;" :turnOn="tbCol['friend_syn'] == 'T'" :statusData="tbRow" @changeSwitchStatus="changeTimeLineStatu"></switch-progress>
                         </div>
+                        <div style="display: inline-block; margin-left: 8px; height: 1rem; line-height: 1rem; font-size: .5rem;">
+                            最高群数
+                            <div style="display: inline-flex; border: 1px solid #282828; box-sizing: border-box;">
+                                <div style="width: 1rem; cursor: pointer; box-sizing: border-box; text-align: center; font-size: .5rem; border-right: 1px solid #282828;" @click.prevent.stop="$parent.changeMaxGroup(index, 'reduce')">-</div>
+                                <input @keypress.prevent.stop.enter="$parent.changeMaxGroup(index, tbCol.max_group)" type="text" v-model="tbCol.max_group" style="outline: none; border: none; width: 1.5rem; font-size: .5rem; text-align: center; background-color: transparent;">
+                                <div style="width: 1rem; cursor: pointer; box-sizing: border-box; text-align: center; font-size: .5rem; border-left: 1px solid #282828;" @click.prevent.stop="$parent.changeMaxGroup(index, 'add')">+</div>
+                            </div>
+                        </div>
                     </slot>
                 </td>
             </tr>
