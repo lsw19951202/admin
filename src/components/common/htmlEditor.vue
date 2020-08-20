@@ -167,7 +167,8 @@ export default {
          * @param text 文本内容
          */
         insertText: function(text){
-            this.insertHTML('<span>' + text + '</span>')
+            // this.insertHTML('<span>' + text + '</span>')
+            this.insertHTML(text)
         },
         /**
          * 编辑器滚动到光标所在位置
@@ -467,6 +468,9 @@ export default {
          */
         getContent: function(){
             return this.$refs.editor.innerHTML
+        },
+        getContentText: function(){
+            return this.$refs.editor.innerText
         },
         selectImage: function(){
             this.$refs.imageIpt.click()

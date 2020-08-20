@@ -16,7 +16,7 @@
             </div>
             <page :pageData="pageData" @loadList="loadMaterial"></page>
         </div>
-        <material-editor v-if="showMaterialEditor" :editable="editable" :materialLabelList="materialLabelList" :material="material" @saveMaterial="saveMaterial" @cancelEditMaterial="cancelEditMaterial"></material-editor>
+        <material-editor v-if="showMaterialEditor" :editable="editable" :ewmEditable="true" :materialLabelList="materialLabelList" :material="material" @saveMaterial="saveMaterial" @cancelEditMaterial="cancelEditMaterial"></material-editor>
     </div>
 </template>
 <script>
@@ -138,15 +138,42 @@ export default {
             for(let idx = this.material['image_list'].length - 1; idx >= 0; idx--){
                 if(!this.material['image_list'][idx]){
                     this.material['image_list'].splice(idx, 1)
+                    if(this.material['ewm_img_index'] > idx){
+                        this.material['ewm_img_index'] = this.material['ewm_img_index'] - 1
+                    }
                 }
             }
             console.log(this.material)
             this.showLoading()
+            let materialDetail = this.material['material_detail']
+            while(materialDetail.indexOf('&nbsp;') >= 0){
+                materialDetail = materialDetail.replace('&nbsp;', ' ')
+            }
+            while(materialDetail.indexOf('<div>') >= 0){
+                materialDetail = materialDetail.replace('<div>', '')
+            }
+            while(materialDetail.indexOf('</div>') >= 0){
+                materialDetail = materialDetail.replace('</div>', '&lt;br&gt;')
+            }
+            while(materialDetail.indexOf('<br>') >= 0){
+                materialDetail = materialDetail.replace('<br>', '&lt;br&gt;')
+            }
+            while(materialDetail.indexOf('&lt;br&gt;&lt;br&gt;') >= 0){
+                materialDetail = materialDetail.replace('&lt;br&gt;&lt;br&gt;', '&lt;br&gt;')
+            }
+            if(materialDetail.startsWith('&lt;br&gt;')){
+                materialDetail = materialDetail.replace('&lt;br&gt;', '')
+            }
+            if(materialDetail.endsWith('&lt;br&gt;')){
+                materialDetail = materialDetail.substring(0, materialDetail.length - 10)
+            }
+            console.log(materialDetail)
             const requestParams = {
                 'material_type': this.material['material_type'],
-                'material_detail': this.material['material_detail'],
+                'material_detail': materialDetail,
                 'start_time': this.material['start_time'],
-                'end_time': this.material['end_time']
+                'end_time': this.material['end_time'],
+                'ewm_img_index': this.material['ewm_img_index']
             }
             if(this.material['id']){
                 requestParams['material_id'] = this.material['id']
@@ -195,10 +222,10 @@ export default {
                     if(rst.data.code == 200){
                         this.materials[dt]['material_status'] = this.materials[dt]['material_status'] == 0 ? 1: 0
                         this.tbData[dt][4] = this.materials[dt]['material_status'] == 0 ? '隐藏' : '显示'
-                        this.tbData[dt][9]['material_close'] = this.materials[dt]['material_status'] == 0 ? 'F' : 'T'
-                        this.tbData[dt][9]['material_open'] = this.materials[dt]['material_status'] == 0 ? 'T' : 'F'
-                        this.tbData[dt][9]['material_status'] = this.materials[dt]['material_status']
-                        this.tbData[dt][9]['material_edit'] = this.materials[dt]['material_status'] == 0 ? 'T' : 'F'
+                        this.tbData[dt][10]['material_close'] = this.materials[dt]['material_status'] == 0 ? 'F' : 'T'
+                        this.tbData[dt][10]['material_open'] = this.materials[dt]['material_status'] == 0 ? 'T' : 'F'
+                        this.tbData[dt][10]['material_status'] = this.materials[dt]['material_status']
+                        this.tbData[dt][10]['material_edit'] = this.materials[dt]['material_status'] == 0 ? 'T' : 'F'
                     }else{
                         this.alert(rst.data.message || '修改素材发布状态失败')
                     }
@@ -218,8 +245,8 @@ export default {
 
             this.materials = dt.data || []
             const tbData = []
-            for(let idx = 0; idx < dt.data.length; idx++){
-                const item = dt.data[idx]
+            for(let idx = 0; idx < this.materials.length; idx++){
+                const item = this.materials[idx]
                 tbData.push([])
                 for(let idxx = 0; idxx < this.fields.length; idxx++){
                     if(this.fields[idxx] == 'material_detail'){
@@ -230,6 +257,7 @@ export default {
                         while(detail.indexOf('&gt;') >= 0){
                             detail = detail.replace('&gt;', '>')
                         }
+                        item[this.fields[idxx]] = detail
                         tbData[idx].push(detail)
                     }else{
                         tbData[idx].push(item[this.fields[idxx]] || '--')
@@ -275,7 +303,7 @@ export default {
         },
         addMaterial: function(){
             console.log('add material')
-            this.material = { 'material_type': null, 'material_detail': '', 'image_list': [] }
+            this.material = { 'material_type': null, 'material_detail': '', 'image_list': [], 'ewm_img_index': -1 }
             this.showMaterialEditor = true
             this.$parent.subTitle2 = '新增素材'
             this.editable = true

@@ -29,7 +29,10 @@
                 <!-- <locked-table :tbData="orderListTBData" :tbStyle="orderListTBStyle"></locked-table> -->
             </div>
             <page v-show="!showOrderList" :pageData="pageData" @loadList="loadTBData"></page>
-            <page v-show="showOrderList" :pageData="orderListPageData" @loadList="loadOrderListTBData"></page>
+            <div v-show="showOrderList" style="display: flex;">
+                <div class="action-btn" style="font-size: .5rem; margin-top: .3rem;" @click.prevent.stop="prevClicked">返回上一级</div>
+                <page style="flex: 1;" :pageData="orderListPageData" @loadList="loadOrderListTBData"></page>
+            </div>
         </div>
     </div>
 </template>
@@ -124,6 +127,9 @@ export default {
         }
     },
     methods: {
+        prevClicked(){
+            console.log('返回上一级')
+        },
         loadOrderListTBData: function(pageNum){
             this.showLoading()
             request({

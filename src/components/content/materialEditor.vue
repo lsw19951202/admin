@@ -24,11 +24,11 @@
                     <flat-picker v-model="material.end_time" class="search-time-picker" :config="dateConfig" :disabled="!editable"></flat-picker>
                 </div>
             </div>
-            <div class="editor-groups" style="height: 5.21875rem;">
+            <div class="editor-groups" style="height: 5.94375rem;">
                 <label>图片上传</label>
                 <div>
                     <span>(最多上传9张,点击相应位置上传图片)</span>
-                    <image-editor :config="imageConfig" :images="material.image_list" :editable="editable"></image-editor>
+                    <image-editor :ewmEditable="ewmEditable" :ewm_img_index="material.ewm_img_index" :config="imageConfig" :images="material.image_list" :editable="editable"></image-editor>
                 </div>
             </div>
             <div class="editor-groups">
@@ -49,7 +49,7 @@ import 'flatpickr/dist/flatpickr.css'
 import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 
 export default {
-    props: ['material', 'editable', 'materialLabelList'],
+    props: ['material', 'editable', 'materialLabelList', 'ewmEditable'],
     components: {
         'html-editor': htmlEditorVue,
         'image-editor': imageEditorVue,
@@ -65,18 +65,18 @@ export default {
             },
             htmlEditorConfig: {
                 actions: {
-                    bold: true,
-                    italic: true,
-                    alignLeft: true,
-                    alignCenter: true,
-                    alignRight: true,
-                    strikethrough: true,
-                    underline: true,
+                    bold: false,
+                    italic: false,
+                    alignLeft: false,
+                    alignCenter: false,
+                    alignRight: false,
+                    strikethrough: false,
+                    underline: false,
                     emoji: true,
-                    image: true,
+                    image: false,
                     link: false,
                     video: false,
-                    fontSize: true
+                    fontSize: false
                 }
             },
             imageConfig: {

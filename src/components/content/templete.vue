@@ -150,7 +150,7 @@ export default {
             'button_img': '',
             imgType: 'bg',
             bgSize: 300 * 1024,
-            btnSize: 30 * 1024,
+            btnSize: 35 * 1024,
             pageList: null,
             middlePageUrl:''
         }
@@ -342,7 +342,7 @@ export default {
                     }
                 }else if(this.imgType == 'btn'){
                     if(fileSize > this.btnSize){
-                        this.alert('按钮图片大小不超过30K')
+                        this.alert('按钮图片大小不超过35K')
                         reject()
                     }
                 }
@@ -361,7 +361,7 @@ export default {
                         //     reject()
                         // }
                         if(tmpImg.height != 103){
-                            this.alert('按钮图片尺寸为*103,所选图片尺寸错误')
+                            this.alert('按钮图片尺寸为?*103,所选图片尺寸错误')
                             reject()
                         }
                     }

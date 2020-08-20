@@ -17,7 +17,8 @@
                 <td style="padding: 0 10px;">
                     <div class="issue" v-if="item.status == '发布中'">
                         <div class="textValue" @click="offShelfBtn(item.id)">下架</div>
-                        <div class="textValue" @click="lookUpBtn(item)">查看</div>
+                        <!-- <div class="textValue" @click="lookUpBtn(item)">查看</div> -->
+                        <div class="textValue" @click="editBtn(item)">编辑</div>
                     </div>
                     <div class="issue" v-else>
                         <div class="textValue" @click="releaseBtn(item.id)">发布</div>

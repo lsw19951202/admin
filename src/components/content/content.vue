@@ -5,56 +5,56 @@
     </div>
 </template>
 <script>
-import Header from '../content/header.vue'
-import CardContainer from '../content/cardContainer.vue'
-import Setting from '@/setting'
-import UserManager from '@/views/userManager.vue'
-import RoleManager from '@/views/roleManager.vue'
-import PermissionManager from '@/views/permissionManager.vue'
-import CpsCount from '@/views/cpsCount.vue'
-import AppCount from '@/views/appCount.vue'
-import CpsCollect from '@/views/cpsCollect.vue'
-import CpsTaobao from '@/views/cpsTaobao.vue'
-import CpsJingdong from '@/views/cpsJingdong.vue'
-import cpsPddVue from '../../views/cpsPdd.vue'
-import cpsRobotVue from '../../views/cpsRobot.vue'
-import cpsRobotOrderVue from '../../views/cpsRobotOrder.vue'
-import cpsAccountsOrderVue from '../../views/cpsAccountsOrder.vue'
-import cpsCompanyOrderVue from '../../views/cpsCompanyOrder.vue'
-import cpsCapitalVue from '../../views/cpsCapital.vue'
-import cpsStatisticsCount from '../../views/cpsStatisticsCount.vue'
-import cpsHandData from '../../views/cpsHandData.vue'
-import userList from '../../views/userList.vue'
-import orderList from '../../views/orderList.vue'
-import withdrawListVue from '../../views/withdrawList.vue'
-import materialListVue from '../../views/materialList.vue'
-import orderSalesListVue from '../../views/orderSalesList.vue'
-import teamSortListVue from '../../views/teamSortList.vue'
-import userRankListVue from '../../views/userRankList.vue'
-import cpsDealMonthVue from '../../views/cpsDealMonth.vue'
-import cpsDealYearVue from '../../views/cpsDealYear.vue'
-import cpsperMonthVue from '../../views/cpsPerMonth.vue'
-import cpsperYearVue from '../../views/cpsPerYear.vue'
-import cpsDealAccountsVue from '../../views/cpsDealAccounts.vue'
-import cpsestYearVue from '../../views/cpsEstYear.vue'
-import cpsestMonthVue from '../../views/cpsEstMonth.vue'
-import cpsRemMonthVue from '../../views/cpsRemMonth.vue'
-import cpsRemYearVue from '../../views/cpsRemYear.vue'
-import cpsGenMonthVue from '../../views/cpsGenMonth.vue'
-import cpsGenYearVue from '../../views/cpsGenYear.vue'
-import cpsAmountPersonalVue from '../../views/cpsAmountPersonal.vue'
-import cpsWithdrawMonthVue from '../../views/cpsWithdrawMonth.vue'
-import cpsWithdrawYearVue from '../../views/cpsWithdrawYear.vue'
-import activityPrizepoollistVue from '../../views/activityPrizepoollist.vue'
-import sxyArticleVue from '../../views/sxyArticle.vue'
-import sxyTagVue from '../../views/sxyTag.vue'
-import materialLabelVue from '../../views/materialLabel.vue'
-import totalUserVue from '../../views/dataWorkBench.vue'
-import directedListVue from '../../views/directedList.vue'
-import goodsMaterialVue from '../../views/goodsMaterial.vue'
-import posterMaterialVue from '../../views/posterMaterial.vue'
-import popupListVue from '../../views/popupList.vue'
-import YfdRobotListVue from '../../views/YfdRobotList.vue'
+const Setting = () => import('@/setting')
+const Header = () => import('../content/header.vue')
+const CardContainer = () => import('../content/cardContainer.vue')
+const UserManager = () => import('@/views/userManager.vue')
+const RoleManager = () => import('@/views/roleManager.vue')
+const PermissionManager = () => import('@/views/permissionManager.vue')
+const CpsCount = () => import('@/views/cpsCount.vue')
+const AppCount = () => import('@/views/appCount.vue')
+const CpsCollect = () => import('@/views/cpsCollect.vue')
+const CpsTaobao = () => import('@/views/cpsTaobao.vue')
+const CpsJingdong = () => import('@/views/cpsJingdong.vue')
+const cpsPddVue = () => import('../../views/cpsPdd.vue')
+const cpsRobotVue = () => import('../../views/cpsRobot.vue')
+const cpsRobotOrderVue = () => import('../../views/cpsRobotOrder.vue')
+const cpsAccountsOrderVue = () => import('../../views/cpsAccountsOrder.vue')
+const cpsCompanyOrderVue = () => import('../../views/cpsCompanyOrder.vue')
+const cpsCapitalVue = () => import('../../views/cpsCapital.vue')
+const cpsStatisticsCount = () => import('../../views/cpsStatisticsCount.vue')
+const cpsHandData = () => import('../../views/cpsHandData.vue')
+const userList = () => import('../../views/userList.vue')
+const orderList = () => import('../../views/orderList.vue')
+const withdrawListVue = () => import('../../views/withdrawList.vue')
+const materialListVue = () => import('../../views/materialList.vue')
+const orderSalesListVue = () => import('../../views/orderSalesList.vue')
+const teamSortListVue = () => import('../../views/teamSortList.vue')
+const userRankListVue = () => import('../../views/userRankList.vue')
+const cpsDealMonthVue = () => import('../../views/cpsDealMonth.vue')
+const cpsDealYearVue = () => import('../../views/cpsDealYear.vue')
+const cpsperMonthVue = () => import('../../views/cpsPerMonth.vue')
+const cpsperYearVue = () => import('../../views/cpsPerYear.vue')
+const cpsDealAccountsVue = () => import('../../views/cpsDealAccounts.vue')
+const cpsestYearVue = () => import('../../views/cpsEstYear.vue')
+const cpsestMonthVue = () => import('../../views/cpsEstMonth.vue')
+const cpsRemMonthVue = () => import('../../views/cpsRemMonth.vue')
+const cpsRemYearVue = () => import('../../views/cpsRemYear.vue')
+const cpsGenMonthVue = () => import('../../views/cpsGenMonth.vue')
+const cpsGenYearVue = () => import('../../views/cpsGenYear.vue')
+const cpsAmountPersonalVue = () => import('../../views/cpsAmountPersonal.vue')
+const cpsWithdrawMonthVue = () => import('../../views/cpsWithdrawMonth.vue')
+const cpsWithdrawYearVue = () => import('../../views/cpsWithdrawYear.vue')
+const activityPrizepoollistVue = () => import('../../views/activityPrizepoollist.vue')
+const sxyArticleVue = () => import('../../views/sxyArticle.vue')
+const sxyTagVue = () => import('../../views/sxyTag.vue')
+const materialLabelVue = () => import('../../views/materialLabel.vue')
+const totalUserVue = () => import('../../views/dataWorkBench.vue')
+const directedListVue = () => import('../../views/directedList.vue')
+const goodsMaterialVue = () => import('../../views/goodsMaterial.vue')
+const posterMaterialVue = () => import('../../views/posterMaterial.vue')
+const popupListVue = () => import('../../views/popupList.vue')
+const YfdRobotListVue = () => import('../../views/YfdRobotList.vue')
 
 export default {
     props: ['currentView', 'title', 'subTitle1', 'isContentAlive'],

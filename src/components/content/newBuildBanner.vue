@@ -6,11 +6,17 @@
             <h5 style="margin-bottom: 20px;" v-show="isEdit">编辑banner</h5>
             <div class="search-group">
                 <span class="totalS">所在页面</span>
-                <input type="text" placeholder="请输入"  disabled :value="pageTb=='shopping'?'首页(购物赚)':pageTb=='my'?'我的页面':pageTb=='brandSpecial'?'品牌专场':'高佣精品'">
+                <!-- <input type="text" placeholder="请输入"  :disabled="!id" :value="pageTb=='shopping'?'首页(购物赚)':pageTb=='my'?'我的页面':pageTb=='brandSpecial'?'品牌专场':'高佣精品'"> -->
+                <select :disabled="!id" v-model="pageTb">
+                    <option :value="key" v-for="(item, key) in belongTypeObj" :key="key">{{item.name}}</option>
+                </select>
             </div>
             <div class="search-group">
                 <span class="totalS">页面位置</span>
-                <input type="text" placeholder="请输入"  disabled :value="pageSite=='Center'?'中部':'顶部'">
+                <!-- <input type="text" placeholder="请输入"  :disabled="!id" :value="pageSite=='Center'?'中部':'顶部'"> -->
+                <select :disabled="!id" v-model="pageSite">
+                    <option :value="item.type" :key="idx" v-for="(item, idx) in belongTypeObj[pageTb].pos">{{item.name}}</option>
+                </select>
             </div>
             <div class="search-group">
                 <span class="totalS bannerTips1">展示顺序</span>
@@ -24,11 +30,11 @@
                 <span>更新描述</span>
                 <input type="text" :disabled='isLook' placeholder="请简要描述该banner本次更新情况，仅作为内部说明。将不会展示到APP界面。非必填项" v-model="textareaValue">
             </div>
-            <div class="search-group">
+            <div class="search-group" v-if="pageTb == 'shopping' && pageSite == 'Up'">
                 <span class="color">开始颜色</span>
                 <input type="text" :disabled='isLook' placeholder="开始颜色" v-model="startColor">
             </div>
-            <div class="search-group">
+            <div class="search-group" v-if="pageTb == 'shopping' && pageSite == 'Up'">
                 <span class="color">结束颜色</span>
                 <input type="text" :disabled='isLook' placeholder="结束颜色" v-model="endColor">
             </div>
@@ -36,7 +42,7 @@
                 <span class="totalS">图片上传</span>
                 <div class="upload">
                     <div v-show="!isLook">
-                        <div class="imgSize">尺寸1065*420 圆角:30px</div>
+                        <div class="imgSize">尺寸{{imgSize}} 圆角:30px</div>
                         <input class="action-btn" type="button" value="上传+" @click="selectImg">
                     </div>
                     <img style="width:100px; height: 40px;cursor: pointer;margin-left:20px;" :src="srcUrl" alt="" @click="previewImg(srcUrl)">
@@ -109,6 +115,47 @@ export default {
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return{
+            belongTypeObj: {
+                shopping: {
+                    name: '首页(购物赚)',
+                    pos: [{
+                        type: 'Up',
+                        name: '顶部',
+                        imgSize: '1065*420'
+                    }]
+                },
+                // live: {
+                //     name: '生活赚',
+                //     pos: [{
+                //         type: 'Up',
+                //         name: '顶部'
+                //     }]
+                // },
+                my: {
+                    name: '我的页面',
+                    pos: [{
+                        type: 'Center',
+                        name: '中部',
+                        imgSize: '1065*210'
+                    }]
+                },
+                brandSpecial: {
+                    name: '品牌专场',
+                    pos: [{
+                        type: 'Up',
+                        name: '顶部',
+                        imgSize: '1065*420'
+                    }]
+                },
+                brandHigh: {
+                    name: '高佣精品',
+                    pos: [{
+                        type: 'Up',
+                        name: '顶部',
+                        imgSize: '1065*420'
+                    }]
+                }
+            },
             createTimeBegin: '',
             createTimeEnd: '',
             dateConfig: {
@@ -153,10 +200,28 @@ export default {
             endColor:'',//结束颜色
         }
     },
+    computed: {
+        imgSize(){
+            console.log(this.pageTb + '-----' + this.pageSite)
+            let imgSize
+            if(this.pageTb && this.pageSite){
+                const pos = this.belongTypeObj[this.pageTb].pos
+                for(let idx = 0; idx < pos.length; idx++){
+                    if(pos[idx].type == this.pageSite){
+                        imgSize = pos[idx].imgSize
+                        break
+                    }
+                }
+            }
+            return imgSize
+        }
+    },
     created(){
         console.log(this.lookBannerMessge,'*****',this.dataAddree)
         this.pageTb = this.dataAddree.pageTable
         this.pageSite = this.dataAddree.pageLocation
+        // console.log(this.pageTb + '====' + this.pageSite)
+        // console.log(this.pageSite === this.belongTypeObj[this.pageTb].pos[0].type)
         this.lookMessge()
     },
     methods:{
@@ -269,6 +334,12 @@ export default {
             }
         },
         newBuildRequest(){//新建修改方法
+            if(this.pageTb == 'shopping' && this.pageSite == 'Up'){
+                if(!this.startColor || !this.endColor){
+                    this.alert('首页(购物赚),开始和结束颜色必填')
+                    return
+                }
+            }
             const requestData = {
                 'banner_id':this.id,
                 sort:this.sequence,
@@ -366,6 +437,7 @@ export default {
 .totalS{color: #666666;font-size: .5375rem;line-height: 1rem;position: relative;}
 .totalS::after{position: absolute;content: '*';color: red;top: 2px;right: -8px;width: 5px;height: 5px;}
 .search-group>input{width: 15rem;margin-left: 20px;display: block;}
+.search-group>select{ width: 15rem; margin-left: 20px; appearance: menulist; height: 1rem; line-height: 1rem; border-radius: .125rem; border: 1px solid #D9D9D9; font-size: .4375rem; padding-left: .3125rem; padding-right: .3125rem; }
 .color{color: #666666;font-size: .5375rem;line-height: 1rem;position: relative;}
 .select-ipt{margin-left: 20px;width: 15rem;height: 1rem;line-height: 1rem;border-radius: .125rem !important;border: 1px solid #D9D9D9;box-sizing: border-box;font-size: .4375rem;vertical-align: top;padding-left: .3125rem;padding-right: .3125rem;appearance: menulist;}
 .other{margin: 10px 0;}
@@ -383,8 +455,8 @@ export default {
 .action-btn{height: 1.2rem;border: none;position: relative;}
 .action-btn:focus{outline:0;} /*去掉按钮点击时的边框*/ 
 .imgSize{font-size: 0.4rem;color: red;}
-.bannerTips1::before{position: absolute;content: '若有重复顺序，将默认按照时间倒序再次排序(后建先展示)';color: red;top: -20px;right: -370px;width: 350px;font-size: 0.475rem;}
-.color::before{position: absolute;content: '首页(购物赚),顶部，颜色必填';color: red;top: -20px;right: -370px;width: 350px;font-size: 0.475rem;}
+.bannerTips1::before{position: absolute;content: '若有重复顺序，将默认按照时间倒序再次排序(后建先展示)';color: red;top: -25px;right: 0; transform: translateX(calc(100% + 20px)); width: auto;font-size: 0.3125rem; white-space: nowrap;}
+.color::before{position: absolute;content: '首页(购物赚),顶部，颜色必填';color: red;top: -25px;right: 0; transform: translateX(calc(100% + 20px));width: auto;font-size: 0.3125rem; white-space: nowrap;}
 
 .footerBtn{display: flex;justify-content: space-around;padding: 20px 10rem;box-sizing: border-box;}
 .footerCancel{width: 4rem;height: 1.3rem;background-color: #b4b3b3;text-align: center;line-height: 1.3rem;color: #333333;font-size: 14px;border-radius: 6px;cursor: pointer;}
