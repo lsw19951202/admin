@@ -249,6 +249,22 @@
                 </td>
             </tr>
         </tbody>
+        <tbody v-if="tbType == 'pushList'" ref="tbody" class="pushList">
+            <tr v-for="(tbRow, index) in tbData" :key="index">
+                <td v-for="(tbCol, idx) in tbRow" :key="idx">
+                    <slot v-if="idx == tbRow.length - 1">
+                        <button v-if="tbCol.pushPub" style="padding: 1px .15rem;" class="action-btn" @click.prevent.stop="$parent.pubBtnClicked(index)">发布</button>
+                        <button v-if="tbCol.pushDown" style="padding: 1px .15rem;" class="action-btn" @click.prevent.stop="$parent.pubBtnClicked(index)">下架</button>
+                        <button v-if="tbCol.pushDel" class="action-btn del-btn" @click.prevent.stop="$parent.delBtnClicked(index)">删除</button>
+                        <button v-if="tbCol.pushEdit" class="action-btn modify-btn" @click.prevent.stop="$parent.editBtnClicked(index)">编辑</button>
+                        <button class="action-btn" style="padding: 1px .15rem;" @click.prevent.stop="$parent.testPush(index)">测试</button>
+                    </slot>
+                    <slot v-else>
+                        {{tbCol}}
+                    </slot>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 <script>

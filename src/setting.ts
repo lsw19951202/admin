@@ -328,7 +328,17 @@ export default {
         yfdTipsString: '/robot/inform',
         // 管理员群设置
         yfdAdminGroup: '/robot/setmonitor',
-        yfdGetAdminGroup: '/robot/monitor'
+        yfdGetAdminGroup: '/robot/monitor',
+        // 推送列表
+        pushList: '/ypj/push/list',
+        // 添加/修改推送
+        pushAdd: '/ypj/push/add',
+        // 发布/下架推送
+        pushOperate: '/ypj/push/operate',
+        // 测试推送手机号
+        pushPhone: '/ypj/push/phone',
+        // 测试推送
+        pushTest: '/ypj/push/test'
     },
     // 图片地址
     images: {
@@ -789,6 +799,11 @@ export default {
             name: 'robot-index',
             title: '发单机器人',
             subTitle1: '发单机器人'
+        },
+        '/push/list': {
+            name: 'push-list',
+            title: '素材管理',
+            subTitle1: '推送列表'
         }
     }
 }

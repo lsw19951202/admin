@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+const pushListVue = () => import('@/views/pushList.vue')
 const Setting = () => import('@/setting')
 const Header = () => import('../content/header.vue')
 const CardContainer = () => import('../content/cardContainer.vue')
@@ -117,7 +118,8 @@ export default {
         'goods-material': goodsMaterialVue,
         'poster-material': posterMaterialVue,
         'popup-list': popupListVue,
-        'robot-index': YfdRobotListVue
+        'robot-index': YfdRobotListVue,
+        'push-list': pushListVue
     }
 }
 </script>
