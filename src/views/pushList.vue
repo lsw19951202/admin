@@ -41,7 +41,7 @@
                     <label>编辑账号</label>
                     <div class="ipt">
                         <input type="text" v-model="testAccount2">
-                        <div class="tips">*请输入需要测试的手机号，以顿号隔开</div>
+                        <div class="tips">*请输入需要测试的手机号，以英文逗号隔开</div>
                     </div>
                     <div class="action-btn" @click.prevent.stop="setPushPhone">保存</div>
                 </div>
@@ -368,7 +368,7 @@ export default {
                     this.loadPushList(this.pageData.page)
                     this.alert('推送保存成功')
                 }else{
-                    this.alert('推送保存失败')
+                    this.alert(rst.data && rst.data.message || '推送保存失败')
                 }
             }).catch(e => {
                 this.alert(e.message || '推送保存失败')

@@ -154,6 +154,12 @@ import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 export default {
     methods: {
         liveLevelClicked(level){
+            const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
+            for(let idx = 1; idx <= 3; idx++){
+                if(levelArr.indexOf('' + idx) >= 0){
+                    levelArr.splice(levelArr.indexOf('' + idx), 1)
+                }
+            }
             if(level == 'all'){
                 if(this.pushObj['push_obj'] == '4,5,6'){
                     this.pushObj['push_obj'] = ''
@@ -161,7 +167,6 @@ export default {
                     this.pushObj['push_obj'] = '4,5,6'
                 }
             }else if(level == 4){
-                const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
                 if(levelArr.indexOf('4') >= 0){
                     levelArr.splice(0, 1)
                 }else{
@@ -169,7 +174,6 @@ export default {
                 }
                 this.pushObj['push_obj'] = levelArr.join(',')
             }else if(level == 5){
-                const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
                 if(levelArr.indexOf('5') >= 0){
                     levelArr.splice(levelArr.indexOf('5'), 1)
                 }else{
@@ -181,7 +185,6 @@ export default {
                 }
                 this.pushObj['push_obj'] = levelArr.join(',')
             }else if(level == 6){
-                const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
                 if(levelArr.indexOf('6') >= 0){
                     levelArr.splice(levelArr.indexOf('6'), 1)
                 }else{
@@ -191,6 +194,12 @@ export default {
             }
         },
         buyLevelClicked(level){
+            const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
+            for(let idx = 4; idx <= 6; idx++){
+                if(levelArr.indexOf('' + idx) >= 0){
+                    levelArr.splice(levelArr.indexOf('' + idx), 1)
+                }
+            }
             if(level == 'all'){
                 if(this.pushObj['push_obj'] == '1,2,3'){
                     this.pushObj['push_obj'] = ''
@@ -198,7 +207,6 @@ export default {
                     this.pushObj['push_obj'] = '1,2,3'
                 }
             }else if(level == 1){
-                const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
                 if(levelArr.indexOf('1') >= 0){
                     levelArr.splice(0, 1)
                 }else{
@@ -206,7 +214,6 @@ export default {
                 }
                 this.pushObj['push_obj'] = levelArr.join(',')
             }else if(level == 2){
-                const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
                 if(levelArr.indexOf('2') >= 0){
                     levelArr.splice(levelArr.indexOf('2'), 1)
                 }else{
@@ -218,7 +225,6 @@ export default {
                 }
                 this.pushObj['push_obj'] = levelArr.join(',')
             }else if(level == 3){
-                const levelArr = this.pushObj['push_obj'] && this.pushObj['push_obj'].split(',') || []
                 if(levelArr.indexOf('3') >= 0){
                     levelArr.splice(levelArr.indexOf('3'), 1)
                 }else{
