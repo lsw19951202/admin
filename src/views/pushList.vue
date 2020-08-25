@@ -411,6 +411,7 @@ export default {
         },
         cancelEdit(){
             this.showPushEditor = false
+            this.$parent.subTitle2 = ''
         },
         savePushObj(){
             console.log('保存')
