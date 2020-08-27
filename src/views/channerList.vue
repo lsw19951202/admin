@@ -128,8 +128,8 @@
             <div class="editor-groups">
                 <label></label>
                 <div>
-                    <button class="action-btn" style="background-color: #ccc; color: #282828;">取消</button>
-                    <button class="action-btn">保存</button>
+                    <button class="action-btn" style="background-color: #ccc; color: #282828;" @click.prevent.stop="hideEditBox">取消</button>
+                    <button class="action-btn" @click.prevent.stop="saveNewChannel">保存</button>
                 </div>
             </div>
         </div>
@@ -220,7 +220,7 @@ export default {
                 this.citys = []
             } else {
                 if(!this.cityData[nVal].city){
-                    this.citys = this.cityData[nVal]
+                    this.citys = [this.cityData[nVal]]
                 }else{
                     this.citys = this.cityData[nVal].city
                 }
@@ -258,6 +258,14 @@ export default {
         console.log(this.cityData)
     },
     methods: {
+        saveNewChannel(){
+            console.log(this.channel)
+            console.log(this.currProvince)
+            console.log(this.currCity)
+        },
+        hideEditBox(){
+            this.showEditPage = false
+        },
         loadChannelList(pageNo){
             this.loadTBData(setting.urls.channerList, {
                 page: pageNo || 1,

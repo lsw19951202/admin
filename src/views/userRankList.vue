@@ -24,7 +24,7 @@
                 <a class="action-btn" download="用户排行.xlsx" :href="downloadUrl">导出</a>
             </header>
             <locked-table v-show="!showOrderList" :tbData="tbData" :tbType="lockedTBType" :tbStyle="tbStyle" @rowClicked="rowClicked"></locked-table>
-            <div class="table-container hideScrollBar" v-show="showOrderList">
+            <div class="table-container" v-show="showOrderList">
                 <detail-table style="width: 100rem;" :tbType="tbType" :tbData="orderListTBData" :tableHeader="tableHeader"></detail-table>
                 <!-- <locked-table :tbData="orderListTBData" :tbStyle="orderListTBStyle"></locked-table> -->
             </div>
@@ -128,7 +128,7 @@ export default {
     },
     methods: {
         prevClicked(){
-            console.log('返回上一级')
+            this.showOrderList = false
         },
         loadOrderListTBData: function(pageNum){
             this.showLoading()
