@@ -5,6 +5,12 @@
     </div>
 </template>
 <script>
+const servicegoodslListVue = () => import('@/views/servicegoodslList.vue')
+const directedgoodsListVue = () => import('@/views/directedgoodsList.vue')
+const activegoodsListVue = () => import('@/views/activegoodsList.vue')
+const dailygoodsListVue = () => import('@/views/dailygoodsList.vue')
+const zsgoodsListVue = () => import('@/views/zsgoodsList.vue')
+const channerListVue = () => import('@/views/channerList.vue')
 const pushListVue = () => import('@/views/pushList.vue')
 const Setting = () => import('@/setting')
 const Header = () => import('../content/header.vue')
@@ -119,7 +125,13 @@ export default {
         'poster-material': posterMaterialVue,
         'popup-list': popupListVue,
         'robot-index': YfdRobotListVue,
-        'push-list': pushListVue
+        'push-list': pushListVue,
+        'channer-list': channerListVue,
+        'servicegoodsl-list': servicegoodslListVue,
+        'directedgoods-list': directedgoodsListVue,
+        'activegoods-list': activegoodsListVue,
+        'dailygoods-list': dailygoodsListVue,
+        'zsgoods-list': zsgoodsListVue
     }
 }
 </script>

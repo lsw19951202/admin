@@ -2,7 +2,7 @@
  * 所有配置信息
  */
 export default {
-    baseUrl: process.env.NODE_ENV !== 'production' ? 'http://dash.yunzhanxinxi.com' : 'http://test.dash.yunzhanxinxi.com',
+    baseUrl: process.env.NODE_ENV === 'production' ? 'http://dash.yunzhanxinxi.com' : 'http://test.dash.yunzhanxinxi.com',
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
@@ -338,7 +338,41 @@ export default {
         // 测试推送手机号
         pushPhone: '/ypj/push/phone',
         // 测试推送
-        pushTest: '/ypj/push/test'
+        pushTest: '/ypj/push/test',
+        // 渠道列表
+        channerList: '/ypj/channel/list',
+        // 渠道添加/修改
+        channerAdd: '/ypj/channel/add',
+        // 渠道发布/下架
+        channelOperate: '/ypj/channel/operate',
+        // 商品详情
+        zsGoodsInfo: '/ypj/zsgoods/info',
+        // 日常商品列表
+        dailyGoodsList: '/ypj/dailygoods/list',
+        // 日常商品添加/修改
+        dailyGoodsAdd: '/ypj/dailygoods/add',
+        // 日常商品发布/下架
+        dailyGoodsOperate: '/ypj/dailygoods/operate',
+        // 定向商品列表
+        directGoodsList: '/ypj/directedgoods/list',
+        // 定向商品添加/修改
+        directGoodsAdd: '/ypj/directedgoods/add',
+        // 定向商品发布/下架
+        directGoodsOperate: '/ypj/directedgoods/operate',
+        // 服务费商品列表
+        serviceGoodsList: '/ypj/servicegoods/list',
+        // 服务费商品添加/修改
+        serviceGoodsAdd: '/ypj/servicegoods/add',
+        // 服务费商品发布/下架
+        serviceGoodsOperate: '/ypj/servicegoods/operate',
+        // 激励活动商品列表
+        activeGoodsList: '/ypj/activegoods/list',
+        // 激励活动商品添加/修改
+        activeGoodsAdd: '/ypj/activegoods/add',
+        // 激励活动商品上下架
+        activeGoodsOperate: '/ypj/activegoods/operate',
+        // 利润汇总列表
+        zsGoodsList: '/ypj/zsgoods/list'
     },
     // 图片地址
     images: {
@@ -804,6 +838,36 @@ export default {
             name: 'push-list',
             title: '素材管理',
             subTitle1: '推送列表'
+        },
+        '/channel/list': {
+            name: 'channer-list',
+            title: '招商管理',
+            subTitle1: '渠道管理'
+        },
+        '/servicegoodsl/list': {
+            name: 'servicegoodsl-list',
+            title: '招商管理',
+            subTitle1: '服务费商品'
+        },
+        '/directedgoods/list': {
+            name: 'directedgoods-list',
+            title: '招商管理',
+            subTitle1: '定向精推商品'
+        },
+        '/activegoods/list': {
+            name: 'activegoods-list',
+            title: '招商管理',
+            subTitle1: '激励活动商品'
+        },
+        '/dailygoods/list': {
+            name: 'dailygoods-list',
+            title: '招商管理',
+            subTitle1: '日常商品'
+        },
+        '/zsgoods/list': {
+            name: 'zsgoods-list',
+            title: '招商管理',
+            subTitle1: '利润汇总'
         }
     }
 }

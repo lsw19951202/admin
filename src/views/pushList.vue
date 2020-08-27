@@ -222,10 +222,10 @@ export default {
                     text: '全部'
                 }, {
                     value: 0,
-                    text: '未生效'
+                    text: '待发布'
                 }, {
                     value: 1,
-                    text: '生效中'
+                    text: '发布中'
                 }, {
                     value: 2,
                     text: '已下架'
@@ -310,7 +310,7 @@ export default {
         this.showLoading()
         Promise.all([
             this.loadFields(setting.urls.appFields, { 'field_type': 'pushList' }, 'get'),
-            this.loadTBData(setting.urls.pushList, {}, 'get')
+            this.loadTBData(setting.urls.pushList, {page: 1}, 'get')
         ]).then(rst => {
             console.log(rst)
             this.fields = rst[0].fields
@@ -548,7 +548,8 @@ export default {
                 'push_obj': this.pushTo,
                 status: this.status,
                 'start_time': this.startTime,
-                'end_time': this.endTime
+                'end_time': this.endTime,
+                page: pageNo || 1
             }, 'get').then(rst => {
                 this.createTBData(rst)
             })

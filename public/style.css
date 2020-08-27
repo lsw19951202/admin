@@ -268,7 +268,8 @@ input[type="checkbox"] { cursor: pointer; }
 .search-header { color: #666666; font-size: .4375rem; line-height: 1rem; display: flex; flex-direction: row; }
 .search-group { box-sizing: border-box; display: inline-block; margin-left: .2rem; }
 .search-group:first-child { margin-left: 0; }
-.search-time-picker,.search-group>input { width: 5rem; height: 1rem; line-height: 1rem; border-radius: .125rem !important; border: 1px solid #D9D9D9; box-sizing: border-box; font-size: .4375rem; vertical-align: top; padding-left: .3125rem; padding-right: .3125rem; margin-left: .2rem; }
+.search-time-picker,.search-group>input,.search-group>select { width: 5rem; height: 1rem; line-height: 1rem; border-radius: .125rem !important; border: 1px solid #D9D9D9; box-sizing: border-box; font-size: .4375rem; vertical-align: top; padding-left: .3125rem; padding-right: .3125rem; margin-left: .2rem; }
+.search-group>select { appearance: menulist; }
 .split-line { display: inline-block; margin-left: .2rem; }
 .split-line>div { width: .3125rem; height: 0; border-top: 1px solid #CCCCCC; display: inline-block; vertical-align: middle; }
 .search-btn { margin-left: .2rem; cursor: pointer; min-width: 2.65624rem; padding-left: .5rem; padding-right: .5rem; height: 1rem; line-height: 1rem; background-color: #4880EA; border-radius: .125rem; color: white; vertical-align: top; }
