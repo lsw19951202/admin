@@ -277,7 +277,7 @@ export default {
         if(this.pushObj['push_obj'] == '1,2,3,4,5,6'){
             this.pushUserType = 1
             this.pushObj['push_obj'] = ''
-        }else if([3, 7, 15, 30].indexOf(this.pushObj.inactive_users) >= 0){
+        }else if(['3', '7', '15', '30'].indexOf(this.pushObj.inactive_users) >= 0){
             this.pushUserType = 3
         }else{
             this.pushUserType = 2

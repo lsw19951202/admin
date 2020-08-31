@@ -878,6 +878,11 @@ export default {
             name: 'zsgoods-list',
             title: '招商管理',
             subTitle1: '利润汇总'
+        },
+        '/zslog/list': {
+            name: 'zslog-list',
+            title: '招商管理',
+            subTitle1: '操作记录'
         }
     }
 }
