@@ -372,7 +372,17 @@ export default {
         // 激励活动商品上下架
         activeGoodsOperate: '/ypj/activegoods/operate',
         // 利润汇总列表
-        zsGoodsList: '/ypj/zsgoods/list'
+        zsGoodsList: '/ypj/zsgoods/list',
+        // 渠道导入
+        channelImport: '/ypj/channel/import',
+        // 定向导入
+        directedgoodsImport: '/ypj/directedgoods/import',
+        // 服务商品导入
+        servicegoodsImport: '/ypj/servicegoods/import',
+        // 日常商品导入
+        dailygoodsImport: '/ypj/dailygoods/import',
+        // 渠道商品列表
+        channelGoodsList: '/ypj/channel/goodslist'
     },
     // 图片地址
     images: {

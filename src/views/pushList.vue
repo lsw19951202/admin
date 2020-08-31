@@ -349,7 +349,7 @@ export default {
             }
             if(this.newPushObj.pushUserType == 2 || this.newPushObj.pushUserType == 1){
                 requestParams['push_obj'] = this.newPushObj.push_obj
-            }else if(this.newPushObj.push_type == 3){
+            }else if(this.newPushObj.pushUserType == 3){
                 requestParams['inactive_users'] = this.newPushObj.inactive_users
             }
             if(this.newPushObj.hasUrl == 1){

@@ -27,9 +27,12 @@
                 <flat-pickr class="search-time-picker" v-model="end_time" placeholder="结束时间" :config="dateConfig"></flat-pickr>
             </div>
             <button class="action-btn" @click.prevent.stop="loadChannelList(1)">搜索</button>
-            <button class="action-btn">批量导入</button>
+            <button class="action-btn" @click.prevent.stop="checkFile">批量导入</button>
+            <form enctype="multipart/form-data" style="display: none;" ref="fileForm">
+                <input type="file" ref="excelIpt" @change="uploadExcel" accept=".csv, .xlsx" name="file">
+            </form>
             <a class="action-btn" style="display: inline-block;" download="导出渠道列表.xlsx" :href="downloadUrl">批量导出</a>
-            <button class="action-btn" v-if="channer_add == 'T'">新建</button>
+            <button class="action-btn" v-if="channer_add == 'T'" @click.prevent.stop="createNewChannel">新建</button>
         </header>
         <div class="tj">
             <div class="tj-item">渠道数量：{{channerNum}}</div>
@@ -42,7 +45,7 @@
                 <thead>
                     <tr>
                         <td style="width: 2.5625rem; text-align: center;">
-                            <input type="checkbox" v-model="allChecked">
+                            <input type="checkbox" :checked="allChecked" @click="checkAllChannel">
                         </td>
                         <td v-for="(headerItem, index) in tableHeader[0]" :key="index">
                             {{ headerItem.name }}
@@ -55,14 +58,14 @@
                 <tbody>
                     <tr v-for="(row, index) in channelList" :key="index">
                         <td style="width: 2.5625rem; text-align: center;">
-                            <input type="checkbox" :checked="checkedArr.indexOf(row['id']) >= 0" @click.prevent.stop="checkChannel(index)">
+                            <input type="checkbox" :checked="checkedArr.indexOf(row['id']) >= 0" @click="checkChannel($event ,index)">
                         </td>
                         <td v-for="(field, idx) in fields" :key="idx">
                             {{ row[field] }}
                         </td>
                         <td>
-                            <button class="action-btn" style="padding:0 .3rem;">查看</button>
-                            <button class="action-btn" style="padding:0 .3rem;" v-if="row['channel_edit'] == 'T'">编辑</button>
+                            <button class="action-btn" style="padding:0 .3rem;" @click.prevent.stop="lookUpChannel(index)">查看</button>
+                            <button class="action-btn" style="padding:0 .3rem;" v-if="row['channel_edit'] == 'T'" @click.prevent.stop="editChannel(index)">编辑</button>
                         </td>
                     </tr>
                 </tbody>
@@ -71,7 +74,34 @@
         <page :pageData="pageData" @loadList="loadChannelList"></page>
     </div>
     <div class="detail-data-box" v-show="showChannelGoodsList">
-
+        <div class="header" style="text-align: center; font-size: .5rem;">{{channel.name + '合作商品详情'}}</div>
+        <div class="tj">
+            <div class="tj-item">商品数量：{{goodsListGoodsNum}}</div>
+            <div class="tj-item">商品销量：{{goodsListGoodsSaleNum}}</div>
+            <div class="tj-item">收入合计：{{goodsListIncomeAmount}}</div>
+        </div>
+        <div class="table-container">
+            <table cellspacing="0" style="width: 80rem;">
+                <thead>
+                    <tr>
+                        <td v-for="(headerItem, index) in goodsListTableHeader[0]" :key="index">
+                            {{ headerItem.name }}
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(row, index) in goodsList" :key="index">
+                        <td v-for="(field, idx) in fields" :key="idx">
+                            {{ row[field] }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="display: flex;">
+            <div style="width: 0; flex: 1;"><div class="action-btn" style="display: inline-block; font-size: .4375rem;" @click.prevent.stop="prevClicked">返回上一级</div></div>
+            <page :pageData="goodsListPageData" @loadList="loadGoodsList"></page>
+        </div>
     </div>
     <div class="detail-data-box" v-show="showEditPage">
         <div class="editor-header">{{channel.id === null ? '新建渠道' : '编辑渠道'}}</div>
@@ -79,25 +109,25 @@
             <div class="editor-groups necessary">
                 <label>渠道名称</label>
                 <div>
-                    <input type="text" v-model="channel.name">
+                    <input type="text" v-model="channel.name" :disabled="!editable">
                 </div>
             </div>
             <div class="editor-groups">
                 <label>手机号</label>
                 <div>
-                    <input type="text" v-model="channel.phone">
+                    <input type="text" v-model="channel.phone" :disabled="!editable">
                 </div>
             </div>
             <div class="editor-groups">
                 <label>微信号</label>
                 <div>
-                    <input type="text" v-model="channel.wechat">
+                    <input type="text" v-model="channel.wechat" :disabled="!editable">
                 </div>
             </div>
             <div class="editor-groups">
                 <label>QQ号</label>
                 <div>
-                    <input type="text" v-model="channel.qq_number">
+                    <input type="text" v-model="channel.qq_number" :disabled="!editable">
                 </div>
             </div>
             <div class="editor-groups">
@@ -110,16 +140,16 @@
                 <label>所在城市</label>
                 <div>
                     <label>省份</label>
-                    <select v-model="currProvince">
+                    <select v-model="currProvince" :disabled="!editable">
                         <option value="">请选择省份</option>
                         <option :value="item.province" v-for="(item, idx) in cityData" :key="idx">
                             {{item.name}}
                         </option>
                     </select>
                     <label>城市</label>
-                    <select v-model="currCity">
+                    <select v-model="currCity" :disabled="!editable">
                         <option value="">请选择城市</option>
-                        <option :value="item.city" v-for="(item, idx) in citys" :key="idx">
+                        <option :value="item.city || item.province" v-for="(item, idx) in citys" :key="idx">
                             {{item.name}}
                         </option>
                     </select>
@@ -129,7 +159,7 @@
                 <label></label>
                 <div>
                     <button class="action-btn" style="background-color: #ccc; color: #282828;" @click.prevent.stop="hideEditBox">取消</button>
-                    <button class="action-btn" @click.prevent.stop="saveNewChannel">保存</button>
+                    <button class="action-btn" v-if="editable" @click.prevent.stop="saveNewChannel">保存</button>
                 </div>
             </div>
         </div>
@@ -143,6 +173,8 @@ import 'flatpickr/dist/flatpickr.css'
 import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import setting from '@/setting'
 import { province, city } from 'province-city-china/data'
+import request from '@/axios'
+import qs from 'qs'
 
 export default {
     inject: ['reload', 'alert', 'showLoading', 'hideLoading', 'loadFields', 'loadTBData'],
@@ -170,12 +202,20 @@ export default {
             // 渠道列表
             // 列表元数据
             channelList: [],
+            goodsList: [],
             // fields
             fields: [],
+            goodsListFields: [],
             // 表头
             tableHeader: [],
+            goodsListTableHeader: [],
             // 页码
             pageData: {
+                total: 0,
+                page: 1,
+                'total_page': 0
+            },
+            goodsListPageData: {
                 total: 0,
                 page: 1,
                 'total_page': 0
@@ -187,34 +227,30 @@ export default {
             channerNum: 0,
             // 商品数量
             goodsNum: 0,
+            // 渠道商品列表 商品数量
+            goodsListGoodsNum: 0,
             // 商品销量
             goodsSaleNum: 0,
+            // 渠道商品列表 商品销量
+            goodsListGoodsSaleNum: 0,
             // 收入合计
             incomeAmount: 0,
+            // 渠道商品列表 收入合计
+            goodsListIncomeAmount: 0,
             // 显示渠道商品列表
             showChannelGoodsList: false,
             // 显示编辑页面
-            showEditPage: true,
-            goodsList: [],
+            showEditPage: false,
             // 编辑对象
             channel: {id:null,name:'',province:'',country:'',city:'',phone:'','qq_number':'',wechat:'',rank:''},
             cityData: {},
             currProvince: '',
             currCity: '',
-            citys: []
+            citys: [],
+            editable: false
         }
     },
     watch: {
-        allChecked(nVal) {
-            if (nVal) {
-                this.checkedArr = []
-                for(let idx = 0; idx < this.channelList.length; idx++){
-                    this.checkedArr.push(this.channelList[idx].id)
-                }
-            } else {
-                this.checkedArr = []
-            }
-        },
         currProvince(nVal) {
             if(!nVal) {
                 this.citys = []
@@ -229,18 +265,21 @@ export default {
     },
     computed: {
         downloadUrl: function(){
-            return setting.baseUrl + setting.urls.channerList + '?name=' + this.name + '&rank=' + this.rank + '&city=' + this.city + '&start_time=' + this.start_time + '&end_time=' + this.end_time + '&page=' + this.pageData.page + '&is_excel=1&skey=' + this.$cookies.get('skey')
+            return setting.baseUrl + setting.urls.channerList + '?name=' + this.name + '&rank=' + this.rank + '&city=' + this.city + '&ids=' + this.checkedArr.join(',') + '&start_time=' + this.start_time + '&end_time=' + this.end_time + '&page=' + this.pageData.page + '&is_excel=1&skey=' + this.$cookies.get('skey')
         }
     },
     created() {
         this.showLoading()
         Promise.all([
             this.loadFields(setting.urls.appFields, { 'field_type': 'channelList' }, 'get'),
-            this.loadTBData(setting.urls.channerList, {page: 1}, 'get')
+            this.loadTBData(setting.urls.channerList, {page: 1}, 'get'),
+            this.loadFields(setting.urls.appFields, { 'field_type': 'channelGoodsList' }, 'get')
         ]).then(rst => {
             this.tableHeader = rst[0].tableHeader
             this.fields = rst[0].fields
             this.makeData(rst[1])
+            this.goodsListFields = rst[2].fields
+            this.goodsListTableHeader = rst[2].tableHeader
         }).catch(e => {
             this.alert(e.message || '加载渠道列表失败')
         }).then(() => {
@@ -255,18 +294,136 @@ export default {
             }
             this.cityData[city[idx].province].city.push(city[idx])
         }
-        console.log(this.cityData)
     },
     methods: {
+        checkFile(){
+            this.$refs.excelIpt.click()
+        },
+        uploadExcel(){
+            this.showLoading()
+            const formData = new FormData(this.$refs.fileForm)
+            request({
+                url: setting.urls.channelImport,
+                method: 'post',
+                data:formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.alert('导入渠道成功')
+                    this.loadChannelList()
+                }else{
+                    this.alert(rst.data.message || '导入渠道失败')
+                }
+            }).catch(e =>{
+                this.alert(e.message || '导入渠道失败')
+            }).then(() => {
+                this.hideLoading()
+                this.$refs.excelIpt.value = ''
+            })
+        },
+        prevClicked(){
+            this.showChannelGoodsList = false
+        },
+        lookUpChannel(index){
+            this.channel = this.channelList[index]
+            this.showChannelGoodsList = true
+            this.loadGoodsList(1)
+        },
+        loadGoodsList(pageNo){
+            this.loadTBData(setting.urls.channelGoodsList, {
+                'channel_id': this.channel.id,
+                page: pageNo || 1
+            }, 'get').then(rst => {
+                this.makeGoodsData(rst)
+            })
+        },
+        editChannel(index){
+            this.editable = true
+            this.channel = this.channelList[index]
+            for(const key in this.cityData){
+                if(this.cityData[key].name == this.channel.province){
+                    this.currProvince = this.cityData[key].province
+                    if(this.cityData[key].city){
+                        this.citys = this.cityData[key].city
+                        flag:
+                        for(let idx = 0; idx < this.citys.length; idx++){
+                            if(this.citys[idx].name == this.channel.city){
+                                this.currCity = this.citys[idx].city
+                                continue flag
+                            }
+                        }
+                    }else{
+                        this.citys = [this.cityData[key]]
+                        this.currCity = this.citys[0].province
+                    }
+                    break
+                }
+            }
+            this.showEditPage = true
+        },
+        createNewChannel(){
+            this.editable = true
+            this.channel = {id:null,name:'',province:'',country:'',city:'',phone:'','qq_number':'',wechat:'',rank:''}
+            this.currCity = ''
+            this.currProvince = ''
+            this.citys = []
+            this.showEditPage = true
+        },
         saveNewChannel(){
-            console.log(this.channel)
-            console.log(this.currProvince)
-            console.log(this.currCity)
+            if(!this.channel.phone && !this.channel.wechat && !this.channel.qq_number){
+                this.alert('手机号，微信号，QQ号至少填写一个')
+                return
+            }
+            if(!this.currProvince || !this.currCity){
+                this.alert('省份和城市必选')
+                return
+            }
+            const requestParams = {
+                name: this.channel.name,
+                country: '中国'
+            }
+            if(this.channel.phone){
+                requestParams.phone = this.channel.phone
+            }
+            if(this.channel.wechat){
+                requestParams.wechat = this.channel.wechat
+            }
+            if(this.channel.qq_number){
+                requestParams['qq_number'] = this.channel.qq_number
+            }
+            requestParams.province = this.cityData[this.currProvince].name
+            if(this.cityData[this.currProvince].city){
+                for(let idx = 0; idx < this.cityData[this.currProvince].city.length; idx++){
+                    if(this.cityData[this.currProvince].city[idx].city == this.currCity){
+                        requestParams.city = this.cityData[this.currProvince].city[idx].name
+                    }
+                }
+            }else{
+                requestParams.city = this.cityData[this.currProvince].name
+            }
+            return request({
+                url: setting.urls.channerAdd,
+                method: 'post',
+                data: qs.stringify(requestParams)
+            }).then(rst => {
+                if(rst.status == 200 && rst.data.code == 200){
+                    this.loadChannelList(this.pageData.page)
+                    this.hideEditBox()
+                    this.alert('保存成功')
+                }else{
+                    this.alert(rst.data.message || '保存失败')
+                }
+            }).catch(e => {
+                this.alert(e.message || '保存失败')
+            })
         },
         hideEditBox(){
             this.showEditPage = false
         },
         loadChannelList(pageNo){
+            this.checkedArr = []
             this.loadTBData(setting.urls.channerList, {
                 page: pageNo || 1,
                 name: this.name,
@@ -278,12 +435,38 @@ export default {
                 this.makeData(rst)
             })
         },
-        checkChannel(index){
+        checkChannel(e, index){
             if(this.checkedArr.indexOf(this.channelList[index].id) >= 0){
                 this.checkedArr.splice(this.checkedArr.indexOf(this.channelList[index].id), 1)
             }else{
                 this.checkedArr.push(this.channelList[index].id)
             }
+            if(this.checkedArr.length == this.channelList.length){
+                this.allChecked = true
+            }else{
+                this.allChecked = false
+            }
+        },
+        checkAllChannel(){
+            if(this.allChecked){
+                this.checkedArr = []
+            }else{
+                for(let idx = 0; idx < this.channelList.length; idx++){
+                    this.checkedArr.push(this.channelList[idx].id)
+                }
+            }
+            this.allChecked = !this.allChecked
+        },
+        makeGoodsData(dt){
+            this.goodsListPageData.total = dt.total || 0
+            this.goodsListPageData['total_page'] = dt.pageCount || dt.total_page || 0
+            this.goodsListPageData.page = dt.page || 1
+
+            this.goodsListGoodsNum = dt.goods_num || 0
+            this.goodsListGoodsSaleNum = dt.sale_num || 0
+            this.goodsListIncomeAmount = dt.total_profit || 0
+
+            this.goodsList = dt.data
         },
         makeData(dt){
             this.pageData.total = dt.total || 0
