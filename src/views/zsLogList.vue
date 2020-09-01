@@ -18,7 +18,7 @@
                 <label>操作描述</label>
                 <input type="text" placeholder="请输入" v-model="desc">
             </div>
-            <button class="action-btn" @click.prevent.stop="loadLogList">搜索</button>
+            <button class="action-btn" @click.prevent.stop="loadLogList(1)">搜索</button>
         </header>
         <div class="table-container">
             <table cellspacing="0">
@@ -87,6 +87,7 @@ export default {
             this.pageData.page = rst[1].page || 1
             this.pageData.total = rst[1].total || 0
             this.pageData['total_page'] = rst[1].total_page || rst[1].pageCount || 0
+            console.log(this.pageData)
 
             this.logList = rst[1].data
         }).catch(e => {
