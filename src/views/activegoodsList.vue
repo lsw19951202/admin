@@ -111,12 +111,12 @@
                     <option v-for="(plat, index) in platArr" :key="index" value="plat.plat">{{plat.plat_name}}</option>
                 </select>
             </div>
-            <div class="search-group">
+            <!-- <div class="search-group">
                 <label>日期筛选</label>
                 <flat-pickr class="search-time-picker" v-model="createTimeBegin" placeholder="开始时间" :config="dateConfig"></flat-pickr>
                 <div class="split-line"><div></div></div>
                 <flat-pickr class="search-time-picker" v-model="createTimeEnd" placeholder="结束时间" :config="dateConfig"></flat-pickr>
-            </div>
+            </div> -->
             <button class="action-btn" @click.prevent.stop="loadOrderList">搜索</button>
         </header>
         <div class="table-container">
@@ -401,8 +401,8 @@ export default {
                 user: this.user,
                 orderStatus: this.orderStatus,
                 platform: this.orderPlatform,
-                createTimeBegin: this.createTimeBegin,
-                createTimeEnd: this.createTimeEnd,
+                // createTimeBegin: this.createTimeBegin,
+                // createTimeEnd: this.createTimeEnd,
                 'goods_id': this.goods.id
             }).then(rst => {
                 if(!this.platArr || this.platArr.length == 0){
