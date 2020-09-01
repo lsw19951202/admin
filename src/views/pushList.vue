@@ -449,6 +449,8 @@ export default {
                 if(pushText.endsWith('\n')){
                     pushText = pushText.substring(0, pushText.length - 1)
                 }
+                pushText = pushText.replace(/<\/?span(.*?)>/gi, '')
+                pushText = pushText.replace(/<\/?pre(.*?)>/gi, '')
             }
             if(!pushText){
                 this.alert('push文案必填')
