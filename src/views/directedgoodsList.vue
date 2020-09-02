@@ -112,14 +112,14 @@
                 <label>订单状态</label>
                 <select v-model="orderStatus">
                     <option value="">全部</option>
-                    <option v-for="(stat, index) in statusArr" :key="index" value="stat.status">{{stat.status_name}}</option>
+                    <option v-for="(stat, index) in statusArr" :key="index" :value="stat.status">{{stat.status_name}}</option>
                 </select>
             </div>
             <div class="search-group">
                 <label>订单平台</label>
                 <select v-model="orderPlatform">
                     <option value="">全部</option>
-                    <option v-for="(plat, index) in platArr" :key="index" value="plat.plat">{{plat.plat_name}}</option>
+                    <option v-for="(plat, index) in platArr" :key="index" :value="plat.plat">{{plat.plat_name}}</option>
                 </select>
             </div>
             <!-- <div class="search-group">
@@ -142,7 +142,12 @@
                 <tbody>
                     <tr v-for="(row, index) in orderList" :key="index">
                         <td v-for="(field, idx) in orderListFields" :key="idx">
-                            {{ row[field] }}
+                            <slot v-if="idx == 3">
+                                <img :src="row[field]">
+                            </slot>
+                            <slot v-else>
+                                {{ row[field] }}
+                            </slot>
                         </td>
                     </tr>
                 </tbody>
