@@ -34,7 +34,7 @@
             <div class="search-group">
                 <label>销量排序</label>
                 <select v-model="sale_num">
-                    <option value="">清选择</option>
+                    <option value="">请选择</option>
                     <option value="1">升序</option>
                     <option value="2">降序</option>
                 </select>
@@ -152,7 +152,7 @@
                     <tr v-for="(row, index) in orderList" :key="index">
                         <td v-for="(field, idx) in orderListFields" :key="idx">
                             <slot v-if="idx == 3">
-                                <img :src="row[field]">
+                                <img :src="row[field]" style="width: 1.375rem; height: 1.375rem; border-radius: 50%;">
                             </slot>
                             <slot v-else>
                                 {{ row[field] }}

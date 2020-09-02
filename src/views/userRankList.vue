@@ -284,7 +284,7 @@ export default {
         createSortData: function(dt){
             const sortOptions = [{
                 value: '',
-                text: '清选择'
+                text: '请选择'
             }]
             for(let idx = 0; idx < dt.length; idx++){
                 sortOptions.push({

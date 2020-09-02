@@ -150,7 +150,7 @@
                     <tr v-for="(row, index) in orderList" :key="index">
                         <td v-for="(field, idx) in orderListFields" :key="idx">
                             <slot v-if="idx == 3">
-                                <img :src="row[field]">
+                                <img :src="row[field]" style="width: 1.375rem; height: 1.375rem; border-radius: 50%;">
                             </slot>
                             <slot v-else>
                                 {{ row[field] }}
