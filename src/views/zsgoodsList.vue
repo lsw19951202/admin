@@ -43,7 +43,7 @@
             <div class="search-group">
                 <label>销量排序</label>
                 <select v-model="sale_num">
-                    <option value="">清选择</option>
+                    <option value="">请选择</option>
                     <option value="1">升序</option>
                     <option value="2">降序</option>
                 </select>
