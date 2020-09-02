@@ -137,7 +137,7 @@
                 <div class="split-line"><div></div></div>
                 <flat-pickr class="search-time-picker" v-model="createTimeEnd" placeholder="结束时间" :config="dateConfig"></flat-pickr>
             </div> -->
-            <button class="action-btn" @click.prevent.stop="loadOrderList">搜索</button>
+            <button class="action-btn" @click.prevent.stop="loadOrderList(1)">搜索</button>
         </header>
         <div class="table-container">
             <table cellspacing="0" style="width: 90rem;">

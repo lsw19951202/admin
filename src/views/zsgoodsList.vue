@@ -134,7 +134,7 @@
                 <div class="split-line"><div></div></div>
                 <flat-pickr class="search-time-picker" v-model="createTimeEnd" placeholder="结束时间" :config="dateConfig"></flat-pickr>
             </div> -->
-            <button class="action-btn" @click.prevent.stop="loadOrderList">搜索</button>
+            <button class="action-btn" @click.prevent.stop="loadOrderList(1)">搜索</button>
             <a class="action-btn" style="display: inline-block;" download="导出订单列表.xlsx" :href="orderDownloadUrl">导出</a>
         </header>
         <div class="table-container">
@@ -357,7 +357,8 @@ export default {
                 status: this.status,
                 'sale_num': this.sale_num,
                 'start_time': this.start_time,
-                'end_time': this.end_time
+                'end_time': this.end_time,
+                type: this.type
             }, 'get').then(rst => {
                 this.makeData(rst)
             })
