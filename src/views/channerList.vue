@@ -197,7 +197,7 @@ export default {
                 'time_24hr': true,
                 locale: Mandarin,
                 dateFormat: 'Y-m-d H:i:S',
-                enableTime: true,
+                enableTime: true
             },
             // 渠道列表
             // 列表元数据
@@ -392,6 +392,9 @@ export default {
             }
             if(this.channel.qq_number){
                 requestParams['qq_number'] = this.channel.qq_number
+            }
+            if(this.channel.id) {
+                requestParams['id'] = this.channel.id
             }
             requestParams.province = this.cityData[this.currProvince].name
             if(this.cityData[this.currProvince].city){

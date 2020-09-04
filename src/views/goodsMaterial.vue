@@ -48,7 +48,7 @@ export default {
 
 <style scoped>
 .detail-data-box,.detail-container{padding: 0;}
-.newFreeHeader{width: 100%;display: flex;margin-bottom: 30px;}
+.newFreeHeader{width: 100%;display: flex;margin-bottom: 10px;}
 .headerNav{width: 100px;height: 30px;font-size: 16px;font-family: '微软雅黑';color: #ffffff;background-color: #4880EA;line-height: 30px;text-align: center;margin-right: 30px;border-radius: 5px;cursor: pointer;}
 .headerNavNo{background-color: #999999;}
 </style>

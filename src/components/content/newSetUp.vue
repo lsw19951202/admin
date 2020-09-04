@@ -12,13 +12,36 @@
                     <option :value="item.value" v-for="(item,index) in selectParams" :key="index">{{item.name}}</option>
                 </select>
             </div>
+            <div class="search-group" v-if="type == 'highServant' || type == 'highServantEdit'">
+                <label>品类</label>
+                <select v-model="fqcat">
+                    <option value="0">全部</option>
+                    <option value="1">女装</option>
+                    <option value="2">男装</option>
+                    <option value="3">内衣</option>
+                    <option value="4">美妆</option>
+                    <option value="5">配饰</option>
+                    <option value="6">鞋品</option>
+                    <option value="7">箱包</option>
+                    <option value="8">儿童</option>
+                    <option value="9">母婴</option>
+                    <option value="10">居家</option>
+                    <option value="11">美食</option>
+                    <option value="12">数码</option>
+                    <option value="13">家电</option>
+                    <option value="14">其他</option>
+                    <option value="15">车品</option>
+                    <option value="16">文体</option>
+                    <option value="17">宠物</option>
+                </select>
+            </div>
             <div class="search-group">
                 <label>商品ID： </label>
                 <input type="text" placeholder="请输入" class="mask-put" v-model="goodId" :disabled="type=='highServantEdit'">
             </div>
             <div class="search-group" v-if="type=='highServant' || type=='highServantEdit'">
                 <label>佣金比： </label>
-                <input type="text" placeholder="请输入" class="mask-put" v-model="commissionRate">
+                <input type="text" placeholder="请输入" class="mask-put" v-model="commissionRate" :disabled="selectMessge.source != '手动添加'">
                 <span style="position:relative;top:6px;">%</span>
             </div>
             <div class="search-group">
@@ -42,6 +65,7 @@ export default {
     props:['type','selectMessge'],
     data(){
         return{
+            fqcat: '',
             selectParams:[
                 {value:'',name:'请选择'},
                 {value:'jd',name:'京东'},
@@ -85,7 +109,8 @@ export default {
                 const data = {
                     'goods_id':this.goodId,
                     'platform':this.platform,
-                    'commission_rate':this.commissionRate
+                    'commission_rate':this.commissionRate,
+                    fqcat: this.fqcat
                 }
                 this.$emit('preservationEvent',data)
             }

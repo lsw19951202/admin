@@ -2,7 +2,7 @@
  * 所有配置信息
  */
 export default {
-    baseUrl: process.env.NODE_ENV === 'production' ? 'http://dash.yunzhanxinxi.com' : 'http://test.dash.yunzhanxinxi.com',
+    baseUrl: process.env.NODE_ENV !== 'production' ? 'http://dash.yunzhanxinxi.com' : 'http://test.dash.yunzhanxinxi.com',
     urls: {
         // 用户管理-用户排行-表头数据+排序数据
         userRankTableHeader: '/app/field',
@@ -384,7 +384,12 @@ export default {
         // 渠道商品列表
         channelGoodsList: '/ypj/channel/goodslist',
         // 操作日志
-        zsLogList: '/ypj/zslog/list'
+        zsLogList: '/ypj/zslog/list',
+        // 好单库商品列表
+        hdkGoodsList: '/ypj/hdk/list',
+        // 好单库批量发布
+        hdkGoodsAdd: '/ypj/free/addhdk',
+        highHdkGoodsAdd: '/ypj/high/addhdk'
     },
     // 图片地址
     images: {
