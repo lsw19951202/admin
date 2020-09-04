@@ -99,6 +99,9 @@
                     <button class="action-btn" @click.prevent.stop="loadHDKGoods(1)">搜索</button>
                     <button class="action-btn" @click.prevent.stop="pubHDKGoods">批量发布</button>
                 </header>
+                <div style="width: 100%; height: 1rem; line-height: 1rem; color: red; font-size: .4375rem;">
+                    本次勾选商品: {{hdkGoodsIds.length}}
+                </div>
                 <div class="table-container">
                     <table cellspacing="0">
                         <thead>
@@ -470,11 +473,14 @@ export default {
         },
         loadHDKGoods(type) {
             this.showPriceSelectBox = false
-            this.hdkGoodsAllChecked = false
+            // this.hdkGoodsAllChecked = false
             let pageNo = 0
             if(type == 1){
                 pageNo = 1
                 this.pageArr = []
+                this.hdkGoodsAllChecked = false
+                this.hdkGoodsIds = []
+                this.hdkGoodsArr = []
             }else if(type == 'next'){
                 if(this.pageBegin === 0){
                     return
@@ -509,9 +515,18 @@ export default {
             }, 'get').then(rst => {
                 if(!rst.data || rst.data.length == 0){
                     this.hdkGoodsList = []
+                    this.hdkGoodsAllChecked = false
                     this.alert('当前页无数据')
                 }else{
                     this.hdkGoodsList = rst.data
+                    let allChecked = true;
+                    for(let idx = 0; idx < rst.data.length; idx ++) {
+                        if(this.hdkGoodsIds.indexOf(rst.data[idx].productId) == -1){
+                            allChecked = false
+                            break
+                        }
+                    }
+                    this.hdkGoodsAllChecked = allChecked
                 }
                 if(type == 'next' && this.pageBegin){
                     this.pageArr.push(this.pageBegin)
