@@ -228,6 +228,7 @@ export default {
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return{
+            pageArr: [],
             source: '',
             'valid_endtime': '',
             'ypj_sales': '',
@@ -245,6 +246,7 @@ export default {
             generalSort: 0,
             couponEndTime: '',
             pageBegin: 0,
+            nextPageNo: 0,
             hdkGoodsArr: [],
             hdkGoodsIds: [],
             hdkGoodsList: [],
@@ -446,22 +448,46 @@ export default {
             })
         },
         nextPage(type){
-            if(type == 'prev') {
-                if(this.pageBegin <= 1) {
-                    this.alert('已经是第一页')
-                    return
-                }else{
-                    this.pageBegin = this.pageBegin - 1
-                    this.loadHDKGoods(this.pageBegin)
-                }
-            }else{
-                this.pageBegin = this.pageBegin - 0 + 1
-                this.loadHDKGoods(this.pageBegin)
-            }
+            // if(type == 'prev') {
+            //     if(this.pageBegin <= 1) {
+            //         this.alert('已经是第一页')
+            //         return
+            //     }else{
+            //         this.pageBegin = this.pageBegin - 1
+            //         this.loadHDKGoods(this.pageBegin)
+            //     }
+            // }else{
+            //     this.pageBegin = this.pageBegin - 0 + 1
+            //     this.loadHDKGoods(this.pageBegin)
+            // }
+            this.loadHDKGoods(type)
         },
-        loadHDKGoods(pageNo) {
+        loadHDKGoods(type) {
             this.showPriceSelectBox = false
             this.hdkGoodsAllChecked = false
+            let pageNo = 0
+            if(type == 1){
+                pageNo = 1
+                this.pageArr = []
+            }else if(type == 'next'){
+                if(this.pageBegin === 0){
+                    return
+                }
+                if(!this.nextPageNo){
+                    this.alert('没有下一页了')
+                    return
+                }
+                pageNo = this.nextPageNo
+            }else if(type == 'prev'){
+                if(this.pageBegin === 0){
+                    return
+                }
+                if(this.pageBegin == 1){
+                    this.alert('已经是第一页了')
+                    return
+                }
+                pageNo = this.pageArr.pop()
+            }
             this.showLoading()
             this.loadTBData(setting.urls.hdkGoodsList, {
                 fqcat: this.fqcat,
@@ -480,6 +506,11 @@ export default {
                 }else{
                     this.hdkGoodsList = rst.data
                 }
+                if(type == 'next' && this.pageBegin){
+                    this.pageArr.push(this.pageBegin)
+                }
+                this.pageBegin = pageNo
+                this.nextPageNo = rst.nextPage
             }).catch(e => {
                 console.log(e)
             }).then(() => {
