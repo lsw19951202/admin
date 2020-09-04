@@ -1,8 +1,11 @@
 <template>
   <div class="detail-container">
-    <div style="copyAddre">
-        <span class="urlAddre">页面地址:{{url}}</span>
-        <button class="copyBtn" ref="copy" :data-clipboard-text="url" @click="copy" id="copy_text">复制</button>
+    <div style="width: 100%; display: flex;">
+        <div class="copyAddre" style="width: 0; flex: 1; overflow: hidden;">
+            <span class="urlAddre">页面地址:{{url}}</span>
+            <button class="copyBtn" ref="copy" :data-clipboard-text="url" @click="copy" id="copy_text">复制</button>
+        </div>
+        <div class="action-btn" style="display: inline-block; font-size: .4375rem;" @click.prevent.stop="refreshGoodsList">刷新</div>
     </div>
     <div class="detail-data-box">
         <div class="goodsContainer">
@@ -17,7 +20,7 @@
                     </div>
                 </div>
                 <div class="title">{{goodsSrc == 'HDK' ? '好单库' : ''}}商品</div>
-                <header class="search-header">
+                <header class="search-header" style="display: block;">
                     <div class="search-group">
                         <label>品类</label>
                         <select v-model="fqcat">
@@ -40,6 +43,10 @@
                             <option value="16">文体</option>
                             <option value="17">宠物</option>
                         </select>
+                    </div>
+                    <div class="search-group">
+                        <label>佣金比>=</label>
+                        <input type="text" style="width: 2rem;" v-model="tkratesMin">%
                     </div>
                     <div class="search-group">
                         <label>月销量>=</label>
@@ -92,7 +99,7 @@
                     <button class="action-btn" @click.prevent.stop="loadHDKGoods(1)">搜索</button>
                     <button class="action-btn" @click.prevent.stop="pubHDKGoods">批量发布</button>
                 </header>
-                <div class="table-container hideScrollBar">
+                <div class="table-container">
                     <table cellspacing="0">
                         <thead>
                             <tr>
@@ -172,10 +179,11 @@
                         <div class="undercar operationText" @click="batchShelf">批量下架</div>
                         <div class="undercar operationText" @click="batchRelease">批量发布</div>
                         <div class="cutOff operationText" @click="batchDelete">批量删除</div>
+                        <a class="action-btn" style="font-size: .5rem;" download="高佣商品列表.xlsx" :href="downloadUrl">导出</a>
                     </div>
                 </div>
                 <!-- 商品列表 -->
-                <div class="table-container hideScrollBar">
+                <div class="table-container">
                     <goods-table :tableType='tableType' :newFreeHeader='newFreeHeader' :newFreeTbody='newFreeTbody' :checkedId='checkedId' @offShelfEvent='offShelfFn' 
                     @releaseEvent='releaseFn' @deleteEvent='deleteFn' @shooseStatusEvent='shooseStatusFn' @editEvent='editFn'></goods-table>
                 </div>
@@ -224,6 +232,7 @@ export default {
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return{
+            tkratesMin: '',
             source: '',
             'valid_endtime': '',
             'ypj_sales': '',
@@ -330,7 +339,28 @@ export default {
                 this.hdkFields = rst.fields
             })
     },
+    computed: {
+        downloadUrl() {
+            return setting.baseUrl + setting.urls.higServantList + '?page=' + (this.pageData.page || 1) + '&goods_id=' + this.goodsid
+                + '&platform=' + this.platform + '&status=' + this.inshow + '&goods_title=' + this.goodstitle
+                + '&start_time=' + this.createTimeBegin + '&end_time=' + this.createTimeEnd
+                + '&source=' + this.source + '&valid_endtime=' + this.valid_endtime
+                + '&ypj_sales=' + this.ypj_sales + '&is_excel=1&skey=' + this.$cookies.get('skey')
+        }
+    },
     methods:{
+        refreshGoodsList(){
+            this.goodsid = ''
+            this.platform = ''
+            this.inshow = ''
+            this.goodstitle = ''
+            this.createTimeBegin = ''
+            this.createTimeEnd = ''
+            this.source = ''
+            this.$data['valid_endtime'] = ''
+            this.$data['ypj_sales'] = ''
+            this.getNewFreeTbody(1)
+        },
         checkHDKGoods(idx){
             const index = this.hdkGoodsIds.indexOf(this.hdkGoodsList[idx].productId)
             if(index >= 0){
@@ -448,7 +478,8 @@ export default {
                 saleSort: this.saleSort,
                 generalSort: this.generalSort,
                 shopType: this.shopType,
-                pageBegin: pageNo || 1
+                pageBegin: pageNo || 1,
+                tkratesMin: this.tkratesMin
             }, 'get').then(rst => {
                 if(!rst.data || rst.data.length == 0){
                     this.hdkGoodsList = []

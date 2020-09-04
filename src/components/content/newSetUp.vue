@@ -41,7 +41,7 @@
             </div>
             <div class="search-group" v-if="type=='highServant' || type=='highServantEdit'">
                 <label>佣金比： </label>
-                <input type="text" placeholder="请输入" class="mask-put" v-model="commissionRate" :disabled="selectMessge.source != '手动添加'">
+                <input type="text" placeholder="请输入" class="mask-put" v-model="commissionRate" :disabled="type == 'highServantEdit' && selectMessge.source != '手动添加'">
                 <span style="position:relative;top:6px;">%</span>
             </div>
             <div class="search-group">
