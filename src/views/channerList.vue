@@ -91,7 +91,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(row, index) in goodsList" :key="index">
-                        <td v-for="(field, idx) in fields" :key="idx">
+                        <td v-for="(field, idx) in goodsListFields" :key="idx">
                             {{ row[field] }}
                         </td>
                     </tr>
