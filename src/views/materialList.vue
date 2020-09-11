@@ -149,15 +149,15 @@ export default {
             while(materialDetail.indexOf('&nbsp;') >= 0){
                 materialDetail = materialDetail.replace('&nbsp;', ' ')
             }
-            while(materialDetail.indexOf('<div>') >= 0){
-                materialDetail = materialDetail.replace('<div>', '')
-            }
-            while(materialDetail.indexOf('</div>') >= 0){
-                materialDetail = materialDetail.replace('</div>', '&lt;br&gt;')
-            }
-            while(materialDetail.indexOf('<br>') >= 0){
-                materialDetail = materialDetail.replace('<br>', '&lt;br&gt;')
-            }
+            // while(materialDetail.indexOf('<div>') >= 0){
+                materialDetail = materialDetail.replace(/<\/?(div|br).*?>/g, '&lt;br&gt;')
+            // }
+            // while(materialDetail.indexOf('</div>') >= 0){
+            //     materialDetail = materialDetail.replace('</div>', '&lt;br&gt;')
+            // }
+            // while(materialDetail.indexOf('<br>') >= 0){
+            //     materialDetail = materialDetail.replace('<br>', '&lt;br&gt;')
+            // }
             while(materialDetail.indexOf('&lt;br&gt;&lt;br&gt;') >= 0){
                 materialDetail = materialDetail.replace('&lt;br&gt;&lt;br&gt;', '&lt;br&gt;')
             }
