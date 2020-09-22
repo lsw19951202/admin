@@ -441,7 +441,7 @@ export default {
                 //     pushText = pushText.replace('\n\n', '\n')
                 // }
                 pushText = pushText.replace(/&nbsp;/gi, ' ')
-                pushText = pushText.replace(/<\/?(div|p)(.*?)>/gi, '\n')
+                pushText = pushText.replace(/<\/?(br|div|p)(.*?)>/gi, '\n')
                 pushText = pushText.replace(/\n+/gi, '\n')
                 if(pushText.startsWith('\n')){
                     pushText = pushText.replace('\n', '')
