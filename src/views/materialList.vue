@@ -163,7 +163,7 @@ export default {
             // }
             materialDetail = materialDetail.replace(/&nbsp;/gi, ' ')
             materialDetail = materialDetail.replace(/<\/?(div|p)(.*?)>/gi, '\n')
-            materialDetail = materialDetail.replace(/\n\n/gi, '\n')
+            materialDetail = materialDetail.replace(/\n+/gi, '\n')
             if(materialDetail.startsWith('\n')){
                 materialDetail = materialDetail.replace('\n', '')
             }
