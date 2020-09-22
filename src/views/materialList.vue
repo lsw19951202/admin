@@ -146,9 +146,9 @@ export default {
             console.log(this.material)
             this.showLoading()
             let materialDetail = this.material['material_detail']
-            while(materialDetail.indexOf('&nbsp;') >= 0){
-                materialDetail = materialDetail.replace('&nbsp;', ' ')
-            }
+            // while(materialDetail.indexOf('&nbsp;') >= 0){
+            //     materialDetail = materialDetail.replace('&nbsp;', ' ')
+            // }
             // while(materialDetail.indexOf('<div>') >= 0){
                 materialDetail = materialDetail.replace(/<\/?(div|br).*?>/g, '&lt;br&gt;')
             // }
@@ -158,15 +158,20 @@ export default {
             // while(materialDetail.indexOf('<br>') >= 0){
             //     materialDetail = materialDetail.replace('<br>', '&lt;br&gt;')
             // }
-            while(materialDetail.indexOf('&lt;br&gt;&lt;br&gt;') >= 0){
-                materialDetail = materialDetail.replace('&lt;br&gt;&lt;br&gt;', '&lt;br&gt;')
+            // while(materialDetail.indexOf('&lt;br&gt;&lt;br&gt;') >= 0){
+            //     materialDetail = materialDetail.replace('&lt;br&gt;&lt;br&gt;', '&lt;br&gt;')
+            // }
+            materialDetail = materialDetail.replace(/&nbsp;/gi, ' ')
+            materialDetail = materialDetail.replace(/<\/?(div|p)(.*?)>/gi, '\n')
+            materialDetail = materialDetail.replace(/\n\n/gi, '\n')
+            if(materialDetail.startsWith('\n')){
+                materialDetail = materialDetail.replace('\n', '')
             }
-            if(materialDetail.startsWith('&lt;br&gt;')){
-                materialDetail = materialDetail.replace('&lt;br&gt;', '')
+            if(materialDetail.endsWith('\n')){
+                materialDetail = materialDetail.substring(0, materialDetail.length - 1)
             }
-            if(materialDetail.endsWith('&lt;br&gt;')){
-                materialDetail = materialDetail.substring(0, materialDetail.length - 10)
-            }
+            materialDetail = materialDetail.replace(/<\/?span(.*?)>/gi, '')
+            materialDetail = materialDetail.replace(/<\/?pre(.*?)>/gi, '')
             console.log(materialDetail)
             const requestParams = {
                 'material_type': this.material['material_type'],
