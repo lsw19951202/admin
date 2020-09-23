@@ -428,21 +428,21 @@ export default {
                 }
             }
             if(pushText){
-                while(pushText.indexOf('&nbsp;') >= 0){
-                    pushText = pushText.replace('&nbsp;', ' ')
-                }
-                while(pushText.indexOf('<div>') >= 0){
-                    pushText = pushText.replace('<div>', '')
-                }
-                while(pushText.indexOf('</div>') >= 0){
-                    pushText = pushText.replace('</div>', '\n')
-                }
-                while(pushText.indexOf('<br>') >= 0){
-                    pushText = pushText.replace('<br>', '\n')
-                }
-                while(pushText.indexOf('\n\n') >= 0){
-                    pushText = pushText.replace('\n\n', '\n')
-                }
+                // while(pushText.indexOf('<div>') >= 0){
+                //     pushText = pushText.replace('<div>', '')
+                // }
+                // while(pushText.indexOf('</div>') >= 0){
+                //     pushText = pushText.replace('</div>', '\n')
+                // }
+                // while(pushText.indexOf('<br>') >= 0){
+                //     pushText = pushText.replace('<br>', '\n')
+                // }
+                // while(pushText.indexOf('\n\n') >= 0){
+                //     pushText = pushText.replace('\n\n', '\n')
+                // }
+                pushText = pushText.replace(/&nbsp;/gi, ' ')
+                pushText = pushText.replace(/<\/?(br|div|p)(.*?)>/gi, '\n')
+                pushText = pushText.replace(/\n+/gi, '\n')
                 if(pushText.startsWith('\n')){
                     pushText = pushText.replace('\n', '')
                 }

@@ -167,10 +167,10 @@ export default {
         getTbody(pageNum){//banner管理列表
             this.showLoading()
             request({
-                page:pageNum || 1,
                 url:setting.urls.bannerList,
                 method:'get',
                 params:{
+                    page:pageNum || 1,
                     name:this.avdTitle,
                     'belong_prefecture':this.pageTable,
                     typeIos:this.pageLocation,

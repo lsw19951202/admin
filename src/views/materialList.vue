@@ -146,11 +146,11 @@ export default {
             console.log(this.material)
             this.showLoading()
             let materialDetail = this.material['material_detail']
-            while(materialDetail.indexOf('&nbsp;') >= 0){
-                materialDetail = materialDetail.replace('&nbsp;', ' ')
-            }
+            // while(materialDetail.indexOf('&nbsp;') >= 0){
+            //     materialDetail = materialDetail.replace('&nbsp;', ' ')
+            // }
             // while(materialDetail.indexOf('<div>') >= 0){
-                materialDetail = materialDetail.replace(/<\/?(div|br).*?>/g, '&lt;br&gt;')
+                // materialDetail = materialDetail.replace(/<\/?(div|br|p).*?>/gi, '&lt;br&gt;')
             // }
             // while(materialDetail.indexOf('</div>') >= 0){
             //     materialDetail = materialDetail.replace('</div>', '&lt;br&gt;')
@@ -158,15 +158,20 @@ export default {
             // while(materialDetail.indexOf('<br>') >= 0){
             //     materialDetail = materialDetail.replace('<br>', '&lt;br&gt;')
             // }
-            while(materialDetail.indexOf('&lt;br&gt;&lt;br&gt;') >= 0){
-                materialDetail = materialDetail.replace('&lt;br&gt;&lt;br&gt;', '&lt;br&gt;')
+            // while(materialDetail.indexOf('&lt;br&gt;&lt;br&gt;') >= 0){
+            //     materialDetail = materialDetail.replace('&lt;br&gt;&lt;br&gt;', '&lt;br&gt;')
+            // }
+            materialDetail = materialDetail.replace(/&nbsp;/gi, ' ')
+            materialDetail = materialDetail.replace(/<\/?(br|div|p)(.*?)>/gi, '\n')
+            materialDetail = materialDetail.replace(/\n+/gi, '\n')
+            if(materialDetail.startsWith('\n')){
+                materialDetail = materialDetail.replace('\n', '')
             }
-            if(materialDetail.startsWith('&lt;br&gt;')){
-                materialDetail = materialDetail.replace('&lt;br&gt;', '')
+            if(materialDetail.endsWith('\n')){
+                materialDetail = materialDetail.substring(0, materialDetail.length - 1)
             }
-            if(materialDetail.endsWith('&lt;br&gt;')){
-                materialDetail = materialDetail.substring(0, materialDetail.length - 10)
-            }
+            materialDetail = materialDetail.replace(/<\/?span(.*?)>/gi, '')
+            materialDetail = materialDetail.replace(/<\/?pre(.*?)>/gi, '')
             console.log(materialDetail)
             const requestParams = {
                 'material_type': this.material['material_type'],
@@ -251,12 +256,15 @@ export default {
                 for(let idxx = 0; idxx < this.fields.length; idxx++){
                     if(this.fields[idxx] == 'material_detail'){
                         let detail = item[this.fields[idxx]] || '--'
-                        while(detail.indexOf('&lt;') >= 0){
-                            detail = detail.replace('&lt;', '<')
-                        }
-                        while(detail.indexOf('&gt;') >= 0){
-                            detail = detail.replace('&gt;', '>')
-                        }
+                        // while(detail.indexOf('&lt;') >= 0){
+                            // detail = detail.replace('&lt;', '<')
+                        // }
+                        detail = detail.replace(/&lt;/gi, '<')
+                        // while(detail.indexOf('&gt;') >= 0){
+                            // detail = detail.replace('&gt;', '>')
+                        // }
+                        detail = detail.replace(/&gt;/gi, '>')
+                        detail = detail.replace(/\n/gi, '<br>')
                         item[this.fields[idxx]] = detail
                         tbData[idx].push(detail)
                     }else{
@@ -283,11 +291,15 @@ export default {
             // 如果直接赋值，在编辑界面删除图片时会删除原数据
             const mat = JSON.parse(JSON.stringify(this.materials[idx]))
             this.material = Object.assign({}, mat)
-            while(this.material && this.material.detail && this.material.detail.indexOf('&lt;') >= 0){
-                this.material.detail = this.material.detail.replace('&lt;', '<')
-            }
-            while(this.material && this.material.detail && this.material.detail.indexOf('&gt;') >= 0){
-                this.material.detail = this.material.detail.replace('&gt;', '>')
+            // while(this.material && this.material.detail && this.material.detail.indexOf('&lt;') >= 0){
+                // this.material.detail = this.material.detail.replace('&lt;', '<')
+            // }
+            // while(this.material && this.material.detail && this.material.detail.indexOf('&gt;') >= 0){
+                // this.material.detail = this.material.detail.replace('&gt;', '>')
+            // }
+            if (this.material && this.material.detail) {
+                this.material.detail = this.material.detail.replace(/&lt;/gi, '<')
+                this.material.detail = this.material.detail.replace(/&gt;/gi, '>')
             }
             this.showMaterialEditor = true
             this.$parent.subTitle2 = '编辑素材'

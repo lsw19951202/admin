@@ -277,7 +277,7 @@ export default {
             return setting.baseUrl + setting.urls.zsGoodsList + '?ids=' + this.checkedArr.join(',') + '&goods_id=' + this.goods_id + '&platform=' + this.platform + '&channel_id=' + this.channel_id + '&type=' + this.type + '&status=' + this.status + '&sale_num=' + this.sale_num + '&start_time=' + this.start_time + '&end_time=' + this.end_time + '&is_excel=1&skey=' + this.$cookies.get('skey')
         },
         orderDownloadUrl(){
-            return setting.baseUrl + setting.urls.appOrderList + '?orderNo=' + this.orderNo + '&user=' + this.user + '&orderStatus=' + this.orderStatus + '&platform=' + this.orderPlatform + '&createTimeBegin=' + this.createTimeBegin + '&createTimeEnd=' + this.createTimeEnd + '&goods_id=' + this.goods_id + '&is_excel=1&skey=' + this.$cookies.get('skey')
+            return setting.baseUrl + setting.urls.appOrderList + '?orderNo=' + this.orderNo + '&user=' + this.user + '&orderStatus=' + this.orderStatus + '&platform=' + this.orderPlatform + '&createTimeBegin=' + this.createTimeBegin + '&createTimeEnd=' + this.createTimeEnd + '&goods_id=' + this.goods.id + '&is_excel=1&skey=' + this.$cookies.get('skey')
         }
     },
     watch: {
