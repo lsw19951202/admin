@@ -160,13 +160,13 @@
              this.getOrderuser();//下单总数
              this.getGoodsShare();//商品分享数据
         },
-        watch: {
-            rank(e) {
-                console.log(e, "点击了++++++")
-                this.isShow = 'sleep'
-                this.getSleepTable(1)
-            },
-        },
+        // watch: {
+        //     rank(e) {
+        //         console.log(e, "点击了++++++")
+        //         this.isShow = 'sleep'
+        //         this.getSleepTable(1)
+        //     },
+        // },
         methods: {
             compare(val){
                 return function(a,b){
@@ -177,10 +177,15 @@
             },
             goBack() { //返回上一级
                 this.isShow = 'record'
+                this.$nextTick(() => {
+                        this.$refs.mychild.go("lifeUser");
+                      });
             },
             lookType(sleepType) { //区别团长、总监
                 // console.log(sleepType)
                 this.rank = sleepType;
+                this.isShow = 'sleep'
+                this.getSleepTable(1)
             },
             chooseOption(e) { //选择职级
                 console.log(e, "选择职级 2团长 3总监")

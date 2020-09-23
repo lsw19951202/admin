@@ -39,7 +39,7 @@ export default {
     },
     computed: {
         fromPage: function(){
-            console.log(this.pageData)
+            // console.log(this.pageData)
             let page = 1;
             if(this.pageData.total_page > 9){
                 if(this.pageData.page <= 5){
@@ -52,7 +52,7 @@ export default {
             }else{
                 page = 1
             }
-            console.log(page)
+            // console.log(page)
             return page
         },
         toPage: function(){
@@ -68,7 +68,7 @@ export default {
             }else{
                 page = (this.pageData.total_page - 0) || 1
             }
-            console.log(page)
+            // console.log(page)
             return page
         }
     }

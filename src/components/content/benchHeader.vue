@@ -5,29 +5,29 @@
                 <div class="addHeader"></div>
                 <div class="dataBox">
                     <span style="font-size: 0.4rem;display: block;color: black;">今日新增用户</span>
-                    <span style="font-size: 0.8rem;display: block;color: black;">{{item.value}}</span>
+                    <span style="font-size: 0.8rem;display: block;color: black;margin: 0.2rem;">{{item.value}}</span>
                     <span style="font-size: 0.4rem;display: block;color: #55db76;">{{item.percentage}}&nbsp;环比昨日</span>
                 </div>
             </div>
             <div v-if='item.name=="today_total_user_num"' class="today_total_user_num">
-                <div style="display: flex;flex-direction: column;align-items: center;">
+                <div style="display: flex;flex-direction: column;align-items: center;margin-right: 0.8rem;">
                     <div style="width: 2.4rem; height: 2.4rem;" id="lifeChart"></div>
                     <span style="font-size: 0.4rem;display: block;color: #fff;">活跃率</span>
                 </div>
                 <div class="dataBox">
                     <span style="font-size: 0.4rem;display: block;">今日活跃</span>
-                    <span style="font-size: 0.8rem;display: block;color: black;">{{item.value}}</span>
+                    <span style="font-size: 0.8rem;display: block;color: black;margin: 0.2rem;">{{item.value}}</span>
                     <span style="font-size: 0.4rem;display: block;">{{item.percentage}}&nbsp;环比昨日</span>
                 </div>
             </div>
             <div v-if='item.name=="today_order_total_user_num"' class="today_order_total_user_num">
-                <div style="display: flex;flex-direction: column;align-items: center;">
+                <div style="display: flex;flex-direction: column;align-items: center;margin-right: 0.8rem;">
                     <div style="width: 2.4rem; height: 2.4rem;" id="orderChart"></div>
                     <span style="font-size: 0.4rem;display: block;color: #fff;">下单率</span>
                 </div>
                 <div class="dataBox">
                     <span style="font-size: 0.4rem;display: block;">今日下单用户</span>
-                    <span style="font-size: 0.8rem;display: block;color: black;">{{item.value}}</span>
+                    <span style="font-size: 0.8rem;display: block;color: black;margin: 0.2rem;">{{item.value}}</span>
                     <span style="font-size: 0.4rem;display: block;">{{item.percentage}}&nbsp;环比昨日</span>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                 <div class="shareHeader"></div>
                 <div class="dataBox">
                     <span style="font-size: 0.4rem;display: block;">今日商品分享次数</span>
-                    <span style="font-size: 0.8rem;display: block;">{{item.value}}</span>
+                    <span style="font-size: 0.8rem;display: block;margin: 0.2rem;">{{item.value}}</span>
                     <span style="font-size: 0.4rem;display: block;">{{item.percentage}}&nbsp;环比昨日</span>
                 </div>
             </div>

@@ -21,7 +21,7 @@
             lookType(e){
                 this.$emit("sleepData",e)
             },
-            go(e,r){
+            go(e){
                 const anchorElement = document.getElementById(e);
                       if (anchorElement) {
                         anchorElement.scrollIntoView({ behavior: 'smooth' });
