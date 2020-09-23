@@ -79,7 +79,7 @@
                 </div>
                 <div class="scrollBox_one">
                     <div class="every_scroll">
-                            <LineChart v-bind:name='chartData.name' ></LineChart>
+                        <LineChart v-bind:name='chartData.name'></LineChart>
                     </div>
                 </div>
             </div>
@@ -156,48 +156,49 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div>
+                        <div style="display: flex;">
                             <pieChart v-bind:pieData='pieData' v-bind:name='name[3]'></pieChart>
-                        </div>
-                    </div>
-                    <div class="activeRight">
-                        <div class="activeRightTop">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>0~10天</th>
-                                        <th>10~20天</th>
-                                        <th>20天以上</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="activeData">
-                                    <tr>
-                                        <td>本月活跃</td>
-                                        <td>{{activeData.thisMonth.one_active_user==null?0:activeData.thisMonth.one_active_user}}</td>
-                                        <td>{{activeData.thisMonth.two_active_user==null?0:activeData.thisMonth.two_active_user}}</td>
-                                        <td>{{activeData.thisMonth.three_active_user==null?0:activeData.thisMonth.three_active_user}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>上月活跃</td>
-                                        <td>{{activeData.lastMonth.one_active_user==null?0:activeData.lastMonth.one_active_user}}</td>
-                                        <td>{{activeData.lastMonth.two_active_user==null?0:activeData.lastMonth.two_active_user}}</td>
-                                        <td>{{activeData.lastMonth.three_active_user==null?0:activeData.lastMonth.three_active_user}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="activeRightBottom">
-                            <div class="sleepText">沉睡会员 <span class="sleepTip">(48小时以上未商品分享的高级会员)</span></div>
-                            <div class="sleepSort">
-                                <span class="sleepUser">总监:{{sleepUserData.directorNum}}人</span>
-                                <span class="sleepLook" @click="lookSleepData(3)">查看</span>
+                            <div class="activeRight">
+                                <div class="activeRightTop">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>0~10天</th>
+                                                <th>10~20天</th>
+                                                <th>20天以上</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody v-if="activeData">
+                                            <tr>
+                                                <td>本月活跃</td>
+                                                <td>{{activeData.thisMonth.one_active_user==null?0:activeData.thisMonth.one_active_user}}</td>
+                                                <td>{{activeData.thisMonth.two_active_user==null?0:activeData.thisMonth.two_active_user}}</td>
+                                                <td>{{activeData.thisMonth.three_active_user==null?0:activeData.thisMonth.three_active_user}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>上月活跃</td>
+                                                <td>{{activeData.lastMonth.one_active_user==null?0:activeData.lastMonth.one_active_user}}</td>
+                                                <td>{{activeData.lastMonth.two_active_user==null?0:activeData.lastMonth.two_active_user}}</td>
+                                                <td>{{activeData.lastMonth.three_active_user==null?0:activeData.lastMonth.three_active_user}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="activeRightBottom">
+                                    <div class="sleepText">沉睡会员 <span class="sleepTip">(48小时以上未商品分享的高级会员)</span></div>
+                                    <div class="sleepSort">
+                                        <span class="sleepUser">总监:{{sleepUserData.directorNum}}人</span>
+                                        <span class="sleepLook" @click="lookSleepData(3)">查看</span>
+                                    </div>
+                                    <div class="sleepSort">
+                                        <span class="sleepUser">团长:{{sleepUserData.leaderNum}}人</span>
+                                        <span class="sleepLook" @click="lookSleepData(2)">查看</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="sleepSort">
-                                <span class="sleepUser">团长:{{sleepUserData.leaderNum}}人</span>
-                                <span class="sleepLook" @click="lookSleepData(2)">查看</span>
-                            </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="scrollBox_one">
@@ -343,7 +344,7 @@
                             <pieChart v-bind:pieData='pieData' v-bind:name='name[7]'></pieChart>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="scrollBox_one">
                     <div class="every_scroll">
@@ -465,7 +466,7 @@
     }
 
     .table {
-        width: 40rem;
+        width: 48.6rem;
         font-size: 0.5rem;
     }
 
@@ -496,31 +497,27 @@
     }
 
     .scrollBox {
-        height: 32rem;
-        overflow-x: scroll;
-        /* 内容会被裁剪，会以滚动条显示 */
-        overflow-y: hidden;
-        /* 超出内容不可见 */
-        white-space: nowrap;
+        /* height: 32rem; */
+        /* overflow-x: scroll;
+        overflow-y: hidden; */
+        /* white-space: nowrap; */
         /* 不换行 */
         display: flex;
         flex-direction: column;
     }
-   /* .scrollBox::-webkit-scrollbar {
+
+    /* .scrollBox::-webkit-scrollbar {
         display: none;
     } */
     .every_scroll {
-        width: 40rem;
+        width: 44rem;
         display: inline-table;
         margin-bottom: 1rem;
     }
 
-    .every_scroll:first-child {
-        margin-right: 2rem;
-    }
 
     .activeRight {
-        width: 10rem;
+        width: 8.8rem;
         padding: 0.2rem;
         box-sizing: border-box;
         background-color: #ffffff;
@@ -530,7 +527,7 @@
     .activeRightTop {
         border: 1px solid #eeeeee;
         border-radius: 3px;
-        padding: 0.2rem;
+        padding: 0.4rem 0.2rem;
         box-sizing: border-box;
         margin-bottom: 0.4rem;
     }
@@ -600,6 +597,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 0 20px;
+        margin-top: 1rem;
         box-sizing: border-box;
     }
 </style>

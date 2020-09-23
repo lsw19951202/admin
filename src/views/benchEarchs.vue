@@ -430,10 +430,8 @@
     }
     .content{
         margin-top: 0.8rem;
-/*        flex: 1;
-        height: 0;
-        overflow: hidden;
-        overflow-y: auto; */
+        overflow-x: scroll;
+        overflow-y: hidden;
     }
     button{
         width: 3rem;

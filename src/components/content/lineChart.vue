@@ -737,11 +737,13 @@
     }
 
     .newAddUser {
+        width: 48.6rem;
         border: 1px solid #eeeeee;
         border-radius: 10px;
         padding: 20px;
         background-color: #f2f2f2;
         display: flex;
+        box-sizing: border-box;
     }
 
     .userName {
