@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div v-if="bodyData.length>3">
         <div v-for="(item,index) in bodyData" :key='index'>
-            <SlideChart v-bind:chartData='item'></SlideChart>
+            <SlideChart v-bind:chartData='item' @sleepDataList='lookType' :id='item.name'></SlideChart>
         </div>
     </div>
 </template>
@@ -17,9 +17,16 @@
             return {
             }
         },
-
         methods: {
-
+            lookType(e){
+                this.$emit("sleepData",e)
+            },
+            go(e,r){
+                const anchorElement = document.getElementById(e);
+                      if (anchorElement) {
+                        anchorElement.scrollIntoView({ behavior: 'smooth' });
+                      }
+            }
         }
     }
 </script>

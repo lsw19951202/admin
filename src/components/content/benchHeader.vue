@@ -2,7 +2,7 @@
     <div class="AllHeader">
         <div v-for="(item, index) in headerData" :key="index" class="headerBox">
             <div v-if='item.name=="today_user_num"' class="today_user_num">
-                <div class="imgHeader"></div>
+                <div class="addHeader"></div>
                 <div class="dataBox">
                     <span style="font-size: 0.4rem;display: block;color: black;">今日新增用户</span>
                     <span style="font-size: 0.8rem;display: block;color: black;">{{item.value}}</span>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div v-if='item.name=="today_share_num"' class="today_share_num">
-                <div class="imgHeader"></div>
+                <div class="shareHeader"></div>
                 <div class="dataBox">
                     <span style="font-size: 0.4rem;display: block;">今日商品分享次数</span>
                     <span style="font-size: 0.8rem;display: block;">{{item.value}}</span>
@@ -66,6 +66,7 @@
             },
             drawLifeChart() {
                 const text=this.headerData[1].activeRate;
+                // console.log(this.headerData);
                 const value = this.getPieNum(text);
                 const options = {
                     title: {
@@ -154,7 +155,7 @@
         width: 100%;
         display: flex;
         align-items: center;
-        margin-bottom: 0.8rem;
+        margin: 2.5rem  0   0  0;
     }
 
     .headerBox {
@@ -172,14 +173,21 @@
         color: white;
     }
 
-    .imgHeader {
+    .addHeader {
         width: 2rem;
         height: 2rem;
         background: url(../../assets/menu_user_normal.png);
         margin-right: 0.5rem;
         background-size: 100% 100%;
     }
-
+    .shareHeader {
+        width: 2rem;
+        height: 2rem;
+        background: url(../../assets/menu_order_normal.png);
+        margin-right: 0.5rem;
+        background-size: 100% 100%;
+    }
+    
     .today_user_num {
         width: 100%;
         height: 100%;
