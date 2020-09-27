@@ -39,6 +39,16 @@
                     <option value="2">降序</option>
                 </select>
             </div>
+            <!-- 新增活动状态 -->
+            <div class="search-group">
+                <label>活动状态</label>
+                <select v-model="sale_status">
+                    <option value="" >请选择</option>
+                    <option value="0">未开始</option>
+                    <option value="1">进行中</option>
+                    <option value="2">已结束</option>
+                </select>
+            </div>
             <div class="search-group">
                 <label>更新时间</label>
                 <flat-pickr class="search-time-picker" v-model="start_time" placeholder="开始时间" :config="dateConfig"></flat-pickr>
@@ -111,12 +121,12 @@
                     <option v-for="(plat, index) in platArr" :key="index" :value="plat.plat">{{plat.plat_name}}</option>
                 </select>
             </div>
-            <!-- <div class="search-group">
-                <label>日期筛选</label>
+            <div class="search-group">
+                <label>创建时间</label>
                 <flat-pickr class="search-time-picker" v-model="createTimeBegin" placeholder="开始时间" :config="dateConfig"></flat-pickr>
                 <div class="split-line"><div></div></div>
                 <flat-pickr class="search-time-picker" v-model="createTimeEnd" placeholder="结束时间" :config="dateConfig"></flat-pickr>
-            </div> -->
+            </div>
             <button class="action-btn" @click.prevent.stop="loadOrderList(1)">搜索</button>
         </header>
         <div class="table-container">
@@ -330,6 +340,7 @@ export default {
             status: '',
             'start_time': '',
             'end_time': '',
+            'sale_status':'',//新增活动状态
             changedStatus: '',
             channelList: [],
             allChecked: false,
@@ -406,8 +417,8 @@ export default {
                 user: this.user,
                 orderStatus: this.orderStatus,
                 platform: this.orderPlatform,
-                // createTimeBegin: this.createTimeBegin,
-                // createTimeEnd: this.createTimeEnd,
+                createTimeBegin: this.createTimeBegin,
+                createTimeEnd: this.createTimeEnd,
                 'goods_id': this.goods.id
             }).then(rst => {
                 if(!this.platArr || this.platArr.length == 0){
@@ -644,9 +655,11 @@ export default {
                 type: this.type,
                 'sale_num': this.sale_num,
                 'start_time': this.start_time,
-                'end_time': this.end_time
+                'end_time': this.end_time,
+                status:this.sale_status
             }, 'get').then(rst => {
                 this.makeData(rst)
+                console.log(rst)
             })
         },
         loadTJData(){

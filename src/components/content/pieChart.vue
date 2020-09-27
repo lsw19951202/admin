@@ -325,14 +325,15 @@
                         this.secondName = '昨日活跃类型'
                         this.noticeList = ['会员', '团长', '总监']
                         this.rightTitle = ['今日活跃', '昨日活跃']
+                       // {
+                       //     name: '今日活跃用户下单率',
+                       //     value: [val.today.member_order_user_rate, val.today.leader_order_user_rate, val.today
+                       //         .director_order_user_rate
+                       //     ]
+                       // }, 
                         this.rightBoby = [{
                             name: '今日活跃用户',
                             value: [val.today.member_user_num, val.today.leader_user_num, val.today.director_user_num]
-                        }, {
-                            name: '今日活跃用户下单率',
-                            value: [val.today.member_order_user_rate, val.today.leader_order_user_rate, val.today
-                                .director_order_user_rate
-                            ]
                         }, {
                             name: '今日活跃用户下单数',
                             value: [val.today.member_order_user_num, val.today.leader_order_user_num, val.today
@@ -343,17 +344,18 @@
                             value: [val.rate.day_member_order_rate, val.rate.day_leader_order_rate, val.rate.day_director_order_rate]
                         }]
                         this.allBody = [val.today.total_user_num, val.rate.day_rate, val.yesterday.total_user_num, '昨日'];
+                        // {
+                        //     name: '昨日活跃用户下单率',
+                        //     value: [val.yesterday.member_order_user_rate, val.yesterday.leader_order_user_rate,
+                        //         val.yesterday.director_order_user_rate
+                        //     ]
+                        // }, 
                         this.rightBobyNext = [{
                             name: '昨日活跃用户',
                             value: [val.yesterday.member_user_num, val.yesterday.leader_user_num, val.yesterday
                                 .director_user_num
                             ]
-                        }, {
-                            name: '昨日活跃用户下单率',
-                            value: [val.yesterday.member_order_user_rate, val.yesterday.leader_order_user_rate,
-                                val.yesterday.director_order_user_rate
-                            ]
-                        }, {
+                        },{
                             name: '昨日活跃用户下单数',
                             value: [val.yesterday.member_order_user_num, val.yesterday.leader_order_user_num,
                                 val.yesterday.director_order_user_num
@@ -401,13 +403,14 @@
                         this.secondName = '昨日下单用户类型'
                         this.noticeList = ['会员', '团长', '总监']
                         this.rightTitle = ['今日下单', '昨日下单']
+                        // {
+                        //     name: '今日下单率',
+                        //     value: [val.today.member_order_rate, val.today.leader_order_rate, val.today.director_order_rate]
+                        // },
                         this.rightBoby = [{
                             name: '今日下单用户',
                             value: [val.today.member_user_num, val.today.leader_user_num, val.today.director_user_num]
-                        }, {
-                            name: '今日下单率',
-                            value: [val.today.member_order_rate, val.today.leader_order_rate, val.today.director_order_rate]
-                        }, {
+                        },  {
                             name: '今日下单数',
                             value: [val.today.member_order_num, val.today.leader_order_num, val.today.director_order_num]
                         }, {
@@ -417,15 +420,16 @@
                         this.allBody = [val.today.total_order_num, val.rate.day_order_rate, val.yesterday.total_order_num,
                             '昨日'
                         ];
+                        // {
+                        //     name: '昨日下单率',
+                        //     value: [val.yesterday.member_order_rate, val.yesterday.leader_order_rate, val.yesterday
+                        //         .director_order_rate
+                        //     ]
+                        // }, 
                         this.rightBobyNext = [{
                             name: '昨日下单用户',
                             value: [val.yesterday.member_user_num, val.yesterday.leader_user_num, val.yesterday
                                 .director_user_num
-                            ]
-                        }, {
-                            name: '昨日下单率',
-                            value: [val.yesterday.member_order_rate, val.yesterday.leader_order_rate, val.yesterday
-                                .director_order_rate
                             ]
                         }, {
                             name: '昨日下单数',
@@ -454,17 +458,18 @@
                         this.secondName = '上月下单用户类型'
                         this.noticeList = ['会员', '团长', '总监']
                         this.rightTitle = ['本月下单', '上月下单']
+                       // {
+                       //     name: '本月下单率',
+                       //     value: [val.thisMonth.member_order_rate, val.thisMonth.leader_order_rate, val.thisMonth
+                       //         .director_order_rate
+                       //     ]
+                       // },
                         this.rightBoby = [{
                             name: '本月下单用户',
                             value: [val.thisMonth.member_user_num, val.thisMonth.leader_user_num, val.thisMonth
                                 .director_user_num
                             ]
-                        }, {
-                            name: '本月下单率',
-                            value: [val.thisMonth.member_order_rate, val.thisMonth.leader_order_rate, val.thisMonth
-                                .director_order_rate
-                            ]
-                        }, {
+                        },  {
                             name: '本月下单数',
                             value: [val.thisMonth.member_order_num, val.thisMonth.leader_order_num, val.thisMonth
                                 .director_order_num
@@ -476,17 +481,18 @@
                         this.allBody = [val.thisMonth.total_order_num, val.rate.month_order_rate, val.lastMonth.total_order_num,
                             '上月'
                         ];
+                        // {
+                        //     name: '上月下单率',
+                        //     value: [val.lastMonth.member_order_rate, val.lastMonth.leader_order_rate, val.lastMonth
+                        //         .director_order_rate
+                        //     ]
+                        // },
                         this.rightBobyNext = [{
                             name: '上月下单用户',
                             value: [val.yesterday.member_user_num, val.lastMonth.leader_user_num, val.lastMonth
                                 .director_user_num
                             ]
-                        }, {
-                            name: '上月下单率',
-                            value: [val.lastMonth.member_order_rate, val.lastMonth.leader_order_rate, val.lastMonth
-                                .director_order_rate
-                            ]
-                        }, {
+                        },  {
                             name: '上月下单数',
                             value: [val.lastMonth.member_order_num, val.lastMonth.leader_order_num, val.lastMonth
                                 .director_order_num
@@ -666,15 +672,16 @@
                         // console.log(res,"活跃用户")
                         if (res.data.code == 200) {
                             const rest = res.data.data;
+                           // {
+                           //     name: '本月活跃用户下单率',
+                           //     value: [rest.thisMonth.member_order_user_rate, rest.thisMonth.leader_order_user_rate,
+                           //         rest.thisMonth.director_order_user_rate
+                           //     ]
+                           // }, 
                             this.rightBoby = [{
                                 name: '本月活跃用户',
                                 value: [rest.thisMonth.member_user_num, rest.thisMonth.leader_user_num,
                                     rest.thisMonth.director_user_num
-                                ]
-                            }, {
-                                name: '本月活跃用户下单率',
-                                value: [rest.thisMonth.member_order_user_rate, rest.thisMonth.leader_order_user_rate,
-                                    rest.thisMonth.director_order_user_rate
                                 ]
                             }, {
                                 name: '本月活跃用户下单数',
@@ -690,15 +697,16 @@
                             this.allBody = [rest.thisMonth.total_user_num, rest.rate.month_rate, rest.lastMonth
                                 .total_user_num, '上月'
                             ];
+                            // {
+                            //     name: '本月活跃用户下单率',
+                            //     value: [rest.lastMonth.member_order_user_rate, rest.lastMonth.leader_order_user_rate,
+                            //         rest.lastMonth.director_order_user_rate
+                            //     ]
+                            // },
                             this.rightBobyNext = [{
                                 name: '本月活跃用户',
                                 value: [rest.lastMonth.member_user_num, rest.lastMonth.leader_user_num,
                                     rest.lastMonth.director_user_num
-                                ]
-                            }, {
-                                name: '本月活跃用户下单率',
-                                value: [rest.lastMonth.member_order_user_rate, rest.lastMonth.leader_order_user_rate,
-                                    rest.lastMonth.director_order_user_rate
                                 ]
                             }, {
                                 name: '本月活跃用户下单数',

@@ -42,7 +42,8 @@
                 <input type="file" ref="excelIpt" @change="uploadExcel" accept=".csv, .xlsx" name="file">
             </form>
             <a class="action-btn" style="display: inline-block;" download="导出定向商品列表.xlsx" :href="downloadUrl">批量导出</a>
-            <button class="action-btn" @click.prevent.stop="changeStatus">商品状态批量修改</button>
+            <!-- 更改批量状态修改 -->
+            <!-- <button class="action-btn" @click.prevent.stop="changeStatus">商品状态批量修改</button>
             <div class="search-group" style="position: relative;" v-show="showChangeStatusBox">
                 <div class="status" style="position: absolute; top: -1rem; width: 3rem; background-color: #F2F2F2; text-align: center;">
                     <div class="line">
@@ -57,7 +58,7 @@
                         <div class="action-btn" style="display: inline-block; padding-left: .3rem; padding-right: .3rem;" @click.prevent.stop="confirmChangeStatus">确定</div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <button class="action-btn" v-if="goods_add == 'T'" @click.prevent.stop="createNewChannel">新建</button>
         </header>
         <div class="tj">
@@ -122,12 +123,12 @@
                     <option v-for="(plat, index) in platArr" :key="index" :value="plat.plat">{{plat.plat_name}}</option>
                 </select>
             </div>
-            <!-- <div class="search-group">
-                <label>日期筛选</label>
+            <div class="search-group">
+                <label>创建时间</label>
                 <flat-pickr class="search-time-picker" v-model="createTimeBegin" placeholder="开始时间" :config="dateConfig"></flat-pickr>
                 <div class="split-line"><div></div></div>
                 <flat-pickr class="search-time-picker" v-model="createTimeEnd" placeholder="结束时间" :config="dateConfig"></flat-pickr>
-            </div> -->
+            </div>
             <button class="action-btn" @click.prevent.stop="loadOrderList(1)">搜索</button>
         </header>
         <div class="table-container">
@@ -210,6 +211,27 @@
                     </div>
                 </div>
             </div>
+            <!-- 新增推广类型 -->
+             <div class="editor-groups">
+                <h6>推广信息</h6>
+                <div class="items">
+                    <div class="item">
+                        <label>推广类型</label>
+                        <select v-model="goods.is_direct">
+                            <option value="">请选择</option>
+                            <option value="1">定向商品</option>
+                            <option value="2">非定向商品</option>
+                        </select>
+                    </div>
+                    <!-- 新增新建推广时间 -->
+                    <div class="search-group">
+                        <label>推广时间</label>
+                        <flat-pickr class="search-time" v-model="goods.start_time" placeholder="开始时间" :config="dateConfig"></flat-pickr>
+                        <div class="split-line"><div></div></div>
+                        <flat-pickr class="search-time" v-model="goods.end_time" placeholder="结束时间" :config="dateConfig"></flat-pickr>
+                    </div>
+                </div>
+            </div>
             <div class="editor-groups">
                 <h6>商品价格</h6>
                 <div class="items">
@@ -223,11 +245,11 @@
                     </div>
                     <div class="item">
                         <label>商家佣金比例</label>
-                        <input type="text" v-model="shop_commission_rate" disabled>
+                        <input type="text" v-model="shop_commission_rate" :disabled="goods.is_direct==''|| goods.is_direct==2 ? true : false">
                     </div>
                     <div class="item">
                         <label>推广佣金比例</label>
-                        <input type="text" v-model="goods.spread_commission_rate">
+                        <input type="text" v-model="goods.spread_commission_rate" :disabled="goods.is_direct==2">
                     </div>
                 </div>
             </div>
@@ -280,7 +302,7 @@ export default {
             'newgoods_id': '',
             'newgoods_name': '',
             'newgoods_platform': '',
-            goods: {id: '', 'goods_url': '', type: 2, 'channel_id': '', 'spread_commission_rate': 0},
+            goods: {id: '', 'goods_url': '', type: 2, 'channel_id': '', 'spread_commission_rate': 0,'start_time': '','end_time': '','is_direct':''},
             showConfirmParams: false,
             'goods_import': 'F',
             'goods_add': 'F',
@@ -329,7 +351,8 @@ export default {
                 text: '请确定是否保存修改?',
                 status: ''
             },
-            timer: null
+            timer: null,
+            // 测试数据
         }
     },
     created(){
@@ -337,7 +360,7 @@ export default {
         Promise.all([
             this.loadFields(setting.urls.appFields, { 'field_type': 'directedGoodsList' }, 'get'),
             this.loadTBData(setting.urls.directGoodsList, { page: 1 }, 'get'),
-            this.loadTBData(setting.urls.channerList, { pageSize: 1 }, 'get')
+            this.loadTBData(setting.urls.channerList, { page: 1 }, 'get')
         ]).then(rst => {
             this.tableHeader = rst[0].tableHeader
             this.fields = rst[0].fields
@@ -354,6 +377,11 @@ export default {
             return setting.baseUrl + setting.urls.directGoodsList + '?ids=' + this.checkedArr.join(',') + '&goods_id=' + this.goods_id + '&platform=' + this.platform + '&channel_id=' + this.channel_id + '&sale_num=' + this.sale_num + '&start_time=' + this.start_time + '&end_time=' + this.end_time + '&is_excel=1&skey=' + this.$cookies.get('skey')
         }
     },
+    updated(){
+        if(this.goods.is_direct==2){
+            this.$data['shop_commission_rate']=this.goods.spread_commission_rate
+        }
+    },
     methods: {
         prevClicked(){
             this.showOrderList = false
@@ -365,8 +393,8 @@ export default {
                 user: this.user,
                 orderStatus: this.orderStatus,
                 platform: this.orderPlatform,
-                // createTimeBegin: this.createTimeBegin,
-                // createTimeEnd: this.createTimeEnd,
+                createTimeBegin: this.createTimeBegin,
+                createTimeEnd: this.createTimeEnd,
                 'goods_id': this.goods.id
             }).then(rst => {
                 if(!this.platArr || this.platArr.length == 0){
@@ -507,18 +535,19 @@ export default {
                 this.operateGoods()
             }
         },
-        confirmChangeStatus(){
-            this.changeStatus()
-            if(!this.changedStatus){
-                return
-            }
-            this.confirmParams.status = this.changedStatus
-            if(this.checkedArr.length == 0){
-                this.alert('您还未选择要修改的商品')
-                return
-            }
-            this.showConfirmParams = true
-        },
+        //更改批量状态修改
+        // confirmChangeStatus(){
+        //     this.changeStatus()
+        //     if(!this.changedStatus){
+        //         return
+        //     }
+        //     this.confirmParams.status = this.changedStatus
+        //     if(this.checkedArr.length == 0){
+        //         this.alert('您还未选择要修改的商品')
+        //         return
+        //     }
+        //     this.showConfirmParams = true
+        // },
         checkFile(){
             this.$refs.excelIpt.click()
         },
@@ -548,9 +577,10 @@ export default {
                 this.$refs.excelIpt.value = ''
             })
         },
-        changeStatus(){
-            this.showChangeStatusBox = !this.showChangeStatusBox
-        },
+        //更改批量状态修改
+        // changeStatus(){
+        //     this.showChangeStatusBox = !this.showChangeStatusBox
+        // },
         makeData(dt){
             this.pageData.total = dt.total || 0
             this.pageData['total_page'] = dt.pageCount || dt.total_page || 0
@@ -575,9 +605,10 @@ export default {
                 'channel_id': this.channel_id,
                 'sale_num': this.sale_num,
                 'start_time': this.start_time,
-                'end_time': this.end_time
+                'end_time': this.end_time,
             }, 'get').then(rst => {
                 this.makeData(rst)
+                console.log(rst)
             })
         },
         loadTJData(){
@@ -784,5 +815,8 @@ export default {
 td {
     max-width: 7rem;
     word-break: break-all;
+}
+.search-time{
+    width: 7rem !important;
 }
 </style>

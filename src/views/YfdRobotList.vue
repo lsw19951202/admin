@@ -16,6 +16,7 @@
                 </div>
                 <selector class="search-group" :value="login_status" :selectParams="selectParams" @selectOptsClicked="selectOptsClicked"></selector>
                 <button class="action-btn" @click.prevent.stop="loadTBData(1)">搜索</button>
+                <button class="action-btn" @click.prevent.stop="resetSearchParams">重置</button>
                 <button class="action-btn" v-if="showGlobalSetBtn" @click.prevent.stop="openGlobalSetting">H5设置</button>
                 <button class="action-btn" @click.prevent.stop="changeOpenDeviceBoxStatu">开通账号</button>
             </header>
@@ -213,6 +214,12 @@ export default {
         }
     },
     methods: {
+        resetSearchParams(){
+            this.$data['user_id'] = ''
+            this.telephone = ''
+            this.$data['nick_name'] = ''
+            this.$data['login_status'] = ''
+        },
         refreshAdminGroupSettings(){
             this.loadAdminGroupSetting()
                 .then(() => {

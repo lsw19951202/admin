@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+const robotListVue = () => import('@/views/robotList.vue')
 const zsLogListVue = () => import('@/views/zsLogList.vue')
 const servicegoodslListVue = () => import('@/views/servicegoodslList.vue')
 const directedgoodsListVue = () => import('@/views/directedgoodsList.vue')
@@ -134,7 +135,8 @@ export default {
         'activegoods-list': activegoodsListVue,
         'dailygoods-list': dailygoodsListVue,
         'zsgoods-list': zsgoodsListVue,
-        'zslog-list': zsLogListVue
+        'zslog-list': zsLogListVue,
+        'robot-list': robotListVue
     }
 }
 </script>

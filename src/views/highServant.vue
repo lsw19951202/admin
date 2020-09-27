@@ -1,15 +1,12 @@
 <template>
   <div class="detail-container">
-    <div style="width: 100%; display: flex;">
-        <div class="copyAddre" style="width: 0; flex: 1; overflow: hidden;">
-            <span class="urlAddre">页面地址:{{url}}</span>
-            <button class="copyBtn" ref="copy" :data-clipboard-text="url" @click="copy" id="copy_text">复制</button>
-        </div>
-        <div class="action-btn" style="display: inline-block; font-size: .4375rem;" @click.prevent.stop="refreshGoodsList">刷新</div>
-    </div>
     <div class="detail-data-box">
         <div class="goodsContainer">
-            <div class="hdkGoods">
+            <div class="tabs">
+                <div :class="'tab' + (showHdkGoods ? ' curr' : '')" @click.prevent.stop="tabClicked(1)">第三方商品库</div>
+                <div :class="'tab' + (showHdkGoods ? '' : ' curr')" @click.prevent.stop="tabClicked(2)">高佣商品管理</div>
+            </div>
+            <div class="hdkGoods" v-show="showHdkGoods">
                 <div class="goodsSrc">
                     <label class="left">商品来源</label>
                     <div class="platforms">
@@ -118,7 +115,12 @@
                                     <input type="checkbox" :checked="hdkGoodsIds.indexOf(goods.productId) >= 0" @click="checkHDKGoods(index)">
                                 </td>
                                 <td v-for="(field, idx) in hdkFields" :key="idx">
-                                    {{goods[field]}}
+                                    <slot v-if="field == 'itemUrl'">
+                                        <a :href="goods[field]" target="_blank">详情</a>
+                                    </slot>
+                                    <slot v-else>
+                                        {{goods[field]}}
+                                    </slot>
                                 </td>
                             </tr>
                         </tbody>
@@ -129,7 +131,14 @@
                     <div class="nextPageBtn" @click.prevent.stop="nextPage('next')" style="cursor: pointer; display: inline-block; width: 1rem; height: 1rem; text-align: center; line-height: 1rem; border: 1px solid #ccc; box-sizing: border-box; font-size: .4375rem; border-radius: .125rem; margin-left: 10px; vertical-align: top;">&gt;</div>
                 </div>
             </div>
-            <div class="ypjGoods">
+            <div class="ypjGoods" v-show="!showHdkGoods">
+                <div style="width: 100%; display: flex;">
+                    <div class="copyAddre" style="width: 0; flex: 1; overflow: hidden;">
+                        <span class="urlAddre">页面地址:{{url}}</span>
+                        <button class="copyBtn" ref="copy" :data-clipboard-text="url" @click="copy" id="copy_text">复制</button>
+                    </div>
+                    <div class="action-btn" style="display: inline-block; font-size: .4375rem;" @click.prevent.stop="refreshGoodsList">刷新</div>
+                </div>
                 <div class="title">洋皮卷高佣商品</div>
                 <header class="search-header">
                     <div class="search-group">
@@ -235,6 +244,7 @@ export default {
         nStr += ((now.getMonth() < 9) ? '0' : '') + (now.getMonth() + 1) + '-'
         nStr += ((now.getDate() < 10) ? '0' : '') + now.getDate()
         return{
+            showHdkGoods: true,
             pageArr: [],
             tkratesMin: '',
             source: '',
@@ -354,6 +364,18 @@ export default {
         }
     },
     methods:{
+        tabClicked(idx) {
+            if (idx == 1) {
+                if (this.showHdkGoods) {
+                    return
+                }
+                this.showHdkGoods = true
+            } else {
+                if (this.showHdkGoods) {
+                    this.showHdkGoods = false
+                }
+            }
+        },
         refreshGoodsList(){
             this.goodsid = ''
             this.platform = ''
@@ -852,15 +874,34 @@ export default {
     line-height: 30px;
 }
 .goodsContainer {
-    width: 200%;
+    width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+}
+.goodsContainer .tabs {
+    width: 100%;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    border-bottom: 1px solid #ccc;
+}
+.goodsContainer .tabs .tab {
+    box-sizing: border-box;
+    font-size: .5rem;
+    display: inline-block;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    vertical-align: top;
+    cursor: pointer;
+}
+.goodsContainer .tabs .tab.curr {
+    color: cadetblue;
+    border-bottom: 2px solid cadetblue;
 }
 .hdkGoods, .ypjGoods {
-    width: 0;
+    width: 100%;
+    height: 0;
     flex: 1;
-    height: 100%;
     overflow: hidden;
     overflow-y: auto;
     display: flex;

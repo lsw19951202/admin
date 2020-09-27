@@ -253,14 +253,14 @@ export default {
                 })
             }
             this.selectParams.options = Object.assign([], options)
-            const fields = ['goods_id', 'goods_title', 'goods_price', 'sale_num', 'platform', 'plat_commission_amount', 'order_amount']
+            const fields = ['goods_id', 'goods_title', 'goods_price','order_num', 'sale_num', 'platform', 'plat_commission_amount', 'order_amount']
             const tbData = []
             for(let idx = 0; idx < dt.data.length; idx++){
                 tbData.push([])
                 const item = dt.data[idx]
                 for(let idxx = 0; idxx < fields.length; idxx++){
                     let tdText = item[fields[idxx]] || (item[fields[idxx]] == 0 ? item[fields[idxx]] : '--')
-                    if(idxx == 4){
+                    if(idxx == 5){
                         tdText = plats[tdText] || '--'
                     }
                     tbData[idx].push(tdText)

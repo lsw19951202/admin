@@ -95,7 +95,7 @@
                                 <td>总用户</td>
                                 <td>活跃用户</td>
                                 <td>下单活跃用户</td>
-                                <td>活跃用户下单率</td>
+                                <!-- <td>活跃用户下单率</td> -->
                                 <td>下单数</td>
                                 <td>环比昨日下单数</td>
                             </thead>
@@ -105,7 +105,7 @@
                                     <td>{{chartData.value.userNum.today_user_num}}</td>
                                     <td>{{chartData.value.today.total_user_num}}</td>
                                     <td>{{chartData.value.today.total_order_user_num}}</td>
-                                    <td>{{chartData.value.today.total_order_user_rate}}</td>
+                                    <!-- <td>{{chartData.value.today.total_order_user_rate}}</td> -->
                                     <td>{{chartData.value.today.total_order_num}}</td>
                                     <td>{{chartData.value.rate.day_order_rate}}</td>
                                 </tr>
@@ -114,7 +114,7 @@
                                     <td>{{chartData.value.userNum.yesterday_user_num}}</td>
                                     <td>{{chartData.value.yesterday.total_user_num}}</td>
                                     <td>{{chartData.value.yesterday.total_order_user_num}}</td>
-                                    <td>{{chartData.value.yesterday.total_order_user_rate}}</td>
+                                    <!-- <td>{{chartData.value.yesterday.total_order_user_rate}}</td> -->
                                     <td>{{chartData.value.yesterday.total_order_num}}</td>
                                     <td></td>
                                 </tr>
@@ -131,7 +131,7 @@
                                 <td>总用户</td>
                                 <td>活跃用户</td>
                                 <td>下单活跃用户</td>
-                                <td>活跃用户下单率</td>
+                                <!-- <td>活跃用户下单率</td> -->
                                 <td>下单数</td>
                                 <td>环比上月下单数</td>
                             </thead>
@@ -141,7 +141,7 @@
                                     <td>{{chartData.value.userNum.this_month_num}}</td>
                                     <td>{{chartData.value.thisMonth.total_user_num}}</td>
                                     <td>{{chartData.value.thisMonth.total_order_user_num}}</td>
-                                    <td>{{chartData.value.thisMonth.total_order_user_rate}}</td>
+                                    <!-- <td>{{chartData.value.thisMonth.total_order_user_rate}}</td> -->
                                     <td>{{chartData.value.thisMonth.total_order_num}}</td>
                                     <td>{{chartData.value.rate.month_order_rate}}</td>
                                 </tr>
@@ -150,7 +150,7 @@
                                     <td>{{chartData.value.userNum.last_month_num}}</td>
                                     <td>{{chartData.value.lastMonth.total_user_num}}</td>
                                     <td>{{chartData.value.lastMonth.total_order_user_num}}</td>
-                                    <td>{{chartData.value.lastMonth.total_order_user_rate}}</td>
+                                    <!-- <td>{{chartData.value.lastMonth.total_order_user_rate}}</td> -->
                                     <td>{{chartData.value.lastMonth.total_order_num}}</td>
                                     <td></td>
                                 </tr>
@@ -218,7 +218,7 @@
                                 <td></td>
                                 <td>总用户</td>
                                 <td>下单用户</td>
-                                <td>下单率</td>
+                                <!-- <td>下单率</td> -->
                                 <td>下单数</td>
                                 <td>环比昨日下单数</td>
                             </thead>
@@ -227,7 +227,7 @@
                                     <td>今日</td>
                                     <td>{{chartData.value.userNum.today_user_num}}</td>
                                     <td>{{chartData.value.today.total_user_num}}</td>
-                                    <td>{{chartData.value.today.order_rate}}</td>
+                                    <!-- <td>{{chartData.value.today.order_rate}}</td> -->
                                     <td>{{chartData.value.today.total_order_num}}</td>
                                     <td>{{chartData.value.rate.day_order_rate}}</td>
                                 </tr>
@@ -235,7 +235,7 @@
                                     <td>昨日</td>
                                     <td>{{chartData.value.userNum.yesterday_user_num}}</td>
                                     <td>{{chartData.value.yesterday.total_user_num}}</td>
-                                    <td>{{chartData.value.yesterday.order_rate}}</td>
+                                    <!-- <td>{{chartData.value.yesterday.order_rate}}</td> -->
                                     <td>{{chartData.value.yesterday.total_order_num}}</td>
                                     <td></td>
                                 </tr>
@@ -251,7 +251,7 @@
                                 <td></td>
                                 <td>总用户</td>
                                 <td>下单用户</td>
-                                <td>下单率</td>
+                                <!-- <td>下单率</td> -->
                                 <td>下单数</td>
                                 <td>环比上月下单数</td>
                             </thead>
@@ -260,7 +260,7 @@
                                     <td>本月</td>
                                     <td>{{chartData.value.userNum.this_month_num}}</td>
                                     <td>{{chartData.value.thisMonth.total_user_num}}</td>
-                                    <td>{{chartData.value.thisMonth.order_rate}}</td>
+                                    <!-- <td>{{chartData.value.thisMonth.order_rate}}</td> -->
                                     <td>{{chartData.value.thisMonth.total_order_num}}</td>
                                     <td>{{chartData.value.rate.month_order_rate}}</td>
                                 </tr>
@@ -268,7 +268,7 @@
                                     <td>上月</td>
                                     <td>{{chartData.value.userNum.last_month_num}}</td>
                                     <td>{{chartData.value.lastMonth.total_user_num}}</td>
-                                    <td>{{chartData.value.lastMonth.order_rate}}</td>
+                                    <!-- <td>{{chartData.value.lastMonth.order_rate}}</td> -->
                                     <td>{{chartData.value.lastMonth.total_order_num}}</td>
                                     <td></td>
                                 </tr>

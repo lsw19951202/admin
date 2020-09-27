@@ -46,6 +46,8 @@
                 <label for="t4">按用户等级</label>
                 <input type="radio" id="t5" value="3" v-model="pushUserType" name="pushToType" :disabled="!editable" style="margin-left: 20px;">
                 <label for="t5">不活跃用户</label>
+                <input type="radio" id="t25" value="4" v-model="pushUserType" name="pushToType" :disabled="!editable" style="margin-left: 20px;">
+                <label for="t25">指定用户</label>
             </div>
             <div class="levelBox" v-if="pushUserType == 2">
                 <div class="userLevel">
@@ -84,6 +86,9 @@
                 <label for="t23">15天未登陆</label>
                 <input type="radio" id="t24" :disabled="!editable" value="30" v-model="pushObj.inactive_users">
                 <label for="t24">一个月未登录</label>
+            </div>
+            <div class="userPhones" v-if="pushUserType == 4">
+                <textarea placeholder="手机号码,多个号码使用英文逗号隔开" v-model="pushObj.phone"></textarea>
             </div>
         </div>
     </div>
@@ -265,16 +270,24 @@ export default {
             if(nVal == 1){
                 this.pushObj['push_obj'] = ''
                 this.pushObj['inactive_users'] = ''
+                this.pushObj['phone'] = ''
             }else if(nVal == 2){
                 this.pushObj['inactive_users'] = ''
+                this.pushObj['phone'] = ''
             }else if(nVal == 3){
                 this.pushObj['push_obj'] = ''
+                this.pushObj['phone'] = ''
+            }else if(nVal == 4){
+                this.pushObj['push_obj'] = ''
+                this.pushObj['inactive_users'] = ''
             }
         }
     },
     created(){
         this.pushPageList = this.pushPage
-        if(this.pushObj['push_obj'] == '1,2,3,4,5,6'){
+        if(this.pushObj['phone']){
+            this.pushUserType = 4
+        }else if(this.pushObj['push_obj'] == '1,2,3,4,5,6'){
             this.pushUserType = 1
             this.pushObj['push_obj'] = ''
         }else if(['3', '7', '15', '30'].indexOf(this.pushObj.inactive_users) >= 0){
@@ -455,6 +468,18 @@ export default {
                 padding: .4375rem .625rem;
                 input {
                     margin-left: .625rem;
+                }
+            }
+            .userPhones {
+                width: 100%;
+                height: auto;
+                textarea {
+                    height: 3rem;
+                    line-height: .625rem;
+                    resize: none;
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding: .3rem;
                 }
             }
         }

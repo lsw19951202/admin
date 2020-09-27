@@ -75,6 +75,16 @@
     </div>
     <div class="detail-data-box" v-show="showChannelGoodsList">
         <div class="header" style="text-align: center; font-size: .5rem;">{{channel.name + '合作商品详情'}}</div>
+        <!-- 新增加搜索请求 -->
+        <header class="search-header">
+            <div class="search-group">
+                <label>创建时间</label>
+                <flat-pickr class="search-time-picker" v-model="start_times" placeholder="开始时间" :config="dateConfig"></flat-pickr>
+                <div class="split-line"><div></div></div>
+                <flat-pickr class="search-time-picker" v-model="end_times" placeholder="结束时间" :config="dateConfig"></flat-pickr>
+            </div>
+            <button class="action-btn" @click="loadGoodsList">搜索</button>
+        </header>
         <div class="tj">
             <div class="tj-item">商品数量：{{goodsListGoodsNum}}</div>
             <div class="tj-item">商品销量：{{goodsListGoodsSaleNum}}</div>
@@ -192,6 +202,8 @@ export default {
             city: '',
             'start_time': '',
             'end_time': '',
+            'start_times': '',//新增搜索字段(开始时间)
+            'end_times': '',//新增搜索字段(开始时间)
             // 时间空间配置
             dateConfig: {
                 'time_24hr': true,
@@ -331,9 +343,12 @@ export default {
             this.showChannelGoodsList = true
             this.loadGoodsList(1)
         },
+        
         loadGoodsList(pageNo){
             this.loadTBData(setting.urls.channelGoodsList, {
                 'channel_id': this.channel.id,
+                'start_time':this.start_times,//新增搜索请求(开始时间)
+                'end_time':this.end_times,//新增搜索请求(结束时间)
                 page: pageNo || 1
             }, 'get').then(rst => {
                 this.makeGoodsData(rst)

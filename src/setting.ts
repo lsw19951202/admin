@@ -389,7 +389,11 @@ export default {
         hdkGoodsList: '/ypj/hdk/list',
         // 好单库批量发布
         hdkGoodsAdd: '/ypj/free/addhdk',
-        highHdkGoodsAdd: '/ypj/high/addhdk'
+        highHdkGoodsAdd: '/ypj/high/addhdk',
+        // 发单机器人商品数据列表
+        robotGoods: '/robot/goods',
+        // 发单机器人商品销量数据
+        robotGoodsList: '/robot/goodslist'
     },
     // 图片地址
     images: {
@@ -532,7 +536,7 @@ export default {
             [{ name: '序号', colspan: 1 }, { name: '类别', colspan: 1 }, { name: '关键字', colspan: 1 }, { name: '标题', colspan: 1 }, { name: '状态', colspan: 1 }, { name: '内容', colspan: 1 }, { name: '图片', colspan: 1 }, { name: '创建人', colspan: 1 }, { name: '修改人', colspan: 1 }, { name: '创建时间', colspan: 1 }, { name: '修改时间', colspan: 1 }, { name: '操作', colspan: 1 }]
         ],
         orderSalesList: [
-            [{ name: '' }, { name: '商品ID' }, { name: '商品名称' }, { name: '商品价格' }, { name: '销售数量' }, { name: '平台' }, { name: '付款预估收入' }, { name: '付款金额' }]
+            [{ name: '' }, { name: '商品ID' }, { name: '商品名称' }, { name: '商品价格' },{ name: '订单数量' }, { name: '销售数量' },{ name: '平台' }, { name: '付款预估收入' }, { name: '付款金额' }]
         ],
         teamSortList: [
             [{ name: '用户ID' }, { name: '级别' }, { name: '手机号' }, { name: '昵称' }, { name: '微信号' }, { name: '数量|金额' }, { name: '统计时间' }, { name: '上级ID' }, { name: '上级昵称' }]
@@ -850,6 +854,11 @@ export default {
             name: 'robot-index',
             title: '发单机器人',
             subTitle1: '发单机器人'
+        },
+        '/robot/listgoods': {
+            name: 'robot-list',
+            title: '发单机器人',
+            subTitle1: '发单商品数据'
         },
         '/push/list': {
             name: 'push-list',

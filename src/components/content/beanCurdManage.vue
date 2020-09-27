@@ -19,6 +19,7 @@
                             <th>豆腐块名称</th>
                             <th>图片</th>
                             <th>描述</th>
+                            <th>中间页</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>生效时间</th>
@@ -49,6 +50,10 @@
                             <td>
                                 <div class="rowspan">{{item['left_description']}}</div>
                                 <div class="rowspan">{{item['right_description']}}</div>
+                            </td>
+                            <td>
+                                <div class="rowspan">{{item['left_target']}}</div>
+                                <div class="rowspan">{{item['right_target']}}</div>
                             </td>
                             <td class="norowspan">{{item['left_create_time']}}</td>
                             <td class="norowspan">{{item['left_update_time']}}</td>

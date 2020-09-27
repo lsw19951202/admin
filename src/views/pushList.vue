@@ -301,8 +301,12 @@ export default {
                     str += '超级达人'
                 }
                 return str
-            }else{
+            }else if(this.newPushObj.pushUserType == 3){
                 return this.newPushObj.inactive_users + '天未登录'
+            }else if(this.newPushObj.pushUserType == 4){
+                return this.newPushObj.phone
+            }else{
+                return ''
             }
         }
     },
@@ -351,6 +355,8 @@ export default {
                 requestParams['push_obj'] = this.newPushObj.push_obj
             }else if(this.newPushObj.pushUserType == 3){
                 requestParams['inactive_users'] = this.newPushObj.inactive_users
+            }else if(this.newPushObj.pushUserType == 4){
+                requestParams['phone'] = this.newPushObj.phone
             }
             if(this.newPushObj.hasUrl == 1){
                 requestParams['jump_type'] = this.newPushObj.jump_type
@@ -482,6 +488,16 @@ export default {
                     this.alert('请选择push对象不活跃天数')
                     return
                 }
+            }else if(pushRule.pushUserType == 4){
+                if(!this.pushObj.phone){
+                    this.alert('指定用户不能为空')
+                    return
+                }
+                const phonesReg = /^(1[3-9]\d{9},)*(1[3-9]\d{9})$/
+                if(!phonesReg.test(this.pushObj.phone)){
+                    this.alert('指定用户电话号码格式错误')
+                    return
+                }
             }
             if(pushRule.hasUrl == 1){
                 if(pushRule.urlType == 1){
@@ -515,6 +531,7 @@ export default {
                 'push_interval_num': this.pushObj.push_interval_num || 1,
                 'push_obj': pushRule.pushUserType == 1 ? '1,2,3,4,5,6' : this.pushObj.push_obj,
                 'inactive_users': pushRule.pushUserType == 3 ? this.pushObj.inactive_users : '',
+                phone: this.pushObj.phone,
                 desc: this.pushObj.desc,
                 os: this.pushObj.os,
                 hasUrl: pushRule.hasUrl,

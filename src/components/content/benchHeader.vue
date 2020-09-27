@@ -21,10 +21,11 @@
                 </div>
             </div>
             <div v-if='item.name=="today_order_total_user_num"' class="today_order_total_user_num">
-                <div style="display: flex;flex-direction: column;align-items: center;margin-right: 0.8rem;">
+                <!-- <div style="display: flex;flex-direction: column;align-items: center;margin-right: 0.8rem;">
                     <div style="width: 2.4rem; height: 2.4rem;" id="orderChart"></div>
                     <span style="font-size: 0.4rem;display: block;color: #fff;">下单率</span>
-                </div>
+                </div> -->
+                <div class="orderHeader"></div>
                 <div class="dataBox">
                     <span style="font-size: 0.4rem;display: block;">今日下单用户</span>
                     <span style="font-size: 0.8rem;display: block;color: black;margin: 0.2rem;">{{item.value}}</span>
@@ -56,7 +57,7 @@
         updated: function() {
             if (this.headerData.length == 4) {
                 this.drawLifeChart();
-                this.drawOrderChart();
+                // this.drawOrderChart();
             }
         },
         methods: {
@@ -105,46 +106,46 @@
                 };
                 echarts.init(document.getElementById('lifeChart')).setOption(options)
             },
-            drawOrderChart() {
-                const text=this.headerData[2].orderRate;
-                const value = this.getPieNum(text);
-                const options = {
-                    title: {
-                        text: text,
-                        x: 'center',
-                        y: 'center',
-                        textStyle: {
-                            color: '#fff',
-                            fontSize: 18,
-                        }
-                    },
-                    color:['#0099cc','#76b953'],
-                    series: [{
-                        type: 'pie',
-                        radius: ['50%', '60%'],
-                        silent: true,
-                        label: {
-                            normal: {
-                                show: false,
-                            }
-                        },
+            // drawOrderChart() {
+            //     const text=this.headerData[2].orderRate;
+            //     const value = this.getPieNum(text);
+            //     const options = {
+            //         title: {
+            //             text: text,
+            //             x: 'center',
+            //             y: 'center',
+            //             textStyle: {
+            //                 color: '#fff',
+            //                 fontSize: 18,
+            //             }
+            //         },
+            //         color:['#0099cc','#76b953'],
+            //         series: [{
+            //             type: 'pie',
+            //             radius: ['50%', '60%'],
+            //             silent: true,
+            //             label: {
+            //                 normal: {
+            //                     show: false,
+            //                 }
+            //             },
             
-                        data: [{ // 数据值
-                                value: value,
-                                //该数据项是否被选中
-                                selected: false,
+            //             data: [{ // 数据值
+            //                     value: value,
+            //                     //该数据项是否被选中
+            //                     selected: false,
             
-                            },
-                            {
-                                value: 100,
-                            }
-                        ],
-                        animation: false
-                    }]
+            //                 },
+            //                 {
+            //                     value: 100,
+            //                 }
+            //             ],
+            //             animation: false
+            //         }]
             
-                };
-                echarts.init(document.getElementById('orderChart')).setOption(options)
-            }
+            //     };
+            //     echarts.init(document.getElementById('orderChart')).setOption(options)
+            // }
 
         },
     }
@@ -180,14 +181,20 @@
         margin-right: 0.5rem;
         background-size: 100% 100%;
     }
-    .shareHeader {
+    .orderHeader {
         width: 2rem;
         height: 2rem;
         background: url(../../assets/menu_order_normal.png);
         margin-right: 0.5rem;
         background-size: 100% 100%;
     }
-    
+    .shareHeader{
+        width: 2rem;
+        height: 2rem;
+        background: url(../../assets/menu_take_out_normal.png);
+        margin-right: 0.5rem;
+        background-size: 100% 100%;
+    }
     .today_user_num {
         width: 100%;
         height: 100%;
