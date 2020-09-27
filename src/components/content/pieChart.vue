@@ -406,7 +406,7 @@
                             value: [val.today.member_user_num, val.today.leader_user_num, val.today.director_user_num]
                         }, {
                             name: '今日下单率',
-                            value: [val.today.member_user_num, val.today.leader_user_num, val.today.director_user_num]
+                            value: [val.today.member_order_rate, val.today.leader_order_rate, val.today.director_order_rate]
                         }, {
                             name: '今日下单数',
                             value: [val.today.member_order_num, val.today.leader_order_num, val.today.director_order_num]
@@ -424,8 +424,8 @@
                             ]
                         }, {
                             name: '昨日下单率',
-                            value: [val.yesterday.member_user_num, val.yesterday.leader_user_num, val.yesterday
-                                .director_user_num
+                            value: [val.yesterday.member_order_rate, val.yesterday.leader_order_rate, val.yesterday
+                                .director_order_rate
                             ]
                         }, {
                             name: '昨日下单数',
@@ -461,8 +461,8 @@
                             ]
                         }, {
                             name: '本月下单率',
-                            value: [val.thisMonth.member_user_num, val.thisMonth.leader_user_num, val.thisMonth
-                                .director_user_num
+                            value: [val.thisMonth.member_order_rate, val.thisMonth.leader_order_rate, val.thisMonth
+                                .director_order_rate
                             ]
                         }, {
                             name: '本月下单数',
@@ -483,8 +483,8 @@
                             ]
                         }, {
                             name: '上月下单率',
-                            value: [val.lastMonth.member_user_num, val.lastMonth.leader_user_num, val.lastMonth
-                                .director_user_num
+                            value: [val.lastMonth.member_order_rate, val.lastMonth.leader_order_rate, val.lastMonth
+                                .director_order_rate
                             ]
                         }, {
                             name: '上月下单数',
